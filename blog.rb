@@ -1,5 +1,6 @@
 require 'sinatra/base'
 
+require_relative "redirects"
 
 class Blog < Sinatra::Base 
   set :root, File.dirname(__FILE__)
@@ -12,5 +13,12 @@ class Blog < Sinatra::Base
   get '/' do
     File.read('_site/index.html')
   end
+
+  REDIRECTS.each do |hsh|
+    get hsh[:from] do
+      redirect hsh[:to], 301 #yeah, this move is permanent
+    end
+  end
+
 end
 
