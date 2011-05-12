@@ -41,3 +41,4 @@ EDIT: They've posted the sales afterward on Reddit [here][10].
    [9]: http://www.mizage.com/divvy/
    [10]: http://www.reddit.com/r/programming/comments/cmmfg/hey_reddit_a_week_ago_someone_posted_about_divvy/
 
+

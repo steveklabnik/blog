@@ -24,12 +24,7 @@ end
 desc "Package app for production"
 task :package do
   ENV['JEKYLL_ENV'] = 'production'
-  
   Rake::Task["build"].invoke
-
-  print "Compressing assets..."
-  system "jammit -o assets -c _assets.yml"
-  puts "done."
 end
 
 desc "Deploy latest code in _site to production"

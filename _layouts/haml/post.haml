@@ -2,10 +2,10 @@
 %html{:lang => "en"}
   %head
     %meta{:charset => "utf8"}
-    %title Literate Coding - {{ page.title }}
-    {% include_css site %}
-    {% include_js jquery-1.6.min %}
-    {% include_js app %}
+    %title Literate Programming - {{ page.title }}
+    %link{ :rel => "stylesheet", :href => "/css/site.css"}/
+    %script{:src => "/js/jquery-1.6.min.js"}
+    %script{:src => "/js/app.js"}
   - if ENV['JEKYLL_ENV'] == "production"
     :javascript
       var _gaq = _gaq || [];
