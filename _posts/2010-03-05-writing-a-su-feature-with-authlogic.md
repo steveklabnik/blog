@@ -35,22 +35,21 @@ object by just passing it to create.
 
 This lets us write a controller method to do this pretty easily:
 
-
->   def su
->     @user = User.find params[:id]
->     current_user_session.destroy
->     UserSession.create!(@user)
->     flash[:notice] = "You've been su-d to that user."
->     redirect_to dashboard_path
->   end
+    def su
+      @user = User.find params[:id]
+      current_user_session.destroy
+      UserSession.create!(@user)
+      flash[:notice] = "You've been su-d to that user."
+      redirect_to dashboard_path
+    end
 
 Add in a route:
 
-> map.admin_su "/admin/su/:id", :controller => "admin", :action => "su"
+    map.admin_su "/admin/su/:id", :controller => "admin", :action => "su"
 
 And to a view somewhere in your administrative tools:
 
-> <%= link_to "log in as this user", admin_su_path(@user) %>
+    <%= link_to "log in as this user", admin_su_path(@user) %>
 
 And we're good to go!
 
@@ -58,9 +57,9 @@ One last thing about this, though: You don't want to let anyone who's not an
 administrator do this, for obvious reasons. My administrative controllers
 always include a block like this:
 
->   access_control do
->     allow :admin
->   end
+    access_control do
+      allow :admin
+    end
 
 acl9 makes this really easy, but it's really important.
 

@@ -30,7 +30,7 @@ Here's some fun info: stats on statuses by language:
 * farsi 66
 * pinyin 1
 
-Code:
+## Code
 
 Lines, by committer:
 
@@ -73,7 +73,7 @@ Just over 200 pull requests
 
 872 commits
 
-The deal with Heroku
+## The deal with Heroku
 
 Crazy! Such good stuff. I'm really excited as to how it's going, but there
 were a few rocky points along the way as well. Some people saw me tweeting in
@@ -106,7 +106,7 @@ of me. I found a small bug in their platform when deploying the app, but
 everything's gone really well. Bunches of users have commented on how fast the
 site is now, and I've been really happy with it so far. We'll see how it goes.
 
-The Future
+## The Future
 
 Anyway, here's what's next for [rstat.us][1]: The biggest thing is getting to
 100% ostatus compliance. We spent lots of time this week getting screwed over

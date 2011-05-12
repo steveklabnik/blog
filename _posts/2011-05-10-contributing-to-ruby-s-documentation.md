@@ -11,6 +11,8 @@ So I made a video!
 Some small errata: drbrain has informed me that he should edit the Changelog,
 not me. So don't do that. :)
 
+<iframe src="http://player.vimeo.com/video/23522731?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe><p><a href="http://vimeo.com/23522731">How to contribute to Ruby's documentation.</a> from <a href="http://vimeo.com/steveklabnik">Steve Klabnik</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
 If you don't want to watch me talk about it, here's the same info, in text:
 
 Getting the Ruby source is pretty easy. You can find it on GitHub, here:

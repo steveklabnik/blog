@@ -1,6 +1,6 @@
 ---
 published: true
-title: A word about _why, #whyday , and Hackety Hack
+title: A word about why, whyday, and Hackety Hack
 layout: post
 ---
 
@@ -11,15 +11,15 @@ to burst free. Today, it will.
 
 Today, I'm also releasing a prerelease version of Hackety Hack 1.0.
 It's been a long time coming. The announcement of Whyday got me
-thinking about the past year of a world without _why, and the 'your
+thinking about the past year of a world without \_why, and the 'your
 domain is about to expire' notices got me thinking about how I've now
 been the head of the Hackety Hack project for almost 12 months, too. I
-don't like thinking about this, because I almost let _why down.
+don't like thinking about this, because I almost let \_why down.
 
-I never met _why. I can't really claim to know him, or know what his
-intentions were, but I think about him a lot. '_why' the persona,
+I never met \_why. I can't really claim to know him, or know what his
+intentions were, but I think about him a lot. '\_why' the persona,
 really embodies everything that I love about software. The world owes
-_why a great debt, and I'd like to think that I'm doing what I can to
+\_why a great debt, and I'd like to think that I'm doing what I can to
 repay him.
 
 At least, I am now. I don't like to think about roughly 6 or 8 months

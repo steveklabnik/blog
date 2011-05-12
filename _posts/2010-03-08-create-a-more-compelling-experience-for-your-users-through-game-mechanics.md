@@ -9,7 +9,7 @@ going back, time after time after time. Well, I can't speak for all of them,
 but there's a subtle reason that some sites draw your attention on such a
 repeated basis: They're actually games.
 
-Wait, games?
+## Wait, games?
 
 Try a little thought experiment: If I say, "Yeah, he's a ______ addict," what
 are the first few things that pop into your mind? For me, top two are "heroin"
@@ -19,7 +19,7 @@ basically synonymous with the word "addict"? Lots of people smoke pot. Lots of
 people play Call of Duty. Lots do both, and in copious amounts. So why don't
 they get the same label?
 
-Heroin: it's a hell of a drug
+## Heroin: it's a hell of a drug
 
 Yeah, that reference is to cocaine, another famously addictive substance. Oh
 well.
@@ -44,7 +44,7 @@ other things to get your fix. It may sound funny, but it's absolutely true.
 People talk about "relapsing." They speak of "craving." That's why WoW has so
 many subscribers.
 
-How to replicate this success
+## How to replicate this success
 
 I can't guarantee that you'll be able to make your site as addictive as heroin
 is, but many sites use the same basic psychology to keep you coming back. Game
@@ -80,7 +80,7 @@ extra hundred things and get your Power Seller discount.
 
 That's the hard stuff. It'll get you hooked, and coming back for more.
 
-Where's all of this going?
+## Where's all of this going?
 
 This is the current stuff that's being done with game mechanics. But where
 could we go, in the future?
@@ -129,15 +129,12 @@ Shown Facebook Login Course" population and "Complete Facebook Login Course"
 population with the population at large. Kill the test if it hurts your
 metrics, deploy it sitewide if it helps them. 
 
-  
-
 How cool would that be? Now the game mechanics aren't being used just to
 increase engagement, but to actually teach people how to use your site or
 service. It's classical conditioning; reward people for doing the right thing,
 and they'll keep doing the right thing.
 
-  
-Game mechanics are your MVP
+## Game mechanics are your MVP
 
 So how's this stuff relevant to your startup? Well, I think this idea ties in
 really well with the concept of a Minimum Viable Product. Here's the idea:
