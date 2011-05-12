@@ -1,0 +1,8 @@
+javascript_compressor: closure
+
+javascripts:
+  application:
+
+stylesheets:
+  screen:
+    - _site/css/site.scss

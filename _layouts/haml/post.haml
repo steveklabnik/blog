@@ -1,0 +1,32 @@
+!!! 5
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf8"}
+    %title Steve's Blo
+    {% include_css site %}
+    {% include_js jquery-1.6.min %}
+    {% include_js app %}
+  %body
+    %section#right
+      %aside
+        %h1 Hi there, I'm Steve.
+        %img{:src => "http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200"}
+        %p I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+      %nav
+        %h1 See them all
+        %p You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.
+        %h1 Popular Posts
+        %p Here are some of my most-viewed articles.
+        %ul
+          %li
+            %a{:href => "http://localhost:4000/2010/03/03/why-bother-creating-.html"} Why bother creating?
+          %li
+            %a{:href => "http://localhost:4000/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"} A word about _why, #whyday, and Hackety Hack
+          %li
+            %a{:href => "http://localhost:4000/2010/11/17/the-hardest-decision-i-ve-ever-made-.html"} The hardest decision I've ever made
+          %li
+            %a{:href => "http://localhost:4000/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html"} Create a more compelling experience for your users through game mechanics
+          %li
+            %a{:href => "http://localhost:4000/2010/07/17/what-to-know-before-debating-type-systems.html"} What to know before debating type systems
+    %section#main
+      {{ content }}

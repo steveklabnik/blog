@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf8' />
+    <title>Steve's Blo</title>
+    <link href='/css/site.css' media='screen' rel='stylesheet' type='text/css' />
+    <script src='/js/jquery-1.6.min.js' type='text/javascript'></script>
+    <script src='/js/app.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <section id='right'>
+      <aside>
+        <h1>Hi there, I'm Steve.</h1>
+        <img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200' />
+        <p>I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.</p>
+      </aside>
+      <nav>
+        <h1>See them all</h1>
+        <p>You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.</p>
+        <h1>Popular Posts</h1>
+        <p>Here are some of my most-viewed articles.</p>
+        <ul>
+          <li>
+            <a href='http://localhost:4000/2010/03/03/why-bother-creating-.html'>Why bother creating?</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html'>A word about _why, #whyday, and Hackety Hack</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/11/17/the-hardest-decision-i-ve-ever-made-.html'>The hardest decision I've ever made</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html'>Create a more compelling experience for your users through game mechanics</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/07/17/what-to-know-before-debating-type-systems.html'>What to know before debating type systems</a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+    <section id='main'>
+      <p>Ruby 1.9.3 is coming out soon!&nbsp;<a href="http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge">drbrain has challenged the Ruby community to improve its documentation</a>, but some people were asking about how to do so. So I made a video!</p>
+<p>Some small errata: drbrain has informed me that he should edit the Changelog, not me. So don't do that. :)</p>
+<p />
+<div><iframe src="http://player.vimeo.com/video/23522731?portrait=0" frameborder="0" height="283" width="500"></iframe></div>
+<p />
+<div>If you don't want to watch me talk about it, here's the same info, in text:</div>
+<p />
+<div>Getting the Ruby source is pretty easy. You can find it on GitHub, here: <a href="http://github.com/ruby/ruby">http://github.com/ruby/ruby</a> . Click the "fork" button and clone down your own fork:</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$ git clone <a href="mailto:git@github.com">git@github.com</a>:YOURUSERNAME/ruby.git</div>
+<p />
+<div>After that's done, cd in and add the main project as an upstream. This will let you keep up-to-date with the latest changes:</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$ git remote add upstream <a href="https://github.com/ruby/ruby.git">https://github.com/ruby/ruby.git</a></div>
+<div>&nbsp;&nbsp; &nbsp;$ git fetch upstream</div>
+<p />
+<div>Okay! Now that you're all set up, poke around and find something that needs documented. I like to just look through the source, but you can also look <a href="http://segment7.net/projects/ruby/documentation_coverage.txt">here</a> for a list of things that have no docs. Documentation is written in rdoc, and I'd check the recent commits that drbrain has been making to guide you in style. <a href="https://github.com/ruby/ruby/commit/071a678a156dde974d8e470b659c89cb02b07b3b">This commit</a>, for example, is a pretty good template. You can also check out the formatting guides <a href="http://rdoc.rubyforge.org/RDoc/Markup.html">here</a>. There's also <a href="http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html">this</a> which explains some directives for .rb files and <a href="http://rdoc.rubyforge.org/RDoc/Parser/C.html">this</a> which handles directives for .c files.</div>
+<p />
+<div>Now that you've made a change to the documentation, you can regenerate the docs by using rdoc. First, grab the latest version from rubygems:</div>
+<p />
+<div>&nbsp;&nbsp; $ gem install rdoc</div>
+<p />
+<div>Always best to have the latest tools. Now do this to generate the docs:</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$&nbsp;rdoc --o tmpdoc lib/rss*</div>
+<p />
+<div>I'm passing it in an output directory with op, since the doc directory is not an rdoc directory. rdoc will complain and refuse to overwrite those files, which is a good thing. I'm also passing in a pattern of what to compile documentation for, compiling all of it takes a few minutes! In this case, I chose to document the rss library.</div>
+<p />
+<div>Now you have a website in rdocout. Open up its index.html, and poke around for what you've changed. If it all looks good, you're ready to make a patch!</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$ rm -r rdocout</div>
+<div>&nbsp;&nbsp; &nbsp;$ git add .</div>
+<div>&nbsp;&nbsp; &nbsp;$ git commit -m "adding documentation for $SOMETHING"</div>
+<p />
+<div>Now, you have two options here. One is to simply push the change up to GitHub, and make a pull request.</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$ git push origin</div>
+<p />
+<div>... aaand pull request. The core Ruby development doesn't really happen on GitHub though, and so your patch may take a while to get included. If you really want to do it right, submit a patch to RedMine. We'll use git to make this patch:</div>
+<p />
+<div>&nbsp;&nbsp; &nbsp;$ git format-patch HEAD~1</div>
+<p />
+<div>This says "make a patch out of the last commit." It'll tell you a file name, it should start with 000.</div>
+<p />
+<div>Now, sign up for the Ruby RedMine <a href="http://redmine.ruby-lang.org/account/register">here</a>. Once you've clicked the confirmation email, <a href="http://redmine.ruby-lang.org/projects/ruby-19/issues/new">open a new ticket</a>, and assign it to Eric Hodel, category DOC, and give it your Ruby version, even though it's not a big deal here. Click 'choose file' and pick your patch, then 'create and continue' and BAM! You're done!</div>
+<p />
+<div>Let's all pitch in and make this the best documented Ruby release ever! In writing documentation, you might even find some things that you'd like to help improve. ;)&nbsp;</div>
+
+    </section>
+  </body>
+</html>
