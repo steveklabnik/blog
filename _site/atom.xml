@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-05-12T17:27:06-04:00</updated>
+ <updated>2011-05-12T17:35:58-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -20,13 +20,15 @@
    <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I've moved everything over to Jekyll, if
 that means anything to you. You can now &lt;a href=&quot;https://github.com/steveklabnik/blog&quot;&gt;look at my blog on
-GitHub&lt;/a&gt;.&lt;/p&gt;
+GitHub&lt;/a&gt;. Big thanks to &lt;a href=&quot;http://www.jstorimer.com/2009/12/29/jekyll-on-heroku.html&quot;&gt;this
+article&lt;/a&gt; for
+lots of help and pointers with final deployment stuff, and &lt;a href=&quot;http://mikeferrier.ca/2011/04/29/blogging-with-jekyll-haml-sass-and-jammit/&quot;&gt;this one&lt;/a&gt; for haml and sass and stuff. Yay!&lt;/p&gt;
 
 &lt;h2&gt;New-ish beginnings&lt;/h2&gt;
 
 &lt;p&gt;So why'd I do this? Well, this is just part of moving more towards
 hosting all of my own services, and not relying on services that others
-provide. This isn't some sort of arugment over individualism vs.
+provide. This isn't some sort of argument over individualism vs.
 collectivism, it's more about &lt;a href=&quot;http://nomoresharecropping.org/&quot;&gt;No More Sharecropping&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I'm still relying on people for hosting, of course. Nobody is 100%

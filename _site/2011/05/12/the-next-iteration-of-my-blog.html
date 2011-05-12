@@ -8,6 +8,19 @@
     <script src='/js/jquery-1.6.min.js'></script>
     <script src='/js/app.js'></script>
   </head>
+  <script type='text/javascript'>
+    //<![CDATA[
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4054156-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+      })();
+    //]]>
+  </script>
   <body>
     <section id='right'>
       <aside>
@@ -44,13 +57,15 @@
       <p>Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I've moved everything over to Jekyll, if
 that means anything to you. You can now <a href="https://github.com/steveklabnik/blog">look at my blog on
-GitHub</a>.</p>
+GitHub</a>. Big thanks to <a href="http://www.jstorimer.com/2009/12/29/jekyll-on-heroku.html">this
+article</a> for
+lots of help and pointers with final deployment stuff, and <a href="http://mikeferrier.ca/2011/04/29/blogging-with-jekyll-haml-sass-and-jammit/">this one</a> for haml and sass and stuff. Yay!</p>
 
 <h2>New-ish beginnings</h2>
 
 <p>So why'd I do this? Well, this is just part of moving more towards
 hosting all of my own services, and not relying on services that others
-provide. This isn't some sort of arugment over individualism vs.
+provide. This isn't some sort of argument over individualism vs.
 collectivism, it's more about <a href="http://nomoresharecropping.org/">No More Sharecropping</a>.</p>
 
 <p>I'm still relying on people for hosting, of course. Nobody is 100%
