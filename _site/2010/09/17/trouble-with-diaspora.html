@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf8' />
+    <title>Literate Programming - Trouble with Diaspora</title>
+    <link href='http://feeds.feedburner.com/steveklabnik' rel='alternate' type='application/rss+xml' />
+    <link href='/css/site.css' rel='stylesheet' />
+    <script src='/js/jquery-1.6.min.js'></script>
+    <script src='/js/app.js'></script>
+  </head>
+  <script type='text/javascript'>
+    //<![CDATA[
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4054156-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+      })();
+    //]]>
+  </script>
+  <body>
+    <section id='right'>
+      <aside>
+        <h1>Hi there, I'm Steve.</h1>
+        <img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200' />
+        <p>I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.</p>
+      </aside>
+      <nav>
+        <h1>See them all</h1>
+        <p>You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.</p>
+        <h1>Popular Posts</h1>
+        <p>Here are some of my most-viewed articles.</p>
+        <ul>
+          <li>
+            <a href='http://localhost:4000/2010/03/03/why-bother-creating-.html'>Why bother creating?</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html'>A word about _why, #whyday, and Hackety Hack</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/11/17/the-hardest-decision-i-ve-ever-made-.html'>The hardest decision I've ever made</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html'>Create a more compelling experience for your users through game mechanics</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/07/17/what-to-know-before-debating-type-systems.html'>What to know before debating type systems</a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+    <section id='main'>
+      <h1>Trouble with Diaspora</h1>
+      <p>So, Wednesday, Diaspora was released.</p>
+
+<p>If you're not familiar, a few months ago everyone was up in arms about the
+latest Facebook privacy change. So four college kids started <a href="http://www.kickstarter.com/projects/196017994/diaspora-the-personally-controlled-do-it-all-distr">a Kickstarter
+project</a> with a dream: let's make a distributed, private Facebook. They
+asked for $10,000. They got about $200,000.</p>
+
+<p>They worked on the code all summer, in secret. Wednesday, a 'developer
+preview' came out. They'd promised something by the end of the summer, and the
+15th of September is the last day. So <a href="http://github.com/diaspora/diaspora">they put it up on GitHub</a>.</p>
+
+<p>Oh boy.</p>
+
+<p>Basically, the code is really, really bad. I don't mean to rain on anyone's
+parade, but <a href="http://www.theregister.co.uk/2010/09/16/diaspora_pre_alpha_landmines/">there are really, really bad security holes</a>. And they're
+there due to things that any professional programmer would never dream of
+leaving out of their code. I don't want to disclose too many details, but you
+can see the code yourself on GitHub.</p>
+
+<p>At first, I found one. So I tried to patch it. And I did, and it got accepted
+into master. Awesome. But then, the more I read, the more bad things I found.
+They're going to need a complete overhaul to fix this. Go over every last
+piece of code. And don't even get me started on their encryption code.</p>
+
+<p>But basically, please heed their own warning from <a href="http://www.joindiaspora.com/2010/09/15/developer-release.html">the announcement</a>:</p>
+
+<blockquote><p>Feel free to try to get it running on your machines and use it, but we give
+no guarantees. We know there are security holes and bugs, and your data is not
+yet fully exportable. If you do find something, be sure to log it in our
+bugtracker, and we would love screenshots and browser info.</p></blockquote>
+
+<p>If you find one of the many, many nodes that people are publicly posting,
+please don't use your real passwords, or information.</p>
+
+<p>And if you're a developer, consider helping out. It's going to be rough going:
+the mailing list and issue trackers are full of people that have no idea what
+they're doing. Be prepared to wade through tons of crap. But they could
+really, really use the help. I'll be submitting another patch or two, but it
+needs much, much more than I can give.</p>
+
+<p>EDIT: Please check out <a href="http://blog.steveklabnik.com/this-is-why-new-media-hates-old-media">my follow up post</a>, where I talk about being
+misquoted regarding this post.</p>
+
+<p>EDIT 2: Patrick has a post up describing the exploits, now that there have
+been some patches applied. If you're a technically inclined individual, you
+might be interested. You can find it on <a href="http://www.kalzumeus.com/2010/09/22/security-lessons-learned-from-the-diaspora-launch/">his blog</a>.</p>
+
+    </section>
+  </body>
+</html>

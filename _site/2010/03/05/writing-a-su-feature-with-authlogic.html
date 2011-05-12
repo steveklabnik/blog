@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf8' />
+    <title>Literate Programming - Writing a "su" feature with Authlogic</title>
+    <link href='http://feeds.feedburner.com/steveklabnik' rel='alternate' type='application/rss+xml' />
+    <link href='/css/site.css' rel='stylesheet' />
+    <script src='/js/jquery-1.6.min.js'></script>
+    <script src='/js/app.js'></script>
+  </head>
+  <script type='text/javascript'>
+    //<![CDATA[
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4054156-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+      })();
+    //]]>
+  </script>
+  <body>
+    <section id='right'>
+      <aside>
+        <h1>Hi there, I'm Steve.</h1>
+        <img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200' />
+        <p>I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.</p>
+      </aside>
+      <nav>
+        <h1>See them all</h1>
+        <p>You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.</p>
+        <h1>Popular Posts</h1>
+        <p>Here are some of my most-viewed articles.</p>
+        <ul>
+          <li>
+            <a href='http://localhost:4000/2010/03/03/why-bother-creating-.html'>Why bother creating?</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html'>A word about _why, #whyday, and Hackety Hack</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/11/17/the-hardest-decision-i-ve-ever-made-.html'>The hardest decision I've ever made</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html'>Create a more compelling experience for your users through game mechanics</a>
+          </li>
+          <li>
+            <a href='http://localhost:4000/2010/07/17/what-to-know-before-debating-type-systems.html'>What to know before debating type systems</a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+    <section id='main'>
+      <h1>Writing a "su" feature with Authlogic</h1>
+      <p>Sometimes, when responding to a support request, it's nice to see what your
+users see. At the same time, you don't want to ask your users for their
+passwords, out of respect for their privacy. So what do you do?</p>
+
+<p>Well, *NIX systems have a program called su.  Here's what man su has to say:</p>
+
+<blockquote><p>NAME
+       su - run a shell with substitute user and group IDs</p>
+
+<p>SYNOPSIS
+       su [OPTION]... [-] [USER [ARG]...]</p>
+
+<p>DESCRIPTION
+       Change the effective user id and group id to that of USER.</p></blockquote>
+
+<p>su can be thought of as "substitute user" or "switch user." It's a command
+system administrators use to assume the identity of one of their users, or a
+way for someone with the root password on the system to switch to the root
+account itself. So how can we incorporate this into a web application?</p>
+
+<p>Well, we want to first log ourselves out, and then log in as the user we're
+su-ing to. That's it. The tricky part, however, comes in when we're logging
+in: as we said before, we don't want to ask for their password. Luckily,
+Authlogic provides a way to create our UserSession object directly from a User
+object by just passing it to create.</p>
+
+<p>This lets us write a controller method to do this pretty easily:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+  current_user_session.destroy
+  UserSession.create!(@user)
+  flash[:notice] = "You've been su-d to that user."
+  redirect_to dashboard_path
+end
+</code></pre>
+
+<p>Add in a route:</p>
+
+<pre><code>map.admin_su "/admin/su/:id", :controller =&gt; "admin", :action =&gt; "su"
+</code></pre>
+
+<p>And to a view somewhere in your administrative tools:</p>
+
+<pre><code>&lt;%= link_to "log in as this user", admin_su_path(@user) %&gt;
+</code></pre>
+
+<p>And we're good to go!</p>
+
+<p>One last thing about this, though: You don't want to let anyone who's not an
+administrator do this, for obvious reasons. My administrative controllers
+always include a block like this:</p>
+
+<pre><code>access_control do
+  allow :admin
+end
+</code></pre>
+
+<p>acl9 makes this really easy, but it's really important.</p>
+
+<p>So there you have it. Easy as pie.</p>
+
+<p>EDIT: This post made the Rails subreddit, and <a href="http://www.reddit.com/r/rails/comments/cb0da/writing_a_su_feature_with_authlogic/c0rf26w">brettbender posted his code</a>
+to get you back to admin. Here it is:</p>
+
+<blockquote><p>I used this article to help build a su feature for a rails app I'm working
+on. thought I would share the code to let you su / exit-su back to the
+original user you were logged in as. You just need to add a link somewhere
+persistent if your session contains an entry for :su_user that links to the
+unsu action.</p>
+
+<p>Inside your admin controller, make sure you limit access to these actions:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+
+  # change these 3 lines to apply to your session representation
+  session[:su_user] = self.current_user.id
+  self.current_user = @user
+
+  flash[:notice] = "You've been logged in as #{@user.login}."
+  redirect_to "/"
+end
+
+def unsu
+  redirect_url = "/"
+  if(session.has_key?(:su_user))
+    self.current_user = User.find session[:su_user]
+    session.delete :su_user
+    flash[:notice] = "You have exited your switch user session. You are
+    redirect_url = "/admin/users/"
+  else
+    flash[:error] = "Sorry, we couldn't find your original user."
+  end
+
+  redirect_to redirect_url
+end
+</code></pre></blockquote>
+
+    </section>
+  </body>
+</html>
