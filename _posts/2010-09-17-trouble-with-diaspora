@@ -1,0 +1,30 @@
+--- 
+published: true
+title: Trouble with Diaspora
+layout: post
+---
+<p>So, Wednesday, Diaspora was released.</p>
+<p />
+<div>If you're not familiar, a few months ago everyone was up in arms about the latest Facebook privacy change. So four college kids started <a href="http://www.kickstarter.com/projects/196017994/diaspora-the-personally-controlled-do-it-all-distr">a Kickstarter project</a> with a dream: let's make a distributed, private Facebook. They asked for $10,000. They got about $200,000.</div>
+<p />
+<div>They worked on the code all summer, in secret. Wednesday, a 'developer preview' came out. They'd promised something by the end of the summer, and the 15th of September is the last day. So <a href="http://github.com/diaspora/diaspora">they put it up on GitHub</a>.</div>
+<p />
+<div>Oh boy.</div>
+<p />
+<div>Basically, the code is really, really bad. I don't mean to rain on anyone's parade, but <a href="http://www.theregister.co.uk/2010/09/16/diaspora_pre_alpha_landmines/">there are really, really bad security holes</a>. And they're there due to things that any professional programmer would never dream of leaving out of their code. I don't want to disclose too many details, but you can see the code yourself on GitHub.</div>
+<p />
+<div>At first, I found one. So I tried to patch it. And I did, and it got accepted into master. Awesome. But then, the more I read, the more bad things I found. They're going to need a complete overhaul to fix this. Go over every last piece of code. And don't even get me started on their encryption code.</div>
+<p />
+<div>But basically, please heed their own warning from <a href="http://www.joindiaspora.com/2010/09/15/developer-release.html">the announcement</a>:</div>
+<p />
+<div><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: 12px; color: #222222; line-height: 18px;"> </span>
+<blockquote class="gmail_quote" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0.8ex; border-left-width: 1px; border-left-color: #cccccc; border-left-style: solid; padding-left: 1ex;"><span style="color: #c0c0c0;">Feel free to try to get it running on your machines and use it, but we give no guarantees. We know there are security holes and bugs, and your data is not yet fully exportable. If you do find something, be sure to log it in our bugtracker, and we would love screenshots and browser info.</span></blockquote>
+<p />
+<div><span style="color: #999999;">If you find one of the many, many nodes that people are publicly posting, please don't use your real passwords, or information.</span></div>
+<p />
+<div><span style="color: #999999;">And if you're a developer, consider helping out. It's going to be rough going: the mailing list and issue trackers are full of people that have no idea what they're doing. Be prepared to wade through tons of crap. But they could really, really use the help. I'll be submitting another patch or two, but it needs much, much more than I can give.</span></div>
+<p />
+<div><span style="color: #999999;">EDIT: Please check out <a href="http://blog.steveklabnik.com/this-is-why-new-media-hates-old-media">my follow up post</a>, where I talk about being misquoted regarding this post.</span></div>
+<p />
+<div><span style="color: #999999;">EDIT 2: Patrick has a post up describing the exploits, now that there have been some patches applied. If you're a technically inclined individual, you might be interested. You can find it on <a href="http://www.kalzumeus.com/2010/09/22/security-lessons-learned-from-the-diaspora-launch/">his blog</a>.</span></div>
+</div>
