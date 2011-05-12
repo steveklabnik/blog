@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <meta charset='utf8' />
-    <title>Steve's Blo</title>
+    <title>Literate Coding - {{ page.title }}</title>
     {% include_css site %}
     {% include_js jquery-1.6.min %}
     {% include_js app %}
@@ -39,6 +39,7 @@
       </nav>
     </section>
     <section id='main'>
+      <h1>{{ page.title }}</h1>
       {{ content }}
     </section>
   </body>
