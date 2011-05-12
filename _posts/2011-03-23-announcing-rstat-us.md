@@ -1,6 +1,6 @@
 ---
 published: true
-title: Announcing rstat.u
+title: Announcing rstat.us
 layout: post
 ---
 
