@@ -4,13 +4,46 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-05-12T15:47:18-04:00</updated>
+ <updated>2011-05-12T17:27:06-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
    <email>steve@steveklabnik.com</email>
  </author>
 
+ 
+ <entry>
+   <title>The next iteration of my blog</title>
+   <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
+   <updated>2011-05-12T00:00:00-04:00</updated>
+   <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
+   <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
+blog, and here we are again. I've moved everything over to Jekyll, if
+that means anything to you. You can now &lt;a href=&quot;https://github.com/steveklabnik/blog&quot;&gt;look at my blog on
+GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;New-ish beginnings&lt;/h2&gt;
+
+&lt;p&gt;So why'd I do this? Well, this is just part of moving more towards
+hosting all of my own services, and not relying on services that others
+provide. This isn't some sort of arugment over individualism vs.
+collectivism, it's more about &lt;a href=&quot;http://nomoresharecropping.org/&quot;&gt;No More Sharecropping&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I'm still relying on people for hosting, of course. Nobody is 100%
+removed, but with my own backup of everything, I'm in total control
+here. It's really minimal work to keep this going, and only a few hours
+of setup to move everything over.&lt;/p&gt;
+
+&lt;h2&gt;A small change in focus, too&lt;/h2&gt;
+
+&lt;p&gt;I'm also going to stop bitching about politics so often, and try to be
+more constructive in general. I have a lot to say about this new
+humanities angle that my life has taken as of late. Hence, I've changed
+the title of my blog. And you can expect more posts along those lines.
+More about books, more about art and code, less whining. One may think
+I'm maturing or something...&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Contributing to Ruby's Documentation</title>
