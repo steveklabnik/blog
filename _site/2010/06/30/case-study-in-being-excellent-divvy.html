@@ -4,6 +4,11 @@
     <meta charset='utf8' />
     <title>Literate Programming - Case Study in being excellent: Divvy</title>
     <link href='http://feeds.feedburner.com/steveklabnik' rel='alternate' type='application/rss+xml' />
+    <link href='/css/blueprint/screen.css' media='screen, projection' rel='stylesheet' />
+    <link href='/css/blueprint/print.css' media='print' rel='stylesheet' />
+    <!--[if lt IE 8]>
+      <link href='/css/blueprint/ie.css' media='screen, projection' rel='stylesheet' />
+    <![endif]-->
     <link href='/css/site.css' rel='stylesheet' />
     <script src='/js/jquery-1.6.min.js'></script>
     <script src='/js/app.js'></script>
@@ -22,39 +27,14 @@
     //]]>
   </script>
   <body>
-    <section id='right'>
-      <aside>
-        <h1>Hi there, I'm Steve.</h1>
-        <img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200' />
-        <p>I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.</p>
-      </aside>
-      <nav>
-        <h1>See them all</h1>
-        <p>You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.</p>
-        <h1>Popular Posts</h1>
-        <p>Here are some of my most-viewed articles.</p>
-        <ul>
-          <li>
-            <a href='/2010/03/03/why-bother-creating.html'>Why bother creating?</a>
-          </li>
-          <li>
-            <a href='/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html'>A word about _why, #whyday, and Hackety Hack</a>
-          </li>
-          <li>
-            <a href='/2010/11/17/the-hardest-decision-i-ve-ever-made.html'>The hardest decision I've ever made</a>
-          </li>
-          <li>
-            <a href='/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html'>Create a more compelling experience for your users through game mechanics</a>
-          </li>
-          <li>
-            <a href='/2010/07/17/what-to-know-before-debating-type-systems.html'>What to know before debating type systems</a>
-          </li>
-        </ul>
-      </nav>
-    </section>
-    <section id='main'>
-      <h1>Case Study in being excellent: Divvy</h1>
-      <p>The other day I wrote a post about <a href="http://blog.steveklabnik.com/being-excellent-to-each-other">being excellent to each other</a>.
+    <div class='container'>
+      <div class='span-24'>
+        <br />
+      </div>
+      <section class='span-13 prepend-1 append-1 clear' id='main'>
+        <h1>Case Study in being excellent: Divvy</h1>
+        <hr />
+        <p>The other day I wrote a post about <a href="http://blog.steveklabnik.com/being-excellent-to-each-other">being excellent to each other</a>.
 Today, I've got a great example of that for you: Divvy.</p>
 
 <p>What would you do if you received an email like this?</p>
@@ -80,6 +60,37 @@ to <a href="http://www.mizage.com/divvy/">Divvy</a>.</p>
 
 <p>EDIT: They've posted the sales afterward on Reddit <a href="http://www.reddit.com/r/programming/comments/cmmfg/hey_reddit_a_week_ago_someone_posted_about_divvy/">here</a>.</p>
 
-    </section>
+      </section>
+      <section class='span-7 prepend-1 last' id='right'>
+        <aside>
+          <h2>Hi there, I'm Steve.</h2>
+          <img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200' />
+          <p>I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.</p>
+        </aside>
+        <nav>
+          <h2>See them all</h2>
+          <p>You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.</p>
+          <h2>Popular Posts</h2>
+          <p>Here are some of my most-viewed articles.</p>
+          <ul>
+            <li>
+              <a href='/2010/03/03/why-bother-creating.html'>Why bother creating?</a>
+            </li>
+            <li>
+              <a href='/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html'>A word about _why, #whyday, and Hackety Hack</a>
+            </li>
+            <li>
+              <a href='/2010/11/17/the-hardest-decision-i-ve-ever-made.html'>The hardest decision I've ever made</a>
+            </li>
+            <li>
+              <a href='/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html'>Create a more compelling experience for your users through game mechanics</a>
+            </li>
+            <li>
+              <a href='/2010/07/17/what-to-know-before-debating-type-systems.html'>What to know before debating type systems</a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </div>
   </body>
 </html>

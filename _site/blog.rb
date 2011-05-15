@@ -7,7 +7,7 @@ class Blog < Sinatra::Base
   set :public, Proc.new { File.join(root, "_site") }
 
   before do
-    response.headers['Cache-Control'] = 'public, max-age=31557600' # 1 year
+    response.headers['Cache-Control'] = 'public, max-age=31557600' if settings.environment == "production"
   end
 
   get '/' do

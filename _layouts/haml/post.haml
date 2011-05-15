@@ -4,7 +4,11 @@
     %meta{:charset => "utf8"}
     %title Literate Programming - {{ page.title }}
     %link{:rel => "alternate", :type => "application/rss+xml", :href => "http://feeds.feedburner.com/steveklabnik"}/
-    %link{ :rel => "stylesheet", :href => "/css/site.css"}/
+    %link{:rel => "stylesheet", :href => "/css/blueprint/screen.css", :media => "screen, projection"}/
+    %link{:rel => "stylesheet", :href => "/css/blueprint/print.css", :media => "print"}/
+    /[if lt IE 8]
+      %link{:rel => "stylesheet", :href => "/css/blueprint/ie.css", :media => "screen, projection"}/
+    %link{:rel => "stylesheet", :href => "/css/site.css"}/
     %script{:src => "/js/jquery-1.6.min.js"}
     %script{:src => "/js/app.js"}
   - if ENV['JEKYLL_ENV'] == "production"
@@ -19,27 +23,31 @@
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
       })();
   %body
-    %section#right
-      %aside
-        %h1 Hi there, I'm Steve.
-        %img{:src => "http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200"}
-        %p I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
-      %nav
-        %h1 See them all
-        %p You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.
-        %h1 Popular Posts
-        %p Here are some of my most-viewed articles.
-        %ul
-          %li
-            %a{:href => "/2010/03/03/why-bother-creating.html"} Why bother creating?
-          %li
-            %a{:href => "/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"} A word about _why, #whyday, and Hackety Hack
-          %li
-            %a{:href => "/2010/11/17/the-hardest-decision-i-ve-ever-made.html"} The hardest decision I've ever made
-          %li
-            %a{:href => "/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html"} Create a more compelling experience for your users through game mechanics
-          %li
-            %a{:href => "/2010/07/17/what-to-know-before-debating-type-systems.html"} What to know before debating type systems
-    %section#main
-      %h1 {{ page.title }}
-      {{ content }}
+    .container
+      .span-24
+        %br/
+      %section#main.span-13.prepend-1.append-1.clear
+        %h1 {{ page.title }}
+        %hr/
+        {{ content }}
+      %section#right.span-7.prepend-1.last
+        %aside
+          %h2 Hi there, I'm Steve.
+          %img{:src => "http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=200"}
+          %p I write both code and prose. Here's some of my thoughts about software, literature, art and code, with some politics thrown in on occasion. You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+        %nav
+          %h2 See them all
+          %p You're viewing a single post, but if you'd like to see the list of everything I've written, just <a href="/">go here</a>.
+          %h2 Popular Posts
+          %p Here are some of my most-viewed articles.
+          %ul
+            %li
+              %a{:href => "/2010/03/03/why-bother-creating.html"} Why bother creating?
+            %li
+              %a{:href => "/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"} A word about _why, #whyday, and Hackety Hack
+            %li
+              %a{:href => "/2010/11/17/the-hardest-decision-i-ve-ever-made.html"} The hardest decision I've ever made
+            %li
+              %a{:href => "/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html"} Create a more compelling experience for your users through game mechanics
+            %li
+              %a{:href => "/2010/07/17/what-to-know-before-debating-type-systems.html"} What to know before debating type systems
