@@ -19,12 +19,12 @@ Getting the Ruby source is pretty easy. You can find it on GitHub, here:
 [http://github.com/ruby/ruby][2] . Click the "fork" button and clone down your
 own fork:
 
-    $ git clone [git@github.com][3]:YOURUSERNAME/ruby.git
+    $ git clone git@github.com:YOURUSERNAME/ruby.git
 
-After that's done, cd in and add the main project as an upstream. This will
+After that's done, type `cd ruby/` and add the main project as an upstream. This will
 let you keep up-to-date with the latest changes:
 
-    $ git remote add upstream [https://github.com/ruby/ruby.git][4]
+    $ git remote add upstream https://github.com/ruby/ruby.git
 
     $ git fetch upstream
 
@@ -97,4 +97,3 @@ improve. ;)
    [9]: http://rdoc.rubyforge.org/RDoc/Parser/C.html
    [10]: http://redmine.ruby-lang.org/account/register
    [11]: http://redmine.ruby-lang.org/projects/ruby-19/issues/new
-
