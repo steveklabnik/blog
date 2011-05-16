@@ -21,7 +21,7 @@ own fork:
 
     $ git clone git@github.com:YOURUSERNAME/ruby.git
 
-After that's done, type `cd ruby/` and add the main project as an upstream. This will
+After that's done, type `cd ruby` and add the main project as an upstream. This will
 let you keep up-to-date with the latest changes:
 
     $ git remote add upstream https://github.com/ruby/ruby.git

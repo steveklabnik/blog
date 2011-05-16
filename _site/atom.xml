@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-05-15T18:40:46-04:00</updated>
+ <updated>2011-05-16T08:35:34-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -71,13 +71,13 @@ not me. So don't do that. :)&lt;/p&gt;
 &lt;a href=&quot;http://github.com/ruby/ruby&quot;&gt;http://github.com/ruby/ruby&lt;/a&gt; . Click the &quot;fork&quot; button and clone down your
 own fork:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ git clone [git@github.com][3]:YOURUSERNAME/ruby.git
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:YOURUSERNAME/ruby.git
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;After that's done, cd in and add the main project as an upstream. This will
+&lt;p&gt;After that's done, type &lt;code&gt;cd ruby&lt;/code&gt; and add the main project as an upstream. This will
 let you keep up-to-date with the latest changes:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ git remote add upstream [https://github.com/ruby/ruby.git][4]
+&lt;pre&gt;&lt;code&gt;$ git remote add upstream https://github.com/ruby/ruby.git
 
 $ git fetch upstream
 &lt;/code&gt;&lt;/pre&gt;
