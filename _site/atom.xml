@@ -4,7 +4,11 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
+<<<<<<< HEAD
  <updated>2011-05-21T13:01:50-04:00</updated>
+=======
+ <updated>2011-05-21T23:42:59+02:00</updated>
+>>>>>>> BAM! Style/CSS Revision Part 1. Hope ya like it. And I've also added a HTML5 fix for IE (Modernizr).
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -15,7 +19,7 @@
  <entry>
    <title>Single text, many masters</title>
    <link href="http://blog.steveklabnik.com/2011/05/21/single-text-many-masters.html"/>
-   <updated>2011-05-21T00:00:00-04:00</updated>
+   <updated>2011-05-21T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/21/single-text-many-masters</id>
    <content type="html">&lt;p&gt;Hey everyone. Here's a draft of an essay I've been working on. I'd love
 to hear your feedback.&lt;/p&gt;
@@ -397,7 +401,7 @@ addressed.&lt;/p&gt;
  <entry>
    <title>The next iteration of my blog</title>
    <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
-   <updated>2011-05-12T00:00:00-04:00</updated>
+   <updated>2011-05-12T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
    <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I've moved everything over to Jekyll, if
@@ -432,7 +436,7 @@ I'm maturing or something...&lt;/p&gt;
  <entry>
    <title>Contributing to Ruby's Documentation</title>
    <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
-   <updated>2011-05-10T00:00:00-04:00</updated>
+   <updated>2011-05-10T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
    <content type="html">&lt;p&gt;Ruby 1.9.3 is coming out soon! &lt;a href=&quot;http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge&quot;&gt;drbrain has challenged the Ruby community to
 improve its documentation&lt;/a&gt;, but some people were asking about how to do so.
@@ -531,7 +535,7 @@ improve. ;)&lt;/p&gt;
  <entry>
    <title>The first week of rstat.us: Users, Press, Scaling, oh my!</title>
    <link href="http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html"/>
-   <updated>2011-03-30T00:00:00-04:00</updated>
+   <updated>2011-03-30T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my</id>
    <content type="html">&lt;p&gt;Hey everyone. A lot of people have been asking me about &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; lately,
 so I figured I'd tell a little bit of the story as it's gone down so far.&lt;/p&gt;
@@ -661,7 +665,7 @@ us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&g
  <entry>
    <title>Announcing rstat.us</title>
    <link href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html"/>
-   <updated>2011-03-23T00:00:00-04:00</updated>
+   <updated>2011-03-23T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us</id>
    <content type="html">&lt;p&gt;Whew.&lt;/p&gt;
 
@@ -697,7 +701,7 @@ stuff we'd like to do.&lt;/p&gt;
  <entry>
    <title>Did you hear? I'm Ruby Mendicant University's first Visiting Teacher</title>
    <link href="http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher.html"/>
-   <updated>2011-03-18T00:00:00-04:00</updated>
+   <updated>2011-03-18T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher</id>
    <content type="html">&lt;p&gt;I've heard &lt;a href=&quot;http://university.rubymendicant.com/&quot;&gt;Ruby Mendicant University&lt;/a&gt; (also known as RMU, not to confuse
 you Robert Morris alums!) described as &quot;the best kept secret of the Ruby
@@ -723,7 +727,7 @@ next level, &lt;a href=&quot;http://university.rubymendicant.com/admissions&quot
  <entry>
    <title>I'm quitting Hacker News</title>
    <link href="http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news.html"/>
-   <updated>2011-03-03T00:00:00-05:00</updated>
+   <updated>2011-03-03T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news</id>
    <content type="html">&lt;p&gt;I've been thinking about this post for a while.&lt;/p&gt;
 
@@ -757,7 +761,7 @@ this here: &lt;a href=&quot;https://github.com/shoes/shoes/tree/feature/gemify&
  <entry>
    <title>A few Notes on Foucault</title>
    <link href="http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault.html"/>
-   <updated>2011-01-22T00:00:00-05:00</updated>
+   <updated>2011-01-22T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault</id>
    <content type="html">&lt;p&gt;I've almost always been in a habit of reading. When I was younger, I spent a
 lot of time in the library. I'd just grab an entire series of novels, and read
@@ -906,7 +910,7 @@ so I may have more to say about it later.&lt;/p&gt;
  <entry>
    <title>Goals for 2011</title>
    <link href="http://blog.steveklabnik.com/2011/01/02/goals-for-2011.html"/>
-   <updated>2011-01-02T00:00:00-05:00</updated>
+   <updated>2011-01-02T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2011/01/02/goals-for-2011</id>
    <content type="html">&lt;p&gt;This year I'm happy to report that I have much more upbeat plans than last
 year's kind of sad post. With that said, here's my 2011 goals:&lt;/p&gt;
@@ -966,7 +970,7 @@ Hopefully this will lead to success.&lt;/p&gt;&lt;/li&gt;
  <entry>
    <title>Hackety Hack v1.0</title>
    <link href="http://blog.steveklabnik.com/2010/12/25/hackety-hack-v1-0.html"/>
-   <updated>2010-12-25T00:00:00-05:00</updated>
+   <updated>2010-12-25T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/12/25/hackety-hack-v1-0</id>
    <content type="html">&lt;p&gt;It's been a long journey. I have a lot to say about this, but it'll have to
 wait until I'm not in the middle of nowhere spending some time with Maria's
@@ -981,7 +985,7 @@ family. I just wanted to tell you all Merry Christmas, and point you at the
  <entry>
    <title>The hardest decision I've ever made.</title>
    <link href="http://blog.steveklabnik.com/2010/11/17/the-hardest-decision-i-ve-ever-made.html"/>
-   <updated>2010-11-17T00:00:00-05:00</updated>
+   <updated>2010-11-17T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/11/17/the-hardest-decision-i-ve-ever-made</id>
    <content type="html">&lt;p&gt;I'll cut to the chase: I've stepped down as CTO of CloudFab. I don't
 want to discuss details, but life is too short to not be doing what
@@ -1041,7 +1045,7 @@ the end.&lt;/p&gt;
  <entry>
    <title>Trolling is a art</title>
    <link href="http://blog.steveklabnik.com/2010/09/24/trolling-is-a-art.html"/>
-   <updated>2010-09-24T00:00:00-04:00</updated>
+   <updated>2010-09-24T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/24/trolling-is-a-art</id>
    <content type="html">&lt;p&gt;I find it incredibly hard not to be judgmental.&lt;/p&gt;
 
@@ -1075,7 +1079,7 @@ forward.&lt;/p&gt;
  <entry>
    <title>80% of success is showing up</title>
    <link href="http://blog.steveklabnik.com/2010/09/21/80-of-success-is-showing-up.html"/>
-   <updated>2010-09-21T00:00:00-04:00</updated>
+   <updated>2010-09-21T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/21/80-of-success-is-showing-up</id>
    <content type="html">&lt;p&gt;It's funny how true this quote is.&lt;/p&gt;
 
@@ -1126,7 +1130,7 @@ you?&lt;/p&gt;
  <entry>
    <title>Trouble with Diaspora</title>
    <link href="http://blog.steveklabnik.com/2010/09/17/trouble-with-diaspora.html"/>
-   <updated>2010-09-17T00:00:00-04:00</updated>
+   <updated>2010-09-17T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/17/trouble-with-diaspora</id>
    <content type="html">&lt;p&gt;So, Wednesday, Diaspora was released.&lt;/p&gt;
 
@@ -1180,7 +1184,7 @@ might be interested. You can find it on &lt;a href=&quot;http://www.kalzumeus.co
  <entry>
    <title>A word about why, whyday, and Hackety Hack</title>
    <link href="http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"/>
-   <updated>2010-08-19T00:00:00-04:00</updated>
+   <updated>2010-08-19T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack</id>
    <content type="html">&lt;p&gt;Today is Whyday. A programmer's holiday. Today is the day that we
 don't forget that programming isn't all Agile and driven by behavior
@@ -1228,7 +1232,7 @@ hand.&lt;/p&gt;
  <entry>
    <title>A blip in time</title>
    <link href="http://blog.steveklabnik.com/2010/07/24/a-blip-in-time.html"/>
-   <updated>2010-07-24T00:00:00-04:00</updated>
+   <updated>2010-07-24T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/07/24/a-blip-in-time</id>
    <content type="html">&lt;p&gt;Sometimes, insight comes from very unlikely places.&lt;/p&gt;
 
@@ -1294,7 +1298,7 @@ know if we're doing better than yesterday?&lt;/p&gt;
  <entry>
    <title>What To Know Before Debating Type Systems</title>
    <link href="http://blog.steveklabnik.com/2010/07/17/what-to-know-before-debating-type-systems.html"/>
-   <updated>2010-07-17T00:00:00-04:00</updated>
+   <updated>2010-07-17T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/07/17/what-to-know-before-debating-type-systems</id>
    <content type="html">&lt;p&gt;Recently, it was brought up on Proggit that Chris Smith's &quot;What to Know Before
 Debating Type Systems&quot; was no longer online. This is a really great article,
@@ -1930,7 +1934,7 @@ programming tasks.&lt;/p&gt;
  <entry>
    <title>Case Study in being excellent: Divvy</title>
    <link href="http://blog.steveklabnik.com/2010/06/30/case-study-in-being-excellent-divvy.html"/>
-   <updated>2010-06-30T00:00:00-04:00</updated>
+   <updated>2010-06-30T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/06/30/case-study-in-being-excellent-divvy</id>
    <content type="html">&lt;p&gt;The other day I wrote a post about &lt;a href=&quot;http://blog.steveklabnik.com/being-excellent-to-each-other&quot;&gt;being excellent to each other&lt;/a&gt;.
 Today, I've got a great example of that for you: Divvy.&lt;/p&gt;
@@ -1963,7 +1967,7 @@ to &lt;a href=&quot;http://www.mizage.com/divvy/&quot;&gt;Divvy&lt;/a&gt;.&lt;/
  <entry>
    <title>Productivity Waves</title>
    <link href="http://blog.steveklabnik.com/2010/06/08/productivity-waves.html"/>
-   <updated>2010-06-08T00:00:00-04:00</updated>
+   <updated>2010-06-08T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/06/08/productivity-waves</id>
    <content type="html">&lt;p&gt;Right now, I'm having a bit of a 'darkness before the dawn' kind of moment. I
 feel like I might soon start to become productive again.&lt;/p&gt;
@@ -2012,7 +2016,7 @@ things, book reviews, and social commentary waiting in the wings.&lt;/p&gt;
  <entry>
    <title>You are terrified of your own children, since they are natives in a world where you will always be immigrants.</title>
    <link href="http://blog.steveklabnik.com/2010/05/01/you-are-terrified-of-your-own-children-since-they-are-natives-in-a-world-where-you-will-always-be-immigrants.html"/>
-   <updated>2010-05-01T00:00:00-04:00</updated>
+   <updated>2010-05-01T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/05/01/you-are-terrified-of-your-own-children-since-they-are-natives-in-a-world-where-you-will-always-be-immigrants</id>
    <content type="html">&lt;p&gt;I just saw this today. It kind of goes along with my &quot;Move to the Internet&quot;
 post from a few days ago.&lt;/p&gt;
@@ -2205,7 +2209,7 @@ humane and fair than the world your governments have made before.&lt;/p&gt;
  <entry>
    <title>A Break with the Past</title>
    <link href="http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past.html"/>
-   <updated>2010-04-27T00:00:00-04:00</updated>
+   <updated>2010-04-27T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.countdowntooauth.com/&quot;&gt;Pretty soon&lt;/a&gt;, Twitter is going to turn off Basic Authentication and switch
 entirely to OAuth. &lt;a href=&quot;http://www.scripting.com/stories/2010/04/26/theToxicCoralReef.html&quot;&gt;People are upset&lt;/a&gt;. It's natural. If apps aren't updated,
@@ -2287,7 +2291,7 @@ it's good that they're embracing it fully.&lt;/p&gt;
  <entry>
    <title>Living in the Cloud</title>
    <link href="http://blog.steveklabnik.com/2010/04/24/living-in-the-cloud.html"/>
-   <updated>2010-04-24T00:00:00-04:00</updated>
+   <updated>2010-04-24T00:00:00+02:00</updated>
    <id>http://blog.steveklabnik.com/2010/04/24/living-in-the-cloud</id>
    <content type="html">&lt;p&gt;I've been joking for a while that I'd like to &quot;move to the Internet.&quot;
 Generally I cite my familiarity and love with online culture as opposed to
@@ -2341,7 +2345,7 @@ where I don't care much for most of my possessions anymore... &lt;/p&gt;
  <entry>
    <title>Book Review: Rework</title>
    <link href="http://blog.steveklabnik.com/2010/03/10/book-review-rework.html"/>
-   <updated>2010-03-10T00:00:00-05:00</updated>
+   <updated>2010-03-10T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/10/book-review-rework</id>
    <content type="html">&lt;p&gt;I've been waiting for this book for a while. &quot;Rework&quot; is the new book by Jason
 Fried and David Heinemeier Hansson from 37signals. It hit stores on Tuesday.
@@ -2434,7 +2438,7 @@ thoughts to chew on.&lt;/p&gt;
  <entry>
    <title>Create a more compelling experience for your users through game mechanics</title>
    <link href="http://blog.steveklabnik.com/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html"/>
-   <updated>2010-03-08T00:00:00-05:00</updated>
+   <updated>2010-03-08T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics</id>
    <content type="html">&lt;p&gt;Ever wonder why some websites are so addictive? Certain sites always keep you
 going back, time after time after time. Well, I can't speak for all of them,
@@ -2621,7 +2625,7 @@ again. Let me know what you think.&lt;/p&gt;
  <entry>
    <title>Writing a "su" feature with Authlogic</title>
    <link href="http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic.html"/>
-   <updated>2010-03-05T00:00:00-05:00</updated>
+   <updated>2010-03-05T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic</id>
    <content type="html">&lt;p&gt;Sometimes, when responding to a support request, it's nice to see what your
 users see. At the same time, you don't want to ask your users for their
@@ -2727,7 +2731,7 @@ end
  <entry>
    <title>Why bother creating?</title>
    <link href="http://blog.steveklabnik.com/2010/03/03/why-bother-creating.html"/>
-   <updated>2010-03-03T00:00:00-05:00</updated>
+   <updated>2010-03-03T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/03/why-bother-creating</id>
    <content type="html">&lt;p&gt;Kanye West posted something interesting about the nature of creativity today.
 I'm going to make a copy of it here, because I find the presentation also
@@ -2815,7 +2819,7 @@ something more important than that, change the world, keep pushing.&lt;/p&gt;
  <entry>
    <title>Reddit drama: an interesting look at community values</title>
    <link href="http://blog.steveklabnik.com/2010/03/01/reddit-drama-an-interesting-look-at-community-values.html"/>
-   <updated>2010-03-01T00:00:00-05:00</updated>
+   <updated>2010-03-01T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/01/reddit-drama-an-interesting-look-at-community-values</id>
    <content type="html">&lt;p&gt;I bet social psychologists are having a field day with the Internet. I know
 nothing about the field, so I don't know if there are thousands of papers
@@ -2960,7 +2964,7 @@ watch!&lt;/p&gt;
  <entry>
    <title>The Hackety Mainfesto</title>
    <link href="http://blog.steveklabnik.com/2009/12/31/the-hackety-mainfesto.html"/>
-   <updated>2009-12-31T00:00:00-05:00</updated>
+   <updated>2009-12-31T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/31/the-hackety-mainfesto</id>
    <content type="html">&lt;p&gt;For those of you that don't know, I've taken over a project by someone named
 _why. He dropped off of the face of the Internet back in March, and the
@@ -3040,7 +3044,7 @@ definitely encouraged, even demanded.&lt;/p&gt;
  <entry>
    <title>The Little Coder's Predicament</title>
    <link href="http://blog.steveklabnik.com/2009/12/28/the-little-coder-s-predicament.html"/>
-   <updated>2009-12-28T00:00:00-05:00</updated>
+   <updated>2009-12-28T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/28/the-little-coder-s-predicament</id>
    <content type="html">&lt;p&gt;For those of you that don't know, I've taken over a project by someone named
 _why. He dropped off of the face of the Internet back in March, and the
@@ -3203,7 +3207,7 @@ yes, Ruby is preferable.&lt;/p&gt;
  <entry>
    <title>About Crows</title>
    <link href="http://blog.steveklabnik.com/2009/12/02/about-crows.html"/>
-   <updated>2009-12-02T00:00:00-05:00</updated>
+   <updated>2009-12-02T00:00:00+01:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/02/about-crows</id>
    <content type="html">&lt;p&gt;A short time ago, the G20 came right here to Pittsburgh. With an event of such
 worldwide importance happening in our backyards, several people decided to

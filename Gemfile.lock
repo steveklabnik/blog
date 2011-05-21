@@ -22,7 +22,11 @@ GEM
       syntax (>= 1.0.0)
     multi_json (1.0.2)
     pygmentize (0.0.3)
+<<<<<<< HEAD
     rack (1.2.1)
+=======
+    rack (1.2.2)
+>>>>>>> BAM! Style/CSS Revision Part 1. Hope ya like it. And I've also added a HTML5 fix for IE (Modernizr).
     rdiscount (1.6.8)
     sass (3.1.1)
     sinatra (1.2.6)
