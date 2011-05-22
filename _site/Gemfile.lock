@@ -22,14 +22,14 @@ GEM
       syntax (>= 1.0.0)
     multi_json (1.0.2)
     pygmentize (0.0.3)
-    rack (1.2.2)
+    rack (1.2.1)
     rdiscount (1.6.8)
     sass (3.1.1)
     sinatra (1.2.6)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
     syntax (1.0.0)
-    tilt (1.3)
+    tilt (1.3.1)
 
 PLATFORMS
   ruby
@@ -39,6 +39,7 @@ DEPENDENCIES
   haml
   jekyll
   pygmentize
+  rack (= 1.2.1)
   rdiscount
   sass
   sinatra

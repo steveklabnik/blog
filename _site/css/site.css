@@ -6,7 +6,8 @@ body {
   background-color: #cccccc;
   background-image: url("/images/background/exclusive_paper.gif");
   font: normal 13px Helmet, Freesans, sans-serif;
-  margin: 78px; }
+  margin: 78px;
+  overflow-x: hidden; }
 
 /*
  * Main

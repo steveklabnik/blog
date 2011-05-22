@@ -4,11 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
-<<<<<<< HEAD
- <updated>2011-05-21T13:01:50-04:00</updated>
-=======
- <updated>2011-05-21T23:42:59+02:00</updated>
->>>>>>> BAM! Style/CSS Revision Part 1. Hope ya like it. And I've also added a HTML5 fix for IE (Modernizr).
+ <updated>2011-05-22T21:56:47+02:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
