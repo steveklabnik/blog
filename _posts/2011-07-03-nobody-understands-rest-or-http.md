@@ -82,7 +82,7 @@ money, you're creating a Transaction resource:
 
 Got it? So then, it returns the URI for your new Transaction:
 
-    HTTP/1.1 200 OK
+    HTTP/1.1 201 OK
     Date: Sun, 3 Jul 2011 23:59:59 GMT
     Content-Type: application/json
     Content-Length: 12345
