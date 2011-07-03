@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-03T17:47:21-04:00</updated>
+ <updated>2011-07-03T18:02:34-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -218,9 +218,15 @@ first iPhone UA:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;Then, once detecting you have a mobile User-Agent, you'd give back a
+mobile version of the site. Hosting it on a subdomain is a minor sin,
+but really, like I said above, this is really a question of
+representation, and so having two URLs that point to the same resource
+is kinda awkward.&lt;/p&gt;
+
 &lt;p&gt;Whatever you do, for the love of users, please don't detect these
-headers, then redirect your users to m.whatever.com. One of my local
-news websites does this, and it means that every time I try to follow a
+headers, then redirect your users to m.whatever.com, at the root. One of my
+local news websites does this, and it means that every time I try to follow a
 link from Twitter in my mobile browser, I don't see their article, I see
 their homepage. It's infuriating.&lt;/p&gt;
 

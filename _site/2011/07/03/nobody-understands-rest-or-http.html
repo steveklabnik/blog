@@ -234,9 +234,15 @@ first iPhone UA:</p>
 <pre><code>Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
 </code></pre>
 
+<p>Then, once detecting you have a mobile User-Agent, you'd give back a
+mobile version of the site. Hosting it on a subdomain is a minor sin,
+but really, like I said above, this is really a question of
+representation, and so having two URLs that point to the same resource
+is kinda awkward.</p>
+
 <p>Whatever you do, for the love of users, please don't detect these
-headers, then redirect your users to m.whatever.com. One of my local
-news websites does this, and it means that every time I try to follow a
+headers, then redirect your users to m.whatever.com, at the root. One of my
+local news websites does this, and it means that every time I try to follow a
 link from Twitter in my mobile browser, I don't see their article, I see
 their homepage. It's infuriating.</p>
 
