@@ -102,7 +102,7 @@ from=1&amp;to=2&amp;amount=500.00
 
 <p>Got it? So then, it returns the URI for your new Transaction:</p>
 
-<pre><code>HTTP/1.1 200 OK
+<pre><code>HTTP/1.1 201 OK
 Date: Sun, 3 Jul 2011 23:59:59 GMT
 Content-Type: application/json
 Content-Length: 12345
@@ -187,6 +187,17 @@ about <code>vnd</code>. It's a <a href="http://tools.ietf.org/html/rfc4288#secti
 After all, we don't really want just any old JSON, we want my specific
 form of JSON. This lets us still have our one URL to represent our
 resource, yet version everything appropriately.</p>
+
+<p>I got a comment from <a href="http://avdi.org/">Avdi Grimm</a> about this, too:</p>
+
+<blockquote><p>Here's an article you might find interesting: <a href="http://www.informit.com/articles/article.aspx?p=1566460">http://www.informit.com/articles/article.aspx?p=1566460</a></p>
+
+<p>The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:</p>
+
+<pre><code>vnd.example-com.foo+json; version=1.0
+</code></pre>
+
+<p>Sadly, Rails does not (yet) understand this format.</p></blockquote>
 
 <h3>I'd like my content to be displayed in multiple langauges</h3>
 

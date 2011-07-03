@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-03T15:47:48-04:00</updated>
+ <updated>2011-07-03T17:18:49-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -99,7 +99,7 @@ from=1&amp;amp;to=2&amp;amp;amount=500.00
 
 &lt;p&gt;Got it? So then, it returns the URI for your new Transaction:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;HTTP/1.1 200 OK
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 201 OK
 Date: Sun, 3 Jul 2011 23:59:59 GMT
 Content-Type: application/json
 Content-Length: 12345
@@ -184,6 +184,17 @@ about &lt;code&gt;vnd&lt;/code&gt;. It's a &lt;a href=&quot;http://tools.ietf.or
 After all, we don't really want just any old JSON, we want my specific
 form of JSON. This lets us still have our one URL to represent our
 resource, yet version everything appropriately.&lt;/p&gt;
+
+&lt;p&gt;I got a comment from &lt;a href=&quot;http://avdi.org/&quot;&gt;Avdi Grimm&lt;/a&gt; about this, too:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Here's an article you might find interesting: &lt;a href=&quot;http://www.informit.com/articles/article.aspx?p=1566460&quot;&gt;http://www.informit.com/articles/article.aspx?p=1566460&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vnd.example-com.foo+json; version=1.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sadly, Rails does not (yet) understand this format.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;h3&gt;I'd like my content to be displayed in multiple langauges&lt;/h3&gt;
 

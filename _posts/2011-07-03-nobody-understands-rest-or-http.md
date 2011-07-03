@@ -164,6 +164,16 @@ After all, we don't really want just any old JSON, we want my specific
 form of JSON. This lets us still have our one URL to represent our
 resource, yet version everything appropriately.
 
+I got a comment from [Avdi Grimm](http://avdi.org/) about this, too:
+
+> Here's an article you might find interesting: [http://www.informit.com/articles/article.aspx?p=1566460](http://www.informit.com/articles/article.aspx?p=1566460)
+>
+> The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:
+>
+>     vnd.example-com.foo+json; version=1.0
+>
+> Sadly, Rails does not (yet) understand this format.
+
 ### I'd like my content to be displayed in multiple langauges
 
 This is related, but a little different. What about pages in different
