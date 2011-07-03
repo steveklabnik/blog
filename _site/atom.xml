@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-05-22T21:56:47+02:00</updated>
+ <updated>2011-07-03T15:47:48-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -13,9 +13,263 @@
 
  
  <entry>
+   <title>Nobody Understands REST or HTTP</title>
+   <link href="http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html"/>
+   <updated>2011-07-03T00:00:00-04:00</updated>
+   <id>http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http</id>
+   <content type="html">&lt;p&gt;The more that I've learned about web development, the more that I've
+come to appreciate the thoroughness and thoughtfulness of the authors of
+the HTTP RFC and Roy Fielding's dissertation. It seems like the answers
+to most problems come down to &quot;There's a section of the spec for that.&quot;
+Now, obviously, they're not infallible, and I'm not saying that there's
+zero room for improvement. But it really disappoints me when people
+don't understand the way that a given issue is supposed to be solved,
+and so they make up a partial solution that solves their given case but
+doesn't jive well with the way that everything else works. There are
+valid criticisms of the specs, but they have to come from an informed
+place about what the spec says in the first place.&lt;/p&gt;
+
+&lt;p&gt;Let's talk about a few cases where either REST or HTTP (which is clearly
+RESTful in its design) solves a common web development problem.&lt;/p&gt;
+
+&lt;h3&gt;I need to design my API&lt;/h3&gt;
+
+&lt;p&gt;This one is a bit more general, but the others build off of it, so bear
+with me.&lt;/p&gt;
+
+&lt;p&gt;The core idea of REST is right there in the name: &quot;Representational
+State Transfer&quot; It's about transferring representations of the state...
+of resources. Okay, so one part isn't in the name. But still, let's
+break this down.&lt;/p&gt;
+
+&lt;h4&gt;Resources&lt;/h4&gt;
+
+&lt;p&gt;From &lt;a href=&quot;http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_1&quot;&gt;Fielding's dissertation&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The key abstraction of information in REST is a resource. Any information
+that can be named can be a resource: a document or image, a temporal service
+(e.g. &quot;today's weather in Los Angeles&quot;), a collection of other resources, a
+non-virtual object (e.g. a person), and so on. In other words, any concept that
+might be the target of an author's hypertext reference must fit within the
+definition of a resource. A resource is a conceptual mapping to a set of
+entities, not the entity that corresponds to the mapping at any particular
+point in time.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;When we interact with a RESTful system, we're interacting with a set of
+resources. Clients request resources from the server in a variety of
+ways. But the key thing here is that resources are &lt;em&gt;nouns&lt;/em&gt;. So a RESTful
+API consists of a set of URIs that map entities in your system to
+endpoints, and then you use HTTP itself for the verbs. If your URLs have
+action words in them, you're doing it wrong. Let's look at an example of
+this, from the early days of Rails. When Rails first started messing
+around with REST, the URLs looked like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/posts/show/1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you you use Rails today, you'll note that the corresponding URL is
+this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/posts/1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Why? Well, it's because the 'show' is unnecessary; you're performing a
+GET request, and that demonstrates that you want to show that resource.
+It doesn't need to be in the URL.&lt;/p&gt;
+
+&lt;h4&gt;A digression about actions&lt;/h4&gt;
+
+&lt;p&gt;Sometimes, you need to perform some sort of action, though. Verbs are
+useful. So how's this fit in? Let's consider the example of transferring
+money from one Account to another. You might decided to build a URI like
+this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;POST /accounts/1/transfer/500.00/to/2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;to transfer $500 from Account 1 to Account 2. But this is wrong! What
+you really need to do is consider the nouns. You're not transferring
+money, you're creating a Transaction resource:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;POST /transactions HTTP/1.1
+Host: &amp;lt;snip, and all other headers&amp;gt;
+
+from=1&amp;amp;to=2&amp;amp;amount=500.00
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Got it? So then, it returns the URI for your new Transaction:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 200 OK
+Date: Sun, 3 Jul 2011 23:59:59 GMT
+Content-Type: application/json
+Content-Length: 12345
+
+{&quot;transaction&quot;:{&quot;id&quot;:1,&quot;uri&quot;:&quot;/transactions/1&quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Whoah, &lt;a href=&quot;http://timelessrepo.com/haters-gonna-hateoas&quot;&gt;HATEOS&lt;/a&gt;! Anyway,
+so now we can GET our Transaction:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET /transactions/1 HTTP/1.1
+Accept: application/json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and the response:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 blah blah blah
+
+{&quot;id&quot;:1,&quot;status&quot;:&quot;in-progress&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So we know it's working. We can continue to poll the URI and see when
+our transaction is finished, or if it failed, or whatever. Easy! But
+it's about manipulating those nouns.&lt;/p&gt;
+
+&lt;h4&gt;Representations&lt;/h4&gt;
+
+&lt;p&gt;You'll notice a pair of headers in the above HTTP requests and
+responses: Accept and Content-Type. These describe the different
+'representation' of any given resource. From &lt;a href=&quot;http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_2&quot;&gt;Fielding&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;REST components perform actions on a resource by using a representation to
+capture the current or intended state of that resource and transferring that
+representation between components. A representation is a sequence of bytes,
+plus representation metadata to describe those bytes. Other commonly used but
+less precise names for a representation include: document, file, and HTTP
+message entity, instance, or variant.&lt;/p&gt;
+
+&lt;p&gt;A representation consists of data, metadata describing the data, and, on
+occasion, metadata to describe the metadata (usually for the purpose of
+verifying message integrity).&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;So &lt;code&gt;/accounts/1&lt;/code&gt; represents a resource. But it doesn't include the form
+that the resource takes. That's what these two headers are for.&lt;/p&gt;
+
+&lt;p&gt;This is also why adding &lt;code&gt;.html&lt;/code&gt; to the end of your URLs is kinda silly.
+If I request &lt;code&gt;/accounts/1.html&lt;/code&gt; with an &lt;code&gt;Accept&lt;/code&gt; header of
+&lt;code&gt;applicaion/json&lt;/code&gt;, then I'll get JSON. The &lt;code&gt;Content-Type&lt;/code&gt; header is the
+server telling us what kind of representation it's sending back as well.
+The important thing, though, is that a given resource can have many
+different representations. Ideally, there should be one unambiguous
+source of information in a system, and you can get different
+representations using &lt;code&gt;Accept&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4&gt;State and Transfer&lt;/h4&gt;
+
+&lt;p&gt;This is more about the way HTTP is designed, so I'll just keep this
+short: Requests are designed to be stateless, and the server holds all
+of the state for its resources. This is important for caching and a few
+other things, but it's sort of out of the scope of this post.&lt;/p&gt;
+
+&lt;p&gt;Okay. With all of that out of the way, let's talk about some more
+specific problems that REST/HTTP solve.&lt;/p&gt;
+
+&lt;h3&gt;I want my API to be versioned&lt;/h3&gt;
+
+&lt;p&gt;The first thing that people do when they want a versioned API is to
+shove a /v1/ in the URL. &lt;em&gt;&lt;em&gt;THIS IS BAD!!!!!1&lt;/em&gt;&lt;/em&gt;. &lt;code&gt;Accept&lt;/code&gt; solves this
+problem. What you're really asking for is &quot;I'd like the version two
+representation of this resource.&quot; So use accept!&lt;/p&gt;
+
+&lt;p&gt;Here's an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET /accounts/1 HTTP/1.1
+Accept: application/vnd.steveklabnik-v2+json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You'll notice a few things: we have a + in our MIME type, and before it
+is a bunch of junk that wasn't there before. It breaks down into three
+things: &lt;code&gt;vnd&lt;/code&gt;, my name, and &lt;code&gt;v2&lt;/code&gt;. You can guess what v2 means, but what
+about &lt;code&gt;vnd&lt;/code&gt;. It's a &lt;a href=&quot;http://tools.ietf.org/html/rfc4288#section-3.2&quot;&gt;Vendor MIME Type&lt;/a&gt;.
+After all, we don't really want just any old JSON, we want my specific
+form of JSON. This lets us still have our one URL to represent our
+resource, yet version everything appropriately.&lt;/p&gt;
+
+&lt;h3&gt;I'd like my content to be displayed in multiple langauges&lt;/h3&gt;
+
+&lt;p&gt;This is related, but a little different. What about pages in different
+languages? Again, we have a question of representation, not one of
+content. /en/whatever is not appropriate here. Turns out, &lt;a href=&quot;http://tools.ietf.org/html/rfc2616#section-14.4&quot;&gt;there's a
+header for that: Accept-Language&lt;/a&gt;.
+Respect the headers, and everything works out.&lt;/p&gt;
+
+&lt;h3&gt;I'd like my content to have a mobile view&lt;/h3&gt;
+
+&lt;p&gt;Sounds like I'm beating a dead horse, but again: it's a representation
+question. In this case, you'd like to vary the response by the
+User-Agent: give one that's mobile-friendly. There's a whole list of
+&lt;a href=&quot;http://www.w3.org/TR/mobile-bp/&quot;&gt;mobile best practices&lt;/a&gt; that the w3c
+recommends, but the short of it is this: the User-Agent should let you
+know that you're dealing with a mobile device. For example, here's the
+first iPhone UA:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Whatever you do, for the love of users, please don't detect these
+headers, then redirect your users to m.whatever.com. One of my local
+news websites does this, and it means that every time I try to follow a
+link from Twitter in my mobile browser, I don't see their article, I see
+their homepage. It's infuriating.&lt;/p&gt;
+
+&lt;h3&gt;I'd like to hide some of my content&lt;/h3&gt;
+
+&lt;p&gt;Every once in a while, you see a story like this: &lt;a href=&quot;http://www.boingboing.net/2010/10/25/local-newspaper-boas.html&quot;&gt;Local paper boasts
+ultimate passive-agressive paywall policy&lt;/a&gt;.
+Now, I find paywalls distasteful, but this is not the way to do it.
+There are technological means to limit content on the web: making users
+be logged-in to read things, for example.&lt;/p&gt;
+
+&lt;p&gt;When this was discussed on Hacker News, &lt;a href=&quot;http://news.ycombinator.com/item?id=1834075&quot;&gt;here's&lt;/a&gt;
+what I had to say:&lt;/p&gt;
+
+&lt;p&gt;nkurz:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I presume if I had an unattended roadside vegetable stand with a cash-box, that I'd be able to prosecute someone who took vegetables without paying, certainly if they also made off with the cash-box. Why is this different on the web? And if a written prohibition has no legal standing, why do so many companies pay lawyers to write click-through &quot;terms of service&quot; agreements?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;me:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;Why is this different on the web?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Let's go through what happens when I visit a web site. I type a URL in my bar, and hit enter. My web browser makes a request via http to a server, and the server inspects the request, determines if I should see the content or not, and returns either a 200 if I am allowed, and a 403 if I'm not. So, by viewing their pages, I'm literally asking permission, and being allowed.&lt;/p&gt;
+
+&lt;p&gt;It sounds to me like a misconfiguration of their server; it's not doing what they want it to.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;h3&gt;I'd like to do some crazy ajax, yet have permalinks&lt;/h3&gt;
+
+&lt;p&gt;This is an example of where the spec is obviously deficient, and so
+something had to be done.&lt;/p&gt;
+
+&lt;p&gt;As the web grew, AJAXy 'web applications' started to become more and
+more the norm. And so applications wanted to provide deep-linking
+capabilities to users, but there's a problem: they couldn't manipulate
+the URL with Javascript without causing a redirect. They &lt;em&gt;could&lt;/em&gt;
+manipulate the anchor, though. You know, that part after the #. So,
+Google came up with a convention: &lt;a href=&quot;http://code.google.com/web/ajaxcrawling/docs/getting-started.html&quot;&gt;Ajax Fragments&lt;/a&gt;.
+This fixed the problem in the short term, but then the spec got fixed in
+the long term: &lt;a href=&quot;http://dev.w3.org/html5/spec-author-view/history.html&quot;&gt;pushState&lt;/a&gt;.
+This lets you still provide a nice deep URL to your users, but not have
+that awkward #!.&lt;/p&gt;
+
+&lt;p&gt;In this case, there was a legitimate technical issue with the spec, and
+so it's valid to invent something. But then the standard improved, and
+so people should stop using #! as HTML5 gains browser support.&lt;/p&gt;
+
+&lt;h3&gt;In conclusion&lt;/h3&gt;
+
+&lt;p&gt;Seriously, most of the problems that you're solving are social, not
+technical. The web is decades old at this point, most people have
+considered these kinds of problems in the past. That doesn't mean that
+they always have the right answer, but they usually do have an answer,
+and it'd behoove you to know what it is before you invent something on
+your own.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Single text, many masters</title>
    <link href="http://blog.steveklabnik.com/2011/05/21/single-text-many-masters.html"/>
-   <updated>2011-05-21T00:00:00+02:00</updated>
+   <updated>2011-05-21T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/21/single-text-many-masters</id>
    <content type="html">&lt;p&gt;Hey everyone. Here's a draft of an essay I've been working on. I'd love
 to hear your feedback.&lt;/p&gt;
@@ -397,7 +651,7 @@ addressed.&lt;/p&gt;
  <entry>
    <title>The next iteration of my blog</title>
    <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
-   <updated>2011-05-12T00:00:00+02:00</updated>
+   <updated>2011-05-12T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
    <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I've moved everything over to Jekyll, if
@@ -432,7 +686,7 @@ I'm maturing or something...&lt;/p&gt;
  <entry>
    <title>Contributing to Ruby's Documentation</title>
    <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
-   <updated>2011-05-10T00:00:00+02:00</updated>
+   <updated>2011-05-10T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
    <content type="html">&lt;p&gt;Ruby 1.9.3 is coming out soon! &lt;a href=&quot;http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge&quot;&gt;drbrain has challenged the Ruby community to
 improve its documentation&lt;/a&gt;, but some people were asking about how to do so.
@@ -531,7 +785,7 @@ improve. ;)&lt;/p&gt;
  <entry>
    <title>The first week of rstat.us: Users, Press, Scaling, oh my!</title>
    <link href="http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html"/>
-   <updated>2011-03-30T00:00:00+02:00</updated>
+   <updated>2011-03-30T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my</id>
    <content type="html">&lt;p&gt;Hey everyone. A lot of people have been asking me about &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; lately,
 so I figured I'd tell a little bit of the story as it's gone down so far.&lt;/p&gt;
@@ -661,7 +915,7 @@ us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&g
  <entry>
    <title>Announcing rstat.us</title>
    <link href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html"/>
-   <updated>2011-03-23T00:00:00+01:00</updated>
+   <updated>2011-03-23T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us</id>
    <content type="html">&lt;p&gt;Whew.&lt;/p&gt;
 
@@ -697,7 +951,7 @@ stuff we'd like to do.&lt;/p&gt;
  <entry>
    <title>Did you hear? I'm Ruby Mendicant University's first Visiting Teacher</title>
    <link href="http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher.html"/>
-   <updated>2011-03-18T00:00:00+01:00</updated>
+   <updated>2011-03-18T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher</id>
    <content type="html">&lt;p&gt;I've heard &lt;a href=&quot;http://university.rubymendicant.com/&quot;&gt;Ruby Mendicant University&lt;/a&gt; (also known as RMU, not to confuse
 you Robert Morris alums!) described as &quot;the best kept secret of the Ruby
@@ -723,7 +977,7 @@ next level, &lt;a href=&quot;http://university.rubymendicant.com/admissions&quot
  <entry>
    <title>I'm quitting Hacker News</title>
    <link href="http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news.html"/>
-   <updated>2011-03-03T00:00:00+01:00</updated>
+   <updated>2011-03-03T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news</id>
    <content type="html">&lt;p&gt;I've been thinking about this post for a while.&lt;/p&gt;
 
@@ -757,7 +1011,7 @@ this here: &lt;a href=&quot;https://github.com/shoes/shoes/tree/feature/gemify&
  <entry>
    <title>A few Notes on Foucault</title>
    <link href="http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault.html"/>
-   <updated>2011-01-22T00:00:00+01:00</updated>
+   <updated>2011-01-22T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault</id>
    <content type="html">&lt;p&gt;I've almost always been in a habit of reading. When I was younger, I spent a
 lot of time in the library. I'd just grab an entire series of novels, and read
@@ -906,7 +1160,7 @@ so I may have more to say about it later.&lt;/p&gt;
  <entry>
    <title>Goals for 2011</title>
    <link href="http://blog.steveklabnik.com/2011/01/02/goals-for-2011.html"/>
-   <updated>2011-01-02T00:00:00+01:00</updated>
+   <updated>2011-01-02T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2011/01/02/goals-for-2011</id>
    <content type="html">&lt;p&gt;This year I'm happy to report that I have much more upbeat plans than last
 year's kind of sad post. With that said, here's my 2011 goals:&lt;/p&gt;
@@ -966,7 +1220,7 @@ Hopefully this will lead to success.&lt;/p&gt;&lt;/li&gt;
  <entry>
    <title>Hackety Hack v1.0</title>
    <link href="http://blog.steveklabnik.com/2010/12/25/hackety-hack-v1-0.html"/>
-   <updated>2010-12-25T00:00:00+01:00</updated>
+   <updated>2010-12-25T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/12/25/hackety-hack-v1-0</id>
    <content type="html">&lt;p&gt;It's been a long journey. I have a lot to say about this, but it'll have to
 wait until I'm not in the middle of nowhere spending some time with Maria's
@@ -981,7 +1235,7 @@ family. I just wanted to tell you all Merry Christmas, and point you at the
  <entry>
    <title>The hardest decision I've ever made.</title>
    <link href="http://blog.steveklabnik.com/2010/11/17/the-hardest-decision-i-ve-ever-made.html"/>
-   <updated>2010-11-17T00:00:00+01:00</updated>
+   <updated>2010-11-17T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/11/17/the-hardest-decision-i-ve-ever-made</id>
    <content type="html">&lt;p&gt;I'll cut to the chase: I've stepped down as CTO of CloudFab. I don't
 want to discuss details, but life is too short to not be doing what
@@ -1041,7 +1295,7 @@ the end.&lt;/p&gt;
  <entry>
    <title>Trolling is a art</title>
    <link href="http://blog.steveklabnik.com/2010/09/24/trolling-is-a-art.html"/>
-   <updated>2010-09-24T00:00:00+02:00</updated>
+   <updated>2010-09-24T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/24/trolling-is-a-art</id>
    <content type="html">&lt;p&gt;I find it incredibly hard not to be judgmental.&lt;/p&gt;
 
@@ -1075,7 +1329,7 @@ forward.&lt;/p&gt;
  <entry>
    <title>80% of success is showing up</title>
    <link href="http://blog.steveklabnik.com/2010/09/21/80-of-success-is-showing-up.html"/>
-   <updated>2010-09-21T00:00:00+02:00</updated>
+   <updated>2010-09-21T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/21/80-of-success-is-showing-up</id>
    <content type="html">&lt;p&gt;It's funny how true this quote is.&lt;/p&gt;
 
@@ -1126,7 +1380,7 @@ you?&lt;/p&gt;
  <entry>
    <title>Trouble with Diaspora</title>
    <link href="http://blog.steveklabnik.com/2010/09/17/trouble-with-diaspora.html"/>
-   <updated>2010-09-17T00:00:00+02:00</updated>
+   <updated>2010-09-17T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/09/17/trouble-with-diaspora</id>
    <content type="html">&lt;p&gt;So, Wednesday, Diaspora was released.&lt;/p&gt;
 
@@ -1180,7 +1434,7 @@ might be interested. You can find it on &lt;a href=&quot;http://www.kalzumeus.co
  <entry>
    <title>A word about why, whyday, and Hackety Hack</title>
    <link href="http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"/>
-   <updated>2010-08-19T00:00:00+02:00</updated>
+   <updated>2010-08-19T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack</id>
    <content type="html">&lt;p&gt;Today is Whyday. A programmer's holiday. Today is the day that we
 don't forget that programming isn't all Agile and driven by behavior
@@ -1228,7 +1482,7 @@ hand.&lt;/p&gt;
  <entry>
    <title>A blip in time</title>
    <link href="http://blog.steveklabnik.com/2010/07/24/a-blip-in-time.html"/>
-   <updated>2010-07-24T00:00:00+02:00</updated>
+   <updated>2010-07-24T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/07/24/a-blip-in-time</id>
    <content type="html">&lt;p&gt;Sometimes, insight comes from very unlikely places.&lt;/p&gt;
 
@@ -1294,7 +1548,7 @@ know if we're doing better than yesterday?&lt;/p&gt;
  <entry>
    <title>What To Know Before Debating Type Systems</title>
    <link href="http://blog.steveklabnik.com/2010/07/17/what-to-know-before-debating-type-systems.html"/>
-   <updated>2010-07-17T00:00:00+02:00</updated>
+   <updated>2010-07-17T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/07/17/what-to-know-before-debating-type-systems</id>
    <content type="html">&lt;p&gt;Recently, it was brought up on Proggit that Chris Smith's &quot;What to Know Before
 Debating Type Systems&quot; was no longer online. This is a really great article,
@@ -1930,7 +2184,7 @@ programming tasks.&lt;/p&gt;
  <entry>
    <title>Case Study in being excellent: Divvy</title>
    <link href="http://blog.steveklabnik.com/2010/06/30/case-study-in-being-excellent-divvy.html"/>
-   <updated>2010-06-30T00:00:00+02:00</updated>
+   <updated>2010-06-30T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/06/30/case-study-in-being-excellent-divvy</id>
    <content type="html">&lt;p&gt;The other day I wrote a post about &lt;a href=&quot;http://blog.steveklabnik.com/being-excellent-to-each-other&quot;&gt;being excellent to each other&lt;/a&gt;.
 Today, I've got a great example of that for you: Divvy.&lt;/p&gt;
@@ -1963,7 +2217,7 @@ to &lt;a href=&quot;http://www.mizage.com/divvy/&quot;&gt;Divvy&lt;/a&gt;.&lt;/
  <entry>
    <title>Productivity Waves</title>
    <link href="http://blog.steveklabnik.com/2010/06/08/productivity-waves.html"/>
-   <updated>2010-06-08T00:00:00+02:00</updated>
+   <updated>2010-06-08T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/06/08/productivity-waves</id>
    <content type="html">&lt;p&gt;Right now, I'm having a bit of a 'darkness before the dawn' kind of moment. I
 feel like I might soon start to become productive again.&lt;/p&gt;
@@ -2012,7 +2266,7 @@ things, book reviews, and social commentary waiting in the wings.&lt;/p&gt;
  <entry>
    <title>You are terrified of your own children, since they are natives in a world where you will always be immigrants.</title>
    <link href="http://blog.steveklabnik.com/2010/05/01/you-are-terrified-of-your-own-children-since-they-are-natives-in-a-world-where-you-will-always-be-immigrants.html"/>
-   <updated>2010-05-01T00:00:00+02:00</updated>
+   <updated>2010-05-01T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/05/01/you-are-terrified-of-your-own-children-since-they-are-natives-in-a-world-where-you-will-always-be-immigrants</id>
    <content type="html">&lt;p&gt;I just saw this today. It kind of goes along with my &quot;Move to the Internet&quot;
 post from a few days ago.&lt;/p&gt;
@@ -2205,7 +2459,7 @@ humane and fair than the world your governments have made before.&lt;/p&gt;
  <entry>
    <title>A Break with the Past</title>
    <link href="http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past.html"/>
-   <updated>2010-04-27T00:00:00+02:00</updated>
+   <updated>2010-04-27T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.countdowntooauth.com/&quot;&gt;Pretty soon&lt;/a&gt;, Twitter is going to turn off Basic Authentication and switch
 entirely to OAuth. &lt;a href=&quot;http://www.scripting.com/stories/2010/04/26/theToxicCoralReef.html&quot;&gt;People are upset&lt;/a&gt;. It's natural. If apps aren't updated,
@@ -2287,7 +2541,7 @@ it's good that they're embracing it fully.&lt;/p&gt;
  <entry>
    <title>Living in the Cloud</title>
    <link href="http://blog.steveklabnik.com/2010/04/24/living-in-the-cloud.html"/>
-   <updated>2010-04-24T00:00:00+02:00</updated>
+   <updated>2010-04-24T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2010/04/24/living-in-the-cloud</id>
    <content type="html">&lt;p&gt;I've been joking for a while that I'd like to &quot;move to the Internet.&quot;
 Generally I cite my familiarity and love with online culture as opposed to
@@ -2341,7 +2595,7 @@ where I don't care much for most of my possessions anymore... &lt;/p&gt;
  <entry>
    <title>Book Review: Rework</title>
    <link href="http://blog.steveklabnik.com/2010/03/10/book-review-rework.html"/>
-   <updated>2010-03-10T00:00:00+01:00</updated>
+   <updated>2010-03-10T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/10/book-review-rework</id>
    <content type="html">&lt;p&gt;I've been waiting for this book for a while. &quot;Rework&quot; is the new book by Jason
 Fried and David Heinemeier Hansson from 37signals. It hit stores on Tuesday.
@@ -2434,7 +2688,7 @@ thoughts to chew on.&lt;/p&gt;
  <entry>
    <title>Create a more compelling experience for your users through game mechanics</title>
    <link href="http://blog.steveklabnik.com/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics.html"/>
-   <updated>2010-03-08T00:00:00+01:00</updated>
+   <updated>2010-03-08T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/08/create-a-more-compelling-experience-for-your-users-through-game-mechanics</id>
    <content type="html">&lt;p&gt;Ever wonder why some websites are so addictive? Certain sites always keep you
 going back, time after time after time. Well, I can't speak for all of them,
@@ -2621,7 +2875,7 @@ again. Let me know what you think.&lt;/p&gt;
  <entry>
    <title>Writing a "su" feature with Authlogic</title>
    <link href="http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic.html"/>
-   <updated>2010-03-05T00:00:00+01:00</updated>
+   <updated>2010-03-05T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic</id>
    <content type="html">&lt;p&gt;Sometimes, when responding to a support request, it's nice to see what your
 users see. At the same time, you don't want to ask your users for their
@@ -2727,7 +2981,7 @@ end
  <entry>
    <title>Why bother creating?</title>
    <link href="http://blog.steveklabnik.com/2010/03/03/why-bother-creating.html"/>
-   <updated>2010-03-03T00:00:00+01:00</updated>
+   <updated>2010-03-03T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/03/why-bother-creating</id>
    <content type="html">&lt;p&gt;Kanye West posted something interesting about the nature of creativity today.
 I'm going to make a copy of it here, because I find the presentation also
@@ -2815,7 +3069,7 @@ something more important than that, change the world, keep pushing.&lt;/p&gt;
  <entry>
    <title>Reddit drama: an interesting look at community values</title>
    <link href="http://blog.steveklabnik.com/2010/03/01/reddit-drama-an-interesting-look-at-community-values.html"/>
-   <updated>2010-03-01T00:00:00+01:00</updated>
+   <updated>2010-03-01T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2010/03/01/reddit-drama-an-interesting-look-at-community-values</id>
    <content type="html">&lt;p&gt;I bet social psychologists are having a field day with the Internet. I know
 nothing about the field, so I don't know if there are thousands of papers
@@ -2960,7 +3214,7 @@ watch!&lt;/p&gt;
  <entry>
    <title>The Hackety Mainfesto</title>
    <link href="http://blog.steveklabnik.com/2009/12/31/the-hackety-mainfesto.html"/>
-   <updated>2009-12-31T00:00:00+01:00</updated>
+   <updated>2009-12-31T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/31/the-hackety-mainfesto</id>
    <content type="html">&lt;p&gt;For those of you that don't know, I've taken over a project by someone named
 _why. He dropped off of the face of the Internet back in March, and the
@@ -3040,7 +3294,7 @@ definitely encouraged, even demanded.&lt;/p&gt;
  <entry>
    <title>The Little Coder's Predicament</title>
    <link href="http://blog.steveklabnik.com/2009/12/28/the-little-coder-s-predicament.html"/>
-   <updated>2009-12-28T00:00:00+01:00</updated>
+   <updated>2009-12-28T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/28/the-little-coder-s-predicament</id>
    <content type="html">&lt;p&gt;For those of you that don't know, I've taken over a project by someone named
 _why. He dropped off of the face of the Internet back in March, and the
@@ -3203,7 +3457,7 @@ yes, Ruby is preferable.&lt;/p&gt;
  <entry>
    <title>About Crows</title>
    <link href="http://blog.steveklabnik.com/2009/12/02/about-crows.html"/>
-   <updated>2009-12-02T00:00:00+01:00</updated>
+   <updated>2009-12-02T00:00:00-05:00</updated>
    <id>http://blog.steveklabnik.com/2009/12/02/about-crows</id>
    <content type="html">&lt;p&gt;A short time ago, the G20 came right here to Pittsburgh. With an event of such
 worldwide importance happening in our backyards, several people decided to
