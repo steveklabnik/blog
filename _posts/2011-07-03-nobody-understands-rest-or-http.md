@@ -86,6 +86,7 @@ Got it? So then, it returns the URI for your new Transaction:
     Date: Sun, 3 Jul 2011 23:59:59 GMT
     Content-Type: application/json
     Content-Length: 12345
+    Location: http://foo.com/transactions/1
 
     {"transaction":{"id":1,"uri":"/transactions/1"}}
 
