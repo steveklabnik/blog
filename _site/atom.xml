@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-03T18:02:34-04:00</updated>
+ <updated>2011-07-03T18:13:01-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -204,6 +204,21 @@ languages? Again, we have a question of representation, not one of
 content. /en/whatever is not appropriate here. Turns out, &lt;a href=&quot;http://tools.ietf.org/html/rfc2616#section-14.4&quot;&gt;there's a
 header for that: Accept-Language&lt;/a&gt;.
 Respect the headers, and everything works out.&lt;/p&gt;
+
+&lt;p&gt;Oh, and I should say this, too: this doesn't solve the problem of &quot;I'd
+like to read this article in Spanish, even though I usually browse in
+English.&quot; Giving your users the option to view your content in different
+ways is a good thing. Personally, I'd consider this to fall out in two
+ways:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It's temporary. Stick this option in the session, and if they have the
+option set, it trumps the header. You're still respecting their usual
+preferences, but allowing them to override it.&lt;/li&gt;
+&lt;li&gt;It's more permanent. Make it some aspect of their account, and it
+trumps a specific header. Same deal.&lt;/li&gt;
+&lt;/ul&gt;
+
 
 &lt;h3&gt;I'd like my content to have a mobile view&lt;/h3&gt;
 

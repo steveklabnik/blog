@@ -221,6 +221,21 @@ content. /en/whatever is not appropriate here. Turns out, <a href="http://tools.
 header for that: Accept-Language</a>.
 Respect the headers, and everything works out.</p>
 
+<p>Oh, and I should say this, too: this doesn't solve the problem of "I'd
+like to read this article in Spanish, even though I usually browse in
+English." Giving your users the option to view your content in different
+ways is a good thing. Personally, I'd consider this to fall out in two
+ways:</p>
+
+<ul>
+<li>It's temporary. Stick this option in the session, and if they have the
+option set, it trumps the header. You're still respecting their usual
+preferences, but allowing them to override it.</li>
+<li>It's more permanent. Make it some aspect of their account, and it
+trumps a specific header. Same deal.</li>
+</ul>
+
+
 <h3>I'd like my content to have a mobile view</h3>
 
 <p>Sounds like I'm beating a dead horse, but again: it's a representation

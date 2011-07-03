@@ -183,6 +183,18 @@ content. /en/whatever is not appropriate here. Turns out, [there's a
 header for that: Accept-Language](http://tools.ietf.org/html/rfc2616#section-14.4).
 Respect the headers, and everything works out.
 
+Oh, and I should say this, too: this doesn't solve the problem of "I'd
+like to read this article in Spanish, even though I usually browse in
+English." Giving your users the option to view your content in different
+ways is a good thing. Personally, I'd consider this to fall out in two
+ways:
+
+* It's temporary. Stick this option in the session, and if they have the
+  option set, it trumps the header. You're still respecting their usual
+  preferences, but allowing them to override it.
+* It's more permanent. Make it some aspect of their account, and it
+  trumps a specific header. Same deal.
+
 ### I'd like my content to have a mobile view
 
 Sounds like I'm beating a dead horse, but again: it's a representation
