@@ -90,8 +90,17 @@ Got it? So then, it returns the URI for your new Transaction:
 
     {"transaction":{"id":1,"uri":"/transactions/1"}}
 
-Whoah, [HATEOS](http://timelessrepo.com/haters-gonna-hateoas)! Anyway,
-so now we can GET our Transaction:
+Whoah, [HATEOS](http://timelessrepo.com/haters-gonna-hateoas)! Also, it
+may or may not be a good idea to return this JSON as the body; the
+important thing is that we have the Location header which tells us where
+our new resource is. If we give a client the ID, they might try to
+construct their own URL, and the URI is a little redundant, since we
+have one in the Location. Regardless, I'm leaving that JSON there,
+because that's the way I typed it first. I'd love to [hear your thoughts
+on this](mailto:steve@steveklabnik.com) if you feel strongly one way or
+the other.
+
+Anyway, so now we can GET our Transaction:
 
     GET /transactions/1 HTTP/1.1
     Accept: application/json

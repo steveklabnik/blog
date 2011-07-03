@@ -124,8 +124,17 @@ Location: http://foo.com/transactions/1
 {"transaction":{"id":1,"uri":"/transactions/1"}}
 </code></pre>
 
-<p>Whoah, <a href="http://timelessrepo.com/haters-gonna-hateoas">HATEOS</a>! Anyway,
-so now we can GET our Transaction:</p>
+<p>Whoah, <a href="http://timelessrepo.com/haters-gonna-hateoas">HATEOS</a>! Also, it
+may or may not be a good idea to return this JSON as the body; the
+important thing is that we have the Location header which tells us where
+our new resource is. If we give a client the ID, they might try to
+construct their own URL, and the URI is a little redundant, since we
+have one in the Location. Regardless, I'm leaving that JSON there,
+because that's the way I typed it first. I'd love to <a href="mailto:steve@steveklabnik.com">hear your thoughts
+on this</a> if you feel strongly one way or
+the other.</p>
+
+<p>Anyway, so now we can GET our Transaction:</p>
 
 <pre><code>GET /transactions/1 HTTP/1.1
 Accept: application/json
