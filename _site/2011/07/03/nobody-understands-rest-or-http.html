@@ -14,6 +14,19 @@
     <script src='/js/modernizr-1.7.min.js'></script>
     <script src='/js/jquery-1.6.min.js'></script>
     <script src='/js/app.js'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-10289851-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
   </head>
   <body>
     <div class='container'>
@@ -209,7 +222,7 @@ resource, yet version everything appropriately.</p>
 
 <p>Sadly, Rails does not (yet) understand this format.</p></blockquote>
 
-<h3>I'd like my content to be displayed in multiple langauges</h3>
+<h3>I'd like my content to be displayed in multiple languages</h3>
 
 <p>This is related, but a little different. What about pages in different
 languages? Again, we have a question of representation, not one of

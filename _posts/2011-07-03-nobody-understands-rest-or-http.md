@@ -184,7 +184,7 @@ I got a comment from [Avdi Grimm](http://avdi.org/) about this, too:
 >
 > Sadly, Rails does not (yet) understand this format.
 
-### I'd like my content to be displayed in multiple langauges
+### I'd like my content to be displayed in multiple languages
 
 This is related, but a little different. What about pages in different
 languages? Again, we have a question of representation, not one of

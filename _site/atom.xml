@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-03T21:30:59+00:00</updated>
+ <updated>2011-07-04T13:11:34+00:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -206,7 +206,7 @@ resource, yet version everything appropriately.&lt;/p&gt;
 
 &lt;p&gt;Sadly, Rails does not (yet) understand this format.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;h3&gt;I'd like my content to be displayed in multiple langauges&lt;/h3&gt;
+&lt;h3&gt;I'd like my content to be displayed in multiple languages&lt;/h3&gt;
 
 &lt;p&gt;This is related, but a little different. What about pages in different
 languages? Again, we have a question of representation, not one of
