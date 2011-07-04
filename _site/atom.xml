@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-04T13:11:34+00:00</updated>
+ <updated>2011-07-04T13:13:51+00:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -157,7 +157,7 @@ that the resource takes. That's what these two headers are for.&lt;/p&gt;
 
 &lt;p&gt;This is also why adding &lt;code&gt;.html&lt;/code&gt; to the end of your URLs is kinda silly.
 If I request &lt;code&gt;/accounts/1.html&lt;/code&gt; with an &lt;code&gt;Accept&lt;/code&gt; header of
-&lt;code&gt;applicaion/json&lt;/code&gt;, then I'll get JSON. The &lt;code&gt;Content-Type&lt;/code&gt; header is the
+&lt;code&gt;application/json&lt;/code&gt;, then I'll get JSON. The &lt;code&gt;Content-Type&lt;/code&gt; header is the
 server telling us what kind of representation it's sending back as well.
 The important thing, though, is that a given resource can have many
 different representations. Ideally, there should be one unambiguous

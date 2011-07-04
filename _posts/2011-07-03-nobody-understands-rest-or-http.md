@@ -137,7 +137,7 @@ that the resource takes. That's what these two headers are for.
 
 This is also why adding `.html` to the end of your URLs is kinda silly.
 If I request `/accounts/1.html` with an `Accept` header of
-`applicaion/json`, then I'll get JSON. The `Content-Type` header is the
+`application/json`, then I'll get JSON. The `Content-Type` header is the
 server telling us what kind of representation it's sending back as well.
 The important thing, though, is that a given resource can have many
 different representations. Ideally, there should be one unambiguous
