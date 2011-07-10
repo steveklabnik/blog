@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-07-06T08:35:12+00:00</updated>
+ <updated>2011-07-10T09:50:24+00:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -105,7 +105,7 @@ Content-Type: application/json
 Content-Length: 12345
 Location: http://foo.com/transactions/1
 
-{&quot;transaction&quot;:{&quot;id&quot;:1,&quot;uri&quot;:&quot;/transactions/1&quot;}}
+{&quot;transaction&quot;:{&quot;id&quot;:1,&quot;uri&quot;:&quot;/transactions/1&quot;,&quot;type&quot;:&quot;transfer&quot;}}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Whoah, &lt;a href=&quot;http://timelessrepo.com/haters-gonna-hateoas&quot;&gt;HATEOS&lt;/a&gt;! Also, it
@@ -128,7 +128,7 @@ Accept: application/json
 
 &lt;pre&gt;&lt;code&gt;HTTP/1.1 blah blah blah
 
-{&quot;id&quot;:1,&quot;status&quot;:&quot;in-progress&quot;}
+{&quot;id&quot;:1,&quot;type&quot;:&quot;transfer&quot;,&quot;status&quot;:&quot;in-progress&quot;}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;So we know it's working. We can continue to poll the URI and see when

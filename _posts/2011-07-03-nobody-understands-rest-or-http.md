@@ -88,7 +88,7 @@ Got it? So then, it returns the URI for your new Transaction:
     Content-Length: 12345
     Location: http://foo.com/transactions/1
 
-    {"transaction":{"id":1,"uri":"/transactions/1"}}
+    {"transaction":{"id":1,"uri":"/transactions/1","type":"transfer"}}
 
 Whoah, [HATEOS](http://timelessrepo.com/haters-gonna-hateoas)! Also, it
 may or may not be a good idea to return this JSON as the body; the
@@ -109,7 +109,7 @@ and the response:
 
     HTTP/1.1 blah blah blah
 
-    {"id":1,"status":"in-progress"}
+    {"id":1,"type":"transfer","status":"in-progress"}
 
 So we know it's working. We can continue to poll the URI and see when
 our transaction is finished, or if it failed, or whatever. Easy! But

@@ -121,7 +121,7 @@ Content-Type: application/json
 Content-Length: 12345
 Location: http://foo.com/transactions/1
 
-{"transaction":{"id":1,"uri":"/transactions/1"}}
+{"transaction":{"id":1,"uri":"/transactions/1","type":"transfer"}}
 </code></pre>
 
 <p>Whoah, <a href="http://timelessrepo.com/haters-gonna-hateoas">HATEOS</a>! Also, it
@@ -144,7 +144,7 @@ Accept: application/json
 
 <pre><code>HTTP/1.1 blah blah blah
 
-{"id":1,"status":"in-progress"}
+{"id":1,"type":"transfer","status":"in-progress"}
 </code></pre>
 
 <p>So we know it's working. We can continue to poll the URI and see when
