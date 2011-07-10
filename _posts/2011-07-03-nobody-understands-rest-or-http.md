@@ -53,7 +53,7 @@ around with REST, the URLs looked like this:
 
     /posts/show/1
 
-If you you use Rails today, you'll note that the corresponding URL is
+If you use Rails today, you'll note that the corresponding URL is
 this:
 
     /posts/1
