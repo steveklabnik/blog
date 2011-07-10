@@ -100,6 +100,10 @@ because that's the way I typed it first. I'd love to [hear your thoughts
 on this](mailto:steve@steveklabnik.com) if you feel strongly one way or
 the other.
 
+EDIT: I've since decided that yes, including the URI is a bad idea. The
+Location header makes much more sense. More on this in Part ii, yet to
+come.
+
 Anyway, so now we can GET our Transaction:
 
     GET /transactions/1 HTTP/1.1
