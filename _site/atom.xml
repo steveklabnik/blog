@@ -4,13 +4,268 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-08-04T13:06:26-04:00</updated>
+ <updated>2011-08-07T13:35:00-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
    <email>steve@steveklabnik.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Some People Understand REST and HTTP</title>
+   <link href="http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html"/>
+   <updated>2011-08-07T00:00:00-04:00</updated>
+   <id>http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http</id>
+   <content type="html">&lt;p&gt;This is a follow-up post to my post &lt;a href=&quot;/2011/07/03/nobody-understands-rest-or-http.html&quot;&gt;here&lt;/a&gt;. You probably want to
+read that first.&lt;/p&gt;
+
+&lt;h2&gt;A few words on standards versus pragmatism&lt;/h2&gt;
+
+&lt;p&gt;When I wrote my first post on this topic, I tried to take a stance that
+would be somewhat soft, yet forceful. Engineering is the art of making
+the proper trade-offs, and there are times when following specifications
+is simply not the correct decision. With that said, my motivation for
+both of these posts is to eradicate some of the ignorance that some
+developers have about certain areas of the HTTP spec and Fielding's REST
+paper. If you understand the correct way, yet choose to do something
+else for an informed reason, that's absolutely, 100% okay. There's no
+use throwing out the baby with the bathwater. But ignorance is never a
+good thing, and most developers are ignorant when it comes to the
+details of REST.&lt;/p&gt;
+
+&lt;p&gt;Secondly, while I think that REST is the best way to develop APIs, there
+are other valid architectural patterns, too. Yet calling non-REST APIs
+'RESTful' continues to confuse developers as to what &quot;RESTful&quot; means.
+I'm not sure what exactly we should call &quot;RESTish&quot; APIs (hey, there we
+go, hmmm...) but I'm also not under the illusion that I personally will
+be able to make a huge dent in this. Hopefully you, humble reader, will
+remember this when dealing with APIs in the future, and I'll have made a
+tiny dent, though.&lt;/p&gt;
+
+&lt;h2&gt;So who &lt;em&gt;does&lt;/em&gt; understand REST?&lt;/h2&gt;
+
+&lt;p&gt;As it turns out, there are two companies that you've probably heard of
+who have APIs that are much more RESTful than many others: &lt;a href=&quot;http://www.twilio.com/docs/api/rest/&quot;&gt;Twillio&lt;/a&gt;
+and &lt;a href=&quot;http://developer.github.com/&quot;&gt;GitHub&lt;/a&gt;. Let's take a look at GitHub first.&lt;/p&gt;
+
+&lt;h3&gt;GitHub: logically awesome&lt;/h3&gt;
+
+&lt;p&gt;GitHub's developer resources are not only beautiful, but thorough. In
+addition, they make use of lots more of REST.&lt;/p&gt;
+
+&lt;h4&gt;The good&lt;/h4&gt;
+
+&lt;p&gt;GitHub uses &lt;a href=&quot;http://developer.github.com/v3/mimes/&quot;&gt;custom MIME&lt;/a&gt; types for all of their responses. They're
+using the vendor extensions that I talked about in my post, too. For
+example:&lt;/p&gt;
+
+&lt;p&gt;  application/vnd.github-issue.text+json&lt;/p&gt;
+
+&lt;p&gt;Super cool.&lt;/p&gt;
+
+&lt;p&gt;Their &lt;a href=&quot;http://developer.github.com/v3/#authentication&quot;&gt;authentication&lt;/a&gt; works in three ways: HTTP Basic, OAuth via an
+Authentication Header, or via a parameter. This allows for a maximum
+amount of compatibility across user agents, and gives the user some
+amount of choice.&lt;/p&gt;
+
+&lt;p&gt;Their &lt;a href=&quot;http://developer.github.com/v3/#pagination&quot;&gt;Pagination&lt;/a&gt; uses a header I didn't discuss in part I: the Link
+header. &lt;a href=&quot;http://tools.ietf.org/html/rfc5988&quot;&gt;Here&lt;/a&gt;'s a link to the
+reference. Basically, Link headers enable HATEOAS for media types which
+aren't hypertext. This is important, especially regarding JSON, since
+JSON isn't hypermedia. More on this at the end of the post. Anyway, so
+pagination on GitHub:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -I &quot;https://api.github.com/users/steveklabnik/gists&quot;
+HTTP/1.1 200 OK
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:34:48 GMT
+Content-Type: application/json
+Connection: keep-alive
+Status: 200 OK
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4994
+Link: &amp;lt;https://api.github.com/users/steveklabnik/gists?page=2&amp;gt;; rel=&quot;next&quot;, &amp;lt;https://api.github.com/users/steveklabnik/gists?page=33333&amp;gt;; rel=&quot;last&quot;
+Content-Length: 29841
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The Link header there shows you how to get to the next page of results.
+You don't need to know how to construct the URL, you just have to parse
+the header and follow it. This, for example, is a great way to connect a
+resource that's not text-based, such as a PNG, to other resources.&lt;/p&gt;
+
+&lt;h4&gt;The bad&lt;/h4&gt;
+
+&lt;p&gt;There's really only one place that GitHub doesn't knock it out of the
+park with their new API, and that's HATEOAS. GitHub's API isn't
+discoverable, because there's no information at the root:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -I https://api.github.com/
+HTTP/1.1 302 Found
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:44:02 GMT
+Content-Type: text/html;charset=utf-8
+Connection: keep-alive
+Status: 302 Found
+X-RateLimit-Limit: 5000
+Location: http://developer.github.com
+X-RateLimit-Remaining: 4993
+Content-Length: 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Well, at least, this is how they present it. If you ask for JSON:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -I https://api.github.com/ -H &quot;Accept: application/json&quot;
+HTTP/1.1 204 No Content
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:45:32 GMT
+Connection: keep-alive
+Status: 204 No Content
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4991
+Link: &amp;lt;users/{user}&amp;gt;; rel=&quot;user&quot;, &amp;lt;repos/{user}/{repo}&amp;gt;; rel=&quot;repo&quot;, &amp;lt;gists&amp;gt;; rel=&quot;gists&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You do get Links, but you have to construct things yourself. As a user,
+you get the same thing. It doesn't change the links to point to your
+repos, it doesn't give you links to anything else that you can do with
+the API.&lt;/p&gt;
+
+&lt;p&gt;Instead, the root should give you a link to the particular resources
+that you can actually view. Maybe something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -I https://api.github.com/ -H &quot;Accept: application/json&quot; -u
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&quot;username:password&quot;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP/1.1 204 No Content
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:45:32 GMT
+Connection: keep-alive
+Status: 204 No Content
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4991
+Link: &amp;lt;/gists/public&amp;gt;; rel=&quot;public_gists&quot;, &amp;lt;/user/repos&amp;gt;; rel=&quot;repos&quot;, &amp;lt;gists&amp;gt;; rel=&quot;gists&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And a bunch more, for all of the other resources that are available.
+This would make the API truly discoverable, and you wouldn't be forced
+to read their gorgeous documentation. :)&lt;/p&gt;
+
+&lt;h3&gt;Twillio&lt;/h3&gt;
+
+&lt;p&gt;I've always really enjoyed Twillio. Their API is incredibly simple to
+use. I once hooked up a little &quot;Text me when someone orders something
+from my site&quot; script, and it took me about fifteen minutes. Good stuff.&lt;/p&gt;
+
+&lt;h4&gt;The good&lt;/h4&gt;
+
+&lt;p&gt;Twillio has got the HATEOAS thing down. Check it out, their home page
+says that the base URL is &quot;https://api.twilio.com/2010-04-01&quot;. Without
+looking at any of the rest of their docs, (I glanced at a page or two,
+but I didn't really read them fully yet), I did this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://api.twilio.com/2010-04-01
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;TwilioResponse&amp;gt;
+  &amp;lt;Version&amp;gt;
+    &amp;lt;Name&amp;gt;2010-04-01&amp;lt;/Name&amp;gt;
+    &amp;lt;Uri&amp;gt;/2010-04-01&amp;lt;/Uri&amp;gt;
+    &amp;lt;SubresourceUris&amp;gt;
+      &amp;lt;Accounts&amp;gt;/2010-04-01/Accounts&amp;lt;/Accounts&amp;gt;
+    &amp;lt;/SubresourceUris&amp;gt;
+  &amp;lt;/Version&amp;gt;
+&amp;lt;/TwilioResponse&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I introduced some formatting. Hmm, okay, Accounts. Let's check this out:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://api.twilio.com/2010-04-01/Accounts&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;TwilioResponse&amp;gt;&amp;lt;RestException&amp;gt;&amp;lt;Status&amp;gt;401&amp;lt;/Status&amp;gt;&amp;lt;Message&amp;gt;Authenticate&amp;lt;/Message&amp;gt;&amp;lt;Code&amp;gt;20003&amp;lt;/Code&amp;gt;&amp;lt;MoreInfo&amp;gt;http://www.twilio.com/docs/errors/20003&amp;lt;/MoreInfo&amp;gt;&amp;lt;/RestException&amp;gt;&amp;lt;/TwilioResponse&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Okay, so I have to be authenticated. If I was, I'd get something like
+this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;TwilioResponse&amp;gt;
+  &amp;lt;Account&amp;gt;
+    &amp;lt;Sid&amp;gt;ACba8bc05eacf94afdae398e642c9cc32d&amp;lt;/Sid&amp;gt;
+    &amp;lt;FriendlyName&amp;gt;Do you like my friendly name?&amp;lt;/FriendlyName&amp;gt;
+    &amp;lt;Type&amp;gt;Full&amp;lt;/Type&amp;gt;
+    &amp;lt;Status&amp;gt;active&amp;lt;/Status&amp;gt;
+    &amp;lt;DateCreated&amp;gt;Wed, 04 Aug 2010 21:37:41 +0000&amp;lt;/DateCreated&amp;gt;
+    &amp;lt;DateUpdated&amp;gt;Fri, 06 Aug 2010 01:15:02 +0000&amp;lt;/DateUpdated&amp;gt;
+    &amp;lt;AuthToken&amp;gt;redacted&amp;lt;/AuthToken&amp;gt;
+    &amp;lt;Uri&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d&amp;lt;/Uri&amp;gt;
+    &amp;lt;SubresourceUris&amp;gt;
+      &amp;lt;AvailablePhoneNumbers&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/AvailablePhoneNumbers&amp;lt;/AvailablePhoneNumbers&amp;gt;
+      &amp;lt;Calls&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Calls&amp;lt;/Calls&amp;gt;
+      &amp;lt;Conferences&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Conferences&amp;lt;/Conferences&amp;gt;
+      &amp;lt;IncomingPhoneNumbers&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/IncomingPhoneNumbers&amp;lt;/IncomingPhoneNumbers&amp;gt;
+      &amp;lt;Notifications&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Notifications&amp;lt;/Notifications&amp;gt;
+      &amp;lt;OutgoingCallerIds&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/OutgoingCallerIds&amp;lt;/OutgoingCallerIds&amp;gt;
+      &amp;lt;Recordings&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Recordings&amp;lt;/Recordings&amp;gt;
+      &amp;lt;Sandbox&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Sandbox&amp;lt;/Sandbox&amp;gt;
+      &amp;lt;SMSMessages&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/SMS/Messages&amp;lt;/SMSMessages&amp;gt;
+      &amp;lt;Transcriptions&amp;gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Transcriptions&amp;lt;/Transcriptions&amp;gt;
+    &amp;lt;/SubresourceUris&amp;gt;
+  &amp;lt;/Account&amp;gt;
+&amp;lt;/TwilioResponse&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Awesome. I can see my all of the other resources that I can interact
+with. Other than knowing how to authenticate, I can follow the links
+from the endpoint, and discover their entire API. Rock. This is the way
+things are supposed to be.&lt;/p&gt;
+
+&lt;h4&gt;The bad&lt;/h4&gt;
+
+&lt;p&gt;This:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://api.twilio.com/2010-04-01/Accounts -H &quot;Accept: application/json&quot;
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;TwilioResponse&amp;gt;&amp;lt;RestException&amp;gt;&amp;lt;Status&amp;gt;401&amp;lt;/Status&amp;gt;&amp;lt;Message&amp;gt;Authenticate&amp;lt;/Message&amp;gt;&amp;lt;Code&amp;gt;20003&amp;lt;/Code&amp;gt;&amp;lt;MoreInfo&amp;gt;http://www.twilio.com/docs/errors/20003&amp;lt;/MoreInfo&amp;gt;&amp;lt;/RestException&amp;gt;&amp;lt;/TwilioResponse&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Versus this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://api.twilio.com/2010-04-01/Accounts.json
+{&quot;status&quot;:401,&quot;message&quot;:&quot;Authenticate&quot;,&quot;code&quot;:20003,&quot;more_info&quot;:&quot;http:\/\/www.twilio.com\/docs\/errors\/20003&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:/ Returning JSON when your resource ends with '.json' isn't bad, but
+not respecting the Accept header, even when you return the right MIME
+type, is just unfortunate.&lt;/p&gt;
+
+&lt;h2&gt;... and a little Announcement&lt;/h2&gt;
+
+&lt;p&gt;It seems that this is a topic that people are really interested in. Part
+I of this article was pretty well-received, and I got lots of great
+email and feedback from people. It was also made pretty clear by &lt;a href=&quot;http://twitter.com/#!/wayneeseguin/status/97733413611638784&quot;&gt;a few&lt;/a&gt; people that
+they want more content from me on this topic.&lt;/p&gt;
+
+&lt;p&gt;So I decided to write a book about it. You can check out the site for
+&quot;&lt;a href=&quot;http://getsomre.st&quot;&gt;Get Some REST&lt;/a&gt;&quot;, and put in your email address. Then you'll get
+updated when I start pre-release sales.&lt;/p&gt;
+
+&lt;p&gt;So what's in &quot;Get Some REST&quot;? It's going to be a full description of how
+to build RESTful web applications, from the ground up. Designing your
+resources, laying out an API, all the details. I'm going to try to keep
+most of the content language-agnostic, but provide code samples in
+Rails 3.1, as well.&lt;/p&gt;
+
+&lt;p&gt;I plan on writing a bunch of content, and then releasing the book at
+half-price in beta. Early adopters will be able to get their two cents
+in, and I'll cover things they still have questions on. It'll be
+available under a liberal license, in PDF, ePub, all that good stuff.&lt;/p&gt;
+
+&lt;p&gt;I've also set up a Twitter account at &lt;a href=&quot;http://twitter.com/#!/getsomerestbook&quot;&gt;@getsomerestbook&lt;/a&gt;. I'll be tweeting updates about the book, and also other good content
+related to RESTful design. Oh, and if you're on
+&lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt;, I also have an account that'll syndicate
+the same content at &lt;a href=&quot;http://rstat.us/users/getsomerestbook&quot;&gt;@getsomerestbook&lt;/a&gt; too.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Twitter is too important to be owned by Twitter</title>
