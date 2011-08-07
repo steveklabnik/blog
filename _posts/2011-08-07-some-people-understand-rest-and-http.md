@@ -247,5 +247,5 @@ the same content at [@getsomerestbook](http://rstat.us/users/getsomerestbook) to
    [4]: http://developer.github.com/v3/mimes/
    [5]: http://developer.github.com/v3/#authentication
    [6]: http://developer.github.com/v3/#pagination
-   [7]: http://getsomre.st
+   [7]: http://getsomere.st
 
