@@ -4,6 +4,8 @@ title: Nobody Understands REST or HTTP
 layout: post
 ---
 
+Update: Part II of this post is [here](/2011/08/07/some-people-understand-rest-and-http.html). Check it out, and there's an announcement at the end!
+
 The more that I've learned about web development, the more that I've
 come to appreciate the thoroughness and thoughtfulness of the authors of
 the HTTP RFC and Roy Fielding's dissertation. It seems like the answers
