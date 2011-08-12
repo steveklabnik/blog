@@ -43,6 +43,14 @@ tons of people, people just fork things willy-nilly. And, from the
 outside, competition is good: in theory, it means that the good ideas
 work and the bad ideas don't.
 
+(A small aside: forking in git is different than 'forking' in svn. This
+overloading of terminology is unfortunate. The fork button is actually
+one of my favorite features of GitHub, because it makes contribution
+easier. But as it's easier to publish new software, it's easier to
+'fork' in the svn sense. It used to be a pain to start a new project,
+and GitHub's made that so easy that it happens more often than I think
+it should.)
+
 But guess what: competition sucks. Cooperation is much better. One of
 the biggest problems with competition is that it means that somebody has
 to lose. For every winner, someone is a loser. That person is going to

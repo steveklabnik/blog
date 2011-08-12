@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-08-12T13:01:29-04:00</updated>
+ <updated>2011-08-12T13:55:57-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -55,6 +55,14 @@ Forking was Serious Business.&lt;/p&gt;
 tons of people, people just fork things willy-nilly. And, from the
 outside, competition is good: in theory, it means that the good ideas
 work and the bad ideas don't.&lt;/p&gt;
+
+&lt;p&gt;(A small aside: forking in git is different than 'forking' in svn. This
+overloading of terminology is unfortunate. The fork button is actually
+one of my favorite features of GitHub, because it makes contribution
+easier. But as it's easier to publish new software, it's easier to
+'fork' in the svn sense. It used to be a pain to start a new project,
+and GitHub's made that so easy that it happens more often than I think
+it should.)&lt;/p&gt;
 
 &lt;p&gt;But guess what: competition sucks. Cooperation is much better. One of
 the biggest problems with competition is that it means that somebody has
