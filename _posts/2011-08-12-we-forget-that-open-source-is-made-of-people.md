@@ -50,6 +50,18 @@ be hurting. In the case of open source, someone has spent (possibly)
 years of their life working on something, and now, all of that is gone.
 That shit stings.
 
+Sometimes, forks are necessary. Sometimes, there are approaches that are
+fundamentally different. Forking is still an option, even if it's a last
+resort. I'm also not saying that feelings should totally trump technical
+merit. All I'm saying is this: consider the blood, sweat, and tears of
+others before you act. Just in general.
+
+It's also not a zero-sum game, either. The pie can be grown. But that
+also doesn't mean that it's grown in a way that makes anyone feel good
+about it. There's a difference between "We represent two sides of some
+coin" and "Those fuckers make shitty software." Both approaches can grow
+the pie. One is far better than the other.
+
 What's the human cost of rapid competition between software projects? Is
 this cost worth it?
 
