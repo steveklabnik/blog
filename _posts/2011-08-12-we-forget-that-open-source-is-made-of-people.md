@@ -127,3 +127,5 @@ that does open source, in a project that you love. Consider helping out,
 in even the smallest of ways.
 
 Thanks.
+
+[My next post is a bit of a follow-up to this](/2011/08/19/matz-is-nice-so-we-are-nice.html).
