@@ -4,13 +4,42 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-08-19T17:01:07-04:00</updated>
+ <updated>2011-08-22T19:44:55-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
    <email>steve@steveklabnik.com</email>
  </author>
 
+ 
+ <entry>
+   <title>I'm Making It Dead Simple To Contribute To Ruby's Documentation</title>
+   <link href="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html"/>
+   <updated>2011-08-22T00:00:00-04:00</updated>
+   <id>http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation</id>
+   <content type="html">&lt;p&gt;Okay! So, if you'd read &lt;a href=&quot;/2011/05/10/contributing-to-ruby-s-documentation.html&quot;&gt;my previous article on
+this&lt;/a&gt;, you'd know how
+easy it is to contribute to Ruby's Documentaiton.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;But Steve, I'm &lt;em&gt;still&lt;/em&gt; kinda scared.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Okay, so here we go: I'm making it even easier on you.&lt;/p&gt;
+
+&lt;p&gt;Send me what you want changed, and how, and I'll make a patch and submit
+it on your behalf.&lt;/p&gt;
+
+&lt;p&gt;No, seriously, I will. I already did once. &lt;a href=&quot;http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873&quot;&gt;This guy&lt;/a&gt; posted something about how it was too hard, &lt;a href=&quot;http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875&quot;&gt;so
+I made a patch for him&lt;/a&gt;. And now Ruby is better because of it.&lt;/p&gt;
+
+&lt;p&gt;And so I'll do it again. Scared to deal with doc patches? I'll make them
+up. I'm serious. I'll do it. Send them to me.&lt;/p&gt;
+
+&lt;p&gt;That's all.&lt;/p&gt;
+
+&lt;p&gt;Send me patches.
+&lt;a href=&quot;mailto:steve@steveklabnik.com&quot;&gt;steve@steveklabnik.com&lt;/a&gt;. Do it.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Matz is Nice So We Are Nice</title>
@@ -1265,7 +1294,14 @@ I'm maturing or something...&lt;/p&gt;
    <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
    <updated>2011-05-10T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
-   <content type="html">&lt;p&gt;Ruby 1.9.3 is coming out soon! &lt;a href=&quot;http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge&quot;&gt;drbrain has challenged the Ruby community to
+   <content type="html">&lt;h3&gt;Update!&lt;/h3&gt;
+
+&lt;p&gt;I'm now making it even easier than this: &lt;a href=&quot;/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html&quot;&gt;Read my new post about how
+I'll do this for you&lt;/a&gt;. That said, if you want to do it yourself, the following will tell you how.&lt;/p&gt;
+
+&lt;h3&gt;Original Article&lt;/h3&gt;
+
+&lt;p&gt;Ruby 1.9.3 is coming out soon! &lt;a href=&quot;http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge&quot;&gt;drbrain has challenged the Ruby community to
 improve its documentation&lt;/a&gt;, but some people were asking about how to do so.
 So I made a video!&lt;/p&gt;
 

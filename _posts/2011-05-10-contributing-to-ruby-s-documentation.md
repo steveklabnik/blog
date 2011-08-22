@@ -4,6 +4,13 @@ title: Contributing to Ruby's Documentation
 layout: post
 ---
 
+### Update!
+
+I'm now making it even easier than this: [Read my new post about how
+I'll do this for you](/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html). That said, if you want to do it yourself, the following will tell you how.
+
+### Original Article
+
 Ruby 1.9.3 is coming out soon! [drbrain has challenged the Ruby community to
 improve its documentation][1], but some people were asking about how to do so.
 So I made a video!
