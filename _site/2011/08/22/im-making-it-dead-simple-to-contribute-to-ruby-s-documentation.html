@@ -47,6 +47,57 @@ it on your behalf.</p>
 <p>No, seriously, I will. I already did once. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873">This guy</a> posted something about how it was too hard, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875">so
 I made a patch for him</a>. And now Ruby is better because of it.</p>
 
+<h2>Patches don't have to be patches</h2>
+
+<p>Seriously, I don't even mean diff outputs. I just got this email:</p>
+
+<blockquote><p>I'm eager to contribute docs but I don't know where to start: I don't
+mean pulling down the repo and all that, I mean, I see this link
+here:http://segment7.net/projects/ruby/documentation_coverage.txt but
+all I see is a ton of "# is documented" comments. Where does a
+relative n00b begin? Poking around in the source code is, well,
+intimidating. I'm completely new to this but I take direction well.
+Just point me in the right direction. Just give me something to
+document, please!</p></blockquote>
+
+<p>I sent this back:</p>
+
+<blockquote><p>No code diving needed! That's part of it. Let's do this: Find the documentation for one of your favorite methods. Here, I'll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:</p>
+
+<blockquote><p>Removes nil elements from the array. Returns nil if no changes were made, otherwise returns </i>ary</i>.</p></blockquote>
+
+<p>Why's that </i> there? Total screw-up.  For example. So, send me this email:</p>
+
+<p>"Hey Steve-</p>
+
+<p>Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There's an extra </i> that's screwing things up.</p>
+
+<p>-Jonathan"</p>
+
+<p>Done! I'll go from there. How about this one:</p>
+
+<p>"Hey Steve-</p>
+
+<p>I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394</p>
+
+<p>These docs kind of suck. What if I don't know what Marshal is? There should at <em>least</em> be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like "You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393</p>
+
+<ul>
+<li>Jonathan"</li>
+</ul>
+
+
+<p>I'm sure you can find something that's formatted wrong, or worded incorrectly, or anything else.</p>
+
+<p>-Steve</p></blockquote>
+
+<p>Now, the <em>closer</em> it is to an actual patch, the faster I'll be able to
+do it. A vague "this documentation is confusing, but I'm not sure why"
+is helpful, but will take longer. I'd rather get that email than not. If
+you're not sure, hit send.</p>
+
+<h2>Just Do It</h2>
+
 <p>And so I'll do it again. Scared to deal with doc patches? I'll make them
 up. I'm serious. I'll do it. Send them to me.</p>
 

@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-08-22T19:44:55-04:00</updated>
+ <updated>2011-08-22T21:55:35-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -30,6 +30,57 @@ it on your behalf.&lt;/p&gt;
 
 &lt;p&gt;No, seriously, I will. I already did once. &lt;a href=&quot;http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873&quot;&gt;This guy&lt;/a&gt; posted something about how it was too hard, &lt;a href=&quot;http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875&quot;&gt;so
 I made a patch for him&lt;/a&gt;. And now Ruby is better because of it.&lt;/p&gt;
+
+&lt;h2&gt;Patches don't have to be patches&lt;/h2&gt;
+
+&lt;p&gt;Seriously, I don't even mean diff outputs. I just got this email:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I'm eager to contribute docs but I don't know where to start: I don't
+mean pulling down the repo and all that, I mean, I see this link
+here:http://segment7.net/projects/ruby/documentation_coverage.txt but
+all I see is a ton of &quot;# is documented&quot; comments. Where does a
+relative n00b begin? Poking around in the source code is, well,
+intimidating. I'm completely new to this but I take direction well.
+Just point me in the right direction. Just give me something to
+document, please!&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;I sent this back:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;No code diving needed! That's part of it. Let's do this: Find the documentation for one of your favorite methods. Here, I'll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Removes nil elements from the array. Returns nil if no changes were made, otherwise returns &lt;/i&gt;ary&lt;/i&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Why's that &lt;/i&gt; there? Total screw-up.  For example. So, send me this email:&lt;/p&gt;
+
+&lt;p&gt;&quot;Hey Steve-&lt;/p&gt;
+
+&lt;p&gt;Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There's an extra &lt;/i&gt; that's screwing things up.&lt;/p&gt;
+
+&lt;p&gt;-Jonathan&quot;&lt;/p&gt;
+
+&lt;p&gt;Done! I'll go from there. How about this one:&lt;/p&gt;
+
+&lt;p&gt;&quot;Hey Steve-&lt;/p&gt;
+
+&lt;p&gt;I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394&lt;/p&gt;
+
+&lt;p&gt;These docs kind of suck. What if I don't know what Marshal is? There should at &lt;em&gt;least&lt;/em&gt; be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like &quot;You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Jonathan&quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I'm sure you can find something that's formatted wrong, or worded incorrectly, or anything else.&lt;/p&gt;
+
+&lt;p&gt;-Steve&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Now, the &lt;em&gt;closer&lt;/em&gt; it is to an actual patch, the faster I'll be able to
+do it. A vague &quot;this documentation is confusing, but I'm not sure why&quot;
+is helpful, but will take longer. I'd rather get that email than not. If
+you're not sure, hit send.&lt;/p&gt;
+
+&lt;h2&gt;Just Do It&lt;/h2&gt;
 
 &lt;p&gt;And so I'll do it again. Scared to deal with doc patches? I'll make them
 up. I'm serious. I'll do it. Send them to me.&lt;/p&gt;
