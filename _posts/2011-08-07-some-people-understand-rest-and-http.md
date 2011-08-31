@@ -33,7 +33,7 @@ tiny dent, though.
 ## So who _does_ understand REST?
 
 As it turns out, there are two companies that you've probably heard of
-who have APIs that are much more RESTful than many others: [Twillio][2]
+who have APIs that are much more RESTful than many others: [Twilio][2]
 and [GitHub][3]. Let's take a look at GitHub first.
 
 ### GitHub: logically awesome
@@ -133,15 +133,15 @@ And a bunch more, for all of the other resources that are available.
 This would make the API truly discoverable, and you wouldn't be forced
 to read their gorgeous documentation. :)
 
-### Twillio
+### Twilio
 
-I've always really enjoyed Twillio. Their API is incredibly simple to
+I've always really enjoyed Twilio. Their API is incredibly simple to
 use. I once hooked up a little "Text me when someone orders something
 from my site" script, and it took me about fifteen minutes. Good stuff.
 
 #### The good
 
-Twillio has got the HATEOAS thing down. Check it out, their home page
+Twilio has got the HATEOAS thing down. Check it out, their home page
 says that the base URL is "https://api.twilio.com/2010-04-01". Without
 looking at any of the rest of their docs, (I glanced at a page or two,
 but I didn't really read them fully yet), I did this:

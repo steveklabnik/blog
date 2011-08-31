@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-08-22T21:55:35-04:00</updated>
+ <updated>2011-08-31T14:26:30-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -309,7 +309,7 @@ tiny dent, though.&lt;/p&gt;
 &lt;h2&gt;So who &lt;em&gt;does&lt;/em&gt; understand REST?&lt;/h2&gt;
 
 &lt;p&gt;As it turns out, there are two companies that you've probably heard of
-who have APIs that are much more RESTful than many others: &lt;a href=&quot;http://www.twilio.com/docs/api/rest/&quot;&gt;Twillio&lt;/a&gt;
+who have APIs that are much more RESTful than many others: &lt;a href=&quot;http://www.twilio.com/docs/api/rest/&quot;&gt;Twilio&lt;/a&gt;
 and &lt;a href=&quot;http://developer.github.com/&quot;&gt;GitHub&lt;/a&gt;. Let's take a look at GitHub first.&lt;/p&gt;
 
 &lt;h3&gt;GitHub: logically awesome&lt;/h3&gt;
@@ -416,15 +416,15 @@ Link: &amp;lt;/gists/public&amp;gt;; rel=&quot;public_gists&quot;, &amp;lt;/user
 This would make the API truly discoverable, and you wouldn't be forced
 to read their gorgeous documentation. :)&lt;/p&gt;
 
-&lt;h3&gt;Twillio&lt;/h3&gt;
+&lt;h3&gt;Twilio&lt;/h3&gt;
 
-&lt;p&gt;I've always really enjoyed Twillio. Their API is incredibly simple to
+&lt;p&gt;I've always really enjoyed Twilio. Their API is incredibly simple to
 use. I once hooked up a little &quot;Text me when someone orders something
 from my site&quot; script, and it took me about fifteen minutes. Good stuff.&lt;/p&gt;
 
 &lt;h4&gt;The good&lt;/h4&gt;
 
-&lt;p&gt;Twillio has got the HATEOAS thing down. Check it out, their home page
+&lt;p&gt;Twilio has got the HATEOAS thing down. Check it out, their home page
 says that the base URL is &quot;https://api.twilio.com/2010-04-01&quot;. Without
 looking at any of the rest of their docs, (I glanced at a page or two,
 but I didn't really read them fully yet), I did this:&lt;/p&gt;
