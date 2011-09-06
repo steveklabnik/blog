@@ -5,7 +5,7 @@ layout: post
 ---
 
 I often tell people that I learned Ruby via Rails. This is pretty much the worst
-way to do it, but I'd learned so many programming languages by that it didn't
+way to do it, but I'd learned so many programming languages by then that it didn't
 hinder me too much. The one thing that it did do, however, was give me a
 slightly twisted sense of how to properly design the classes needed in a Rails
 app. Luckily, I obsessively read other people's code, and I've noticed that
@@ -273,7 +273,7 @@ refactorings later:
       end
 
       def real_turnaround_time
-        adjust_time_for_weekend(start_time + turnaround_in_seconds)
+        adjust_time_for_weekends(start_time + turnaround_in_seconds)
       end
 
       def adjust_time_for_weekends(time)
