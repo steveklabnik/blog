@@ -4,13 +4,400 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-09-04T15:51:07-04:00</updated>
+ <updated>2011-09-06T11:50:18-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
    <email>steve@steveklabnik.com</email>
  </author>
 
+ 
+ <entry>
+   <title>The Secret to Rails OO Design</title>
+   <link href="http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html"/>
+   <updated>2011-09-06T00:00:00-04:00</updated>
+   <id>http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design</id>
+   <content type="html">&lt;p&gt;I often tell people that I learned Ruby via Rails. This is pretty much the worst
+way to do it, but I'd learned so many programming languages by that it didn't
+hinder me too much. The one thing that it did do, however, was give me a
+slightly twisted sense of how to properly design the classes needed in a Rails
+app. Luckily, I obsessively read other people's code, and I've noticed that
+there's one big thing that is common in most of the code that's written by
+people whose design chops I respect.&lt;/p&gt;
+
+&lt;p&gt;This particular thing is also seemingly unique to those people. It's not
+something that people who don't write good code attempt, but do badly. It's like
+a flag, or signal. Now, when I see someone employ this, I instantly think &quot;they
+get it.&quot; Maybe I'm giving it too much credit, but this advanced design technique
+offers a ton of interconnected benefits throughout your Rails app, is easy to
+imploy, and speeds up your tests by an order of magnitude or more.
+Unfortunately, to many beginning Rails devs, it's non-obvious, but I want &lt;em&gt;you&lt;/em&gt;
+to write better code, and so I'm here to 'break the secret,' if you will, and
+share this awesome, powerful technique with you.&lt;/p&gt;
+
+&lt;p&gt;It's called the 'Plain Old Ruby Domain Object.'&lt;/p&gt;
+
+&lt;p&gt;Yep, that's right. A Ruby class that inherets from nothing. It's so simple that
+it hides in plain sight. Loved by those who've mastered Rails, Plain Old Ruby
+Objects, or &quot;POROs&quot; as some like to call them, are a hidden weapon against
+complexity. Here's what I mean. Examine this 'simple' model:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Post &amp;lt; ActiveRecord::Base
+  def self.as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+
+    Post.all.each do |p|
+      dictionary[p.title[0]] &amp;lt;&amp;lt; p
+    end
+
+    dictionary
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We want to display an index page of all our posts, and do it by first letter.
+So we build up a dictionary, and then put our posts in it. I'm assuming we're
+not paginating this, so don't get caught up in querying for all Posts. The
+important thing is the idea: we can now display our posts by title:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- Post.as_dictionary do |letter, list|
+  %p= letter
+  %ul
+  - list.each do |post|
+    %li= link_to post
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sure. And in one way, this code isn't &lt;em&gt;bad&lt;/em&gt;. It's also not good: We've mixed a
+presentational concern into our model, which is supposed to represent buisness
+logic. So let's fix that, via a Presenter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class DictionaryPresenter
+  def initialize(collection)
+    @collection = collection
+  end
+
+  def as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+
+    @collection.each do |p|
+      dictionary[p.title[0]] &amp;lt;&amp;lt; p
+    end
+
+    dictionary
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can use it via &lt;code&gt;DictionaryPresenter.new(Post.all).as_dictionary&lt;/code&gt;. This has
+tons of benefits: we've moved presentation logic out of the model. We've
+&lt;em&gt;already&lt;/em&gt; added a new feature: any collection can now be displayed as a
+dictionary. We can easily write isolated tests for this presenter, and they will
+be &lt;em&gt;fast&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;This post isn't about the Presenter pattern, though, as much as I love it. This
+sort of concept appears in other places, too, &quot;this domain concept deserves its
+own class.&quot; Before we move to a different example, let's expand on this further:
+if we want to sort our Posts by title, this class will work, but if we want to
+display, say, a User, it won't, because Users don't have titles. Furthermore,
+we'll end up with a lot of Posts under &quot;A,&quot; because the word &quot;a&quot; is pretty
+common at the beginning of Posts, so we really want to take the second word in
+that case. We can make two kinds of presenters, but now we lose that generality,
+and the concept of 'display by dictionary' has two representations in our system
+again. You guessed it: POROs to the rescue!&lt;/p&gt;
+
+&lt;p&gt;Let's change our presenter slightly, to also accept an organizational policy
+object:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class DictionaryPresenter
+  def initialize(policy, collection)
+    @policy = policy
+    @collection = collection
+  end
+
+  def as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+
+    @collection.each do |p|
+      dictionary[@policy.category_for(p)] &amp;lt;&amp;lt; p
+    end
+
+    dictionary
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, we can inject a policy, and have them be different:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class UserCategorizationPolicy
+  def self.category_for(user)
+    user.username[0]
+  end
+end
+
+class PostCategorizationPolicy
+  def self.category_for(post)
+    if post.starts_with?(&quot;A &quot;)
+      post.title.split[1][0]
+    else
+      post.title[0]
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bam!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yeah, so that's getting a bit long. It happens. :) You can see that now each
+concept has one representation in our system. The presenter doesn't care how
+things are organized, and the policies only dictate how things are organized. In
+fact, my names sorta suck, maybe it should be &quot;UsernamePolicy&quot; and
+&quot;TitlePolicy&quot;, actually. We don't even care what class they are!&lt;/p&gt;
+
+&lt;p&gt;It goes further than that in other directions, too. Combining the flexibility of
+Ruby with one of my favorite patterns from &quot;Working Effectively with Legacy
+Code,&quot; we can take complex computations and turn them into objects. Look at this
+code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Quote &amp;lt; ActiveRecord::Base
+  #&amp;lt;snip&amp;gt;
+  def pretty_turnaround
+    return &quot;&quot; if turnaround.nil?
+    if purchased_at
+      offset = purchased_at
+      days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      offset = Time.now
+      days_from_today = turnaround + 1
+    end
+    time = offset + (turnaround * 60 * 60 * 24)
+    if(time.strftime(&quot;%a&quot;) == &quot;Sat&quot;)
+      time += 2 * 60 * 60 * 24
+    elsif(time.strftime(&quot;%a&quot;) == &quot;Sun&quot;)
+      time += 1 * 60 * 60 * 24
+    end
+
+    &quot;#{time.strftime(&quot;%A %d %B&quot;)} (#{days_from_today} business days from today)&quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yikes! This method prints a turnaround time, but as you can see, it's a complex
+calculation. We'd be able to understand this much more easily of we used Extract
+Method a few times to break it up, but then we risk polluting our Quote class
+with more stuff that's only relevant to pretty turnaround calculation. Also,
+please ignore that this is also presentation on the model; we just care that
+it's a complex bit of code for this example.&lt;/p&gt;
+
+&lt;p&gt;Okay, so here's the first step of this refactoring, which Feathers calls &quot;Break
+Out Method Object.&quot; You can open your copy of &quot;Working Effectively With Legacy
+Code&quot; and turn to page 330 to read more. If you don't have a copy, get one.
+Anyway, I digress. Here's the plan of attack:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a new class for the computation&lt;/li&gt;
+&lt;li&gt;Define a method on that class to do the new work.&lt;/li&gt;
+&lt;li&gt;Copy the body of the old method over, and change variable references to instance variables.&lt;/li&gt;
+&lt;li&gt;Give it an initialize method that takes arguments to set the instance variables used in step 3.&lt;/li&gt;
+&lt;li&gt;Make the old method delegate to the new class and method.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;I've changed this slightly for Ruby, since we can't Lean On The Compiler, and a
+few of Feathers' steps are about doing this. Anyway, let's try this on that
+code. Step 1:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Quote &amp;lt; ActiveRecord::Base
+  def pretty_turnaround
+    #snip
+  end
+
+  class TurnaroundCalculator
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Two:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class TurnaroundCalculator
+  def calculate
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Three:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class TurnaroundCalculator
+  def calculate
+    return &quot;&quot; if @turnaround.nil?
+    if @purchased_at
+      offset = @purchased_at
+      days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      offset = Time.now
+      days_from_today = @turnaround + 1
+    end
+    time = offset + (@turnaround * 60 * 60 * 24)
+    if(time.strftime(&quot;%a&quot;) == &quot;Sat&quot;)
+      time += 2 * 60 * 60 * 24
+    elsif(time.strftime(&quot;%a&quot;) == &quot;Sun&quot;)
+      time += 1 * 60 * 60 * 24
+    end
+
+    &quot;#{time.strftime(&quot;%A %d %B&quot;)} (#{days_from_today} business days from today)&quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I like to give it a generic name at first, and then give it a better one in step
+5, after we see what it really does. often our code will inform us of a good
+name.&lt;/p&gt;
+
+&lt;p&gt;Four:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class TurnaroundCalculator
+  def initialize(purchased_at, turnaround)
+    @purchased_at = purchased_at
+    @turnaround = turnaround
+  end
+
+  def calculate
+    #snip
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Five:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Quote &amp;lt; ActiveRecord::Base
+  def pretty_turnaround
+    TurnaroundCalculator.new(purchased_at, turnaround).calculate
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Done! We should be able to run our tests and see them pass. Even if 'run our
+tests' consists of manually checking it out...&lt;/p&gt;
+
+&lt;p&gt;So what's the advantage here? Well, we now can start the refactoring process,
+but we're in our own little clean room. We can extract methods into our
+TurnaroundCalcuator class without polluting Quote, we can write speedy tests
+for just the Calculator, and we've split out the idea of calculation into one
+place, where it can easily be changed later. Here's our class, a few
+refactorings later:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class TurnaroundCalculator
+  def calculate
+    return &quot;&quot; if @turnaround.nil?
+
+    &quot;#{arrival_date} (#{days_from_today} business days from today)&quot;
+  end
+
+  protected
+
+  def arrival_date
+    real_turnaround_time.strftime(&quot;%A %d %B&quot;)
+  end
+
+  def real_turnaround_time
+    adjust_time_for_weekend(start_time + turnaround_in_seconds)
+  end
+
+  def adjust_time_for_weekends(time)
+    if saturday?(time)
+      time + 2 * 60 * 60 * 24
+    elsif sunday?(time)
+      time + 1 * 60 * 60 * 24
+    else
+      time
+    end
+  end
+
+  def saturday?(time)
+    time.strftime(&quot;%a&quot;) == &quot;Sat&quot;
+  end
+
+  def sunday?(time)
+    time.strftime(&quot;%a&quot;) == &quot;Sun&quot;
+  end
+
+  def turnaround_in_seconds
+    @turnaround * 60 * 60 * 24
+  end
+
+  def start_time
+    @purchased_at or Time.now
+  end
+
+  def days_from_today
+    if @purchased_at
+      ((Time.now - @purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      @turnaround + 1
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Wow. This code I wrote three years ago isn't perfect, but it's almost
+understandable now. And each of the bits makes sense. This is after two or three
+waves of refactoring, which maybe I'll cover in a separate post, becuase this
+was more illustrative than I thought... anyway, you get the idea. This is what I
+mean when I say that I shoot for roughly five-line methods in Ruby; if your code
+is well-factored, you can often get there.&lt;/p&gt;
+
+&lt;p&gt;This idea of extracting domain objects that are pure Ruby is even in Rails
+itself. Check out this route:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root :to =&amp;gt; 'dashboard#index', :constraints =&amp;gt; LoggedInConstraint
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Huh? LoggedInConstraint?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class LoggedInConstraint
+  def self.matches?(request)
+    current_user
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Whoah. Yep. A domain object that describes our routing policy. Awesome. Also,
+validations, blatantly stolen from &lt;a href=&quot;http://omgbloglol.com/post/392895742/improved-validations-in-rails-3&quot;&gt;omgbloglol&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def SomeClass &amp;lt; ActiveRecord::Base
+  validate :category_id, :proper_category =&amp;gt; true
+end
+
+class ProperCategoryValidator &amp;lt; ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless record.user.category_ids.include?(value)
+      record.errors.add attribute, 'has bad category.'
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This isn't a plain Ruby class, but you get the idea.&lt;/p&gt;
+
+&lt;p&gt;Now, you might be thinking, &quot;Steve: This isn't just for Rails! You've lied!&quot; Why
+yes, actually, you've caught me: this isn't the secret to Rails OO, it's more of
+a general OO design guideline. But there's something special about Rails which
+seems to lure you into the trap of never breaking classes down. Maybe it's that
+&lt;code&gt;lib/&lt;/code&gt; feels like such a junk drawer. Maybe it's that the fifteen minute
+examples only ever include ActiveRecord models. Maybe it's that more Rails apps
+than not are (WARNING: UNSUBSTANTIATED CLAIM ALERT) closed source than open, so
+we don't have as many good examples to draw upon. (I have this hunch since
+Rails is often used to build sites for companies. Gems? Sure? My web app? Not so
+much. I have no stats to back this up, though.)&lt;/p&gt;
+
+&lt;p&gt;In summary: Extracting domain objects is good. They keep your tests fast, your
+code small, and make it easier to change things later. I have some more to say
+about this, specifically the &quot;keeps test fast&quot; part, but I'm already pushing it
+for length here. Until next time!&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>The Self-Improvement Pomodoro</title>
