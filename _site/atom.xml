@@ -4,7 +4,7 @@
  <title>Steve's Blog</title>
  <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
  <link href="http://steveklabnik.com/"/>
- <updated>2011-09-06T11:50:18-04:00</updated>
+ <updated>2011-09-06T19:54:43-04:00</updated>
  <id>http://steveklabnik.com/</id>
  <author>
    <name>Steve Klabnik</name>
@@ -18,7 +18,7 @@
    <updated>2011-09-06T00:00:00-04:00</updated>
    <id>http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design</id>
    <content type="html">&lt;p&gt;I often tell people that I learned Ruby via Rails. This is pretty much the worst
-way to do it, but I'd learned so many programming languages by that it didn't
+way to do it, but I'd learned so many programming languages by then that it didn't
 hinder me too much. The one thing that it did do, however, was give me a
 slightly twisted sense of how to properly design the classes needed in a Rails
 app. Luckily, I obsessively read other people's code, and I've noticed that
@@ -302,7 +302,7 @@ refactorings later:&lt;/p&gt;
   end
 
   def real_turnaround_time
-    adjust_time_for_weekend(start_time + turnaround_in_seconds)
+    adjust_time_for_weekends(start_time + turnaround_in_seconds)
   end
 
   def adjust_time_for_weekends(time)
