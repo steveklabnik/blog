@@ -145,7 +145,7 @@ class DictionaryPresenter
     @dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
 
     collection.each do |p|
-      @dictionary[@policy.category_for(p)] << p
+      @dictionary[policy.category_for(p)] << p
     end
   end
 
