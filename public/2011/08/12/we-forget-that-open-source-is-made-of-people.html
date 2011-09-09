@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>We Forget That Open Source is Made of People - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">We Forget That Open Source Is Made of People</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-12T00:00:00-04:00" pubdate  data-updated="true" >Aug 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Programmers like to think that software is the purest form of
+meritocracy. We like to consider ourselves scientists; what we do is
+entirely impersonal. I&#8217;m at Lone Star Ruby right now, and the first two
+talks are entirely about software as a science.</p>
+
+<p>But this is a fallacy. There&#8217;s a human element to open source that&#8217;s
+often totally forgotten, and it drives people away.</p>
+
+<h2>Software Celebrity and Hero Worship</h2>
+
+<p>We sort of acknowledge this, in a way. There are most certainly software
+celebrities, even if their celebrity is localized to the community in
+which they operate. I heard someone say this today:</p>
+
+<blockquote><p>If I can go to one Ruby conference and not hear anyone mention Zed
+Shaw or _why, I can die happy.</p></blockquote>
+
+<p>If I say &#8220;jnicklas&#8221; you say &#8220;Capybara.&#8221; If I say &#8220;DHH&#8221; you say &#8220;Rails.&#8221;
+If I say &#8220;matz&#8221; you say &#8220;Ruby.&#8221; We have our heroes, villains, and foils,
+just like anybody else. But we forget that in every celebrity, there is
+a real person in there. Actual people, who have real thoughts, feelings,
+ideas, emotions, and that spend all of their time working for free just
+to make your lives better out of the goodness of their heart. Often
+<em>after</em> working at day jobs, often <em>at the expense</em> of a personal life,
+often <em>straining relationships</em> with people they care about.</p>
+
+<h2>Competition Means Somebody Loses</h2>
+
+<p>I used to think that Git was great because it made forks trivial. It
+changed what we mean by &#8216;fork.&#8217; This is largely a good thing. But &#8216;the
+eff word&#8217; used to be a last resort. The nuclear option. You&#8217;re fed up,
+can&#8217;t take it anymore, and so this is what they&#8217;ve driven you to do.
+Forking was Serious Business.</p>
+
+<p>Now, GitHub has made it so easy to fork a project and distribute it to
+tons of people, people just fork things willy-nilly. And, from the
+outside, competition is good: in theory, it means that the good ideas
+work and the bad ideas don&#8217;t.</p>
+
+<p>(A small aside: forking in git is different than &#8216;forking&#8217; in svn. This
+overloading of terminology is unfortunate. The fork button is actually
+one of my favorite features of GitHub, because it makes contribution
+easier. But as it&#8217;s easier to publish new software, it&#8217;s easier to
+&#8216;fork&#8217; in the svn sense. It used to be a pain to start a new project,
+and GitHub&#8217;s made that so easy that it happens more often than I think
+it should.)</p>
+
+<p>But guess what: competition sucks. Cooperation is much better. One of
+the biggest problems with competition is that it means that somebody has
+to lose. For every winner, someone is a loser. That person is going to
+be hurting. In the case of open source, someone has spent (possibly)
+years of their life working on something, and now, all of that is gone.
+That shit stings.</p>
+
+<p>Sometimes, forks are necessary. Sometimes, there are approaches that are
+fundamentally different. Forking is still an option, even if it&#8217;s a last
+resort. I&#8217;m also not saying that feelings should totally trump technical
+merit. All I&#8217;m saying is this: consider the blood, sweat, and tears of
+others before you act. Just in general.</p>
+
+<p>It&#8217;s also not a zero-sum game, either. The pie can be grown. But that
+also doesn&#8217;t mean that it&#8217;s grown in a way that makes anyone feel good
+about it. There&#8217;s a difference between &#8220;We represent two sides of some
+coin&#8221; and &#8220;Those fuckers make shitty software.&#8221; Both approaches can grow
+the pie. One is far better than the other.</p>
+
+<p>What&#8217;s the human cost of rapid competition between software projects? Is
+this cost worth it?</p>
+
+<h2>Open Source: All take, no give</h2>
+
+<p>The Pareto Principle: 80% of the effects come from 20% of the causes.
+This is absolutely true in OSS, and it might be more imbalanced. A few
+people contribute, and lots of people use. Sometimes, this is a good
+thing: it&#8217;s actually what draws me to open source. I can help people in
+a scalable way. My code is currently being used by tens of thousands of
+people. This is awesome. Some documentation that I&#8217;ve written is being
+read by millions of people. This is way more awesome.</p>
+
+<p>But I rarely get any help with my projects. It&#8217;s really easy to let that
+get to a person.</p>
+
+<p>Do you know how many people have told me that what I do is important? I
+got given a Ruby Hero award for my work on Hackety and Shoes. Do you
+know how many commits I have in on them? Probably less than 200. Do you
+know why? I&#8217;ve spent weeks of my life trying to track down bugs, but some
+of them are too hard for me, at my current stage of programming-fu. And
+it gets depressing. And everyone that&#8217;s ever offered to help has flaked
+on me. And all the recognition for something that was largely done by
+someone else gets to me, really deeply. And I get tons of people
+screaming about Lion support, and &#8216;this doesn&#8217;t work,&#8217; and all sorts of
+things&#8230; and no patches. It&#8217;s why the &#8216;patches accepted&#8217; saying was
+coined: this shit grinds on you after a while.</p>
+
+<h2>All of my Heroes are Dying</h2>
+
+<p>Today, this situation with rbenv and rvm made me realize something:
+everyone that I truly, deeply respect in open source has either burned
+out or left. I&#8217;ve said once before that there are four people that I
+truly respect in software: Zed Shaw, _why, Yehuda Katz, and (more
+recently) Wayne Seguin (and also Aaron Patterson. Dammit. This list is
+getting long). All of these developers are brilliant, work hard, and are
+tirelessly supporting their communities. That is, until they were driven
+away. This isn&#8217;t totally applicable to Yehuda, but it happened to Zed.
+It happened to _why. And I can see it happening, right now, to Aaron
+and Wayne. And Yehuda isn&#8217;t really doing Ruby&#8230;</p>
+
+<p>But seeing this happen makes me deeply sad. For them personally, for my
+own selfish reasons, and that that&#8217;s the state of our communities.</p>
+
+<h2>Where Does This Leave Us?</h2>
+
+<p>I don&#8217;t have any answers. I only have a bunch of questions:</p>
+
+<ul>
+<li>Why do we drive people away from Open Source?</li>
+<li>Can we learn to work together, instead of competing?</li>
+<li>How can we better recognize this human element?</li>
+</ul>
+
+
+<p>If you don&#8217;t contribute to Open Source: please consider thanking someone
+that does open source, in a project that you love. Consider helping out,
+in even the smallest of ways.</p>
+
+<p>Thanks.</p>
+
+<p><a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">My next post is a bit of a follow-up to this</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-12T00:00:00-04:00" pubdate  data-updated="true" >Aug 12<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I'm Making It Dead Simple To Contribute To Ruby's Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

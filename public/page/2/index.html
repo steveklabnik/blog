@@ -1,0 +1,1081 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/page/2/index.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/05/10/contributing-to-ruby-s-documentation.html">Contributing to Ruby&#8217;s Documentation</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-10T00:00:00-04:00" pubdate  data-updated="true" >May 10<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Update!</h3>
+
+<p>I&#8217;m now making it even easier than this: <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">Read my new post about how
+I&#8217;ll do this for you</a>. That said, if you want to do it yourself, the following will tell you how.</p>
+
+<h3>Original Article</h3>
+
+<p>Ruby 1.9.3 is coming out soon! <a href="http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge">drbrain has challenged the Ruby community to
+improve its documentation</a>, but some people were asking about how to do so.
+So I made a video!</p>
+
+<p>Some small errata: drbrain has informed me that he should edit the Changelog,
+not me. So don&#8217;t do that. :)</p>
+
+<iframe src="http://player.vimeo.com/video/23522731?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe>
+
+
+<p><a href="http://vimeo.com/23522731">How to contribute to Ruby&#8217;s documentation.</a> from <a href="http://vimeo.com/steveklabnik">Steve Klabnik</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+
+<p>If you don&#8217;t want to watch me talk about it, here&#8217;s the same info, in text:</p>
+
+<p>Getting the Ruby source is pretty easy. You can find it on GitHub, here:
+<a href="http://github.com/ruby/ruby">http://github.com/ruby/ruby</a> . Click the &#8220;fork&#8221; button and clone down your
+own fork:</p>
+
+<pre><code>$ git clone git@github.com:YOURUSERNAME/ruby.git
+</code></pre>
+
+<p>After that&#8217;s done, type <code>cd ruby</code> and add the main project as an upstream. This will
+let you keep up-to-date with the latest changes:</p>
+
+<pre><code>$ git remote add upstream https://github.com/ruby/ruby.git
+
+$ git fetch upstream
+</code></pre>
+
+<p>Okay! Now that you&#8217;re all set up, poke around and find something that needs
+documented. I like to just look through the source, but you can also look
+<a href="http://segment7.net/projects/ruby/documentation_coverage.txt">here</a> for a list of things that have no docs. Documentation is written in
+rdoc, and I&#8217;d check the recent commits that drbrain has been making to guide
+you in style. <a href="https://github.com/ruby/ruby/commit/071a678a156dde974d8e470b659c89cb02b07b3b">This commit</a>, for example, is a pretty good template. You
+can also check out the formatting guides <a href="http://rdoc.rubyforge.org/RDoc/Markup.html">here</a>. There&#8217;s also <a href="http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html">this</a>
+which explains some directives for .rb files and <a href="http://rdoc.rubyforge.org/RDoc/Parser/C.html">this</a> which handles
+directives for .c files.</p>
+
+<p>Now that you&#8217;ve made a change to the documentation, you can regenerate the
+docs by using rdoc. First, grab the latest version from rubygems:</p>
+
+<p>   $ gem install rdoc</p>
+
+<p>Always best to have the latest tools. Now do this to generate the docs:</p>
+
+<pre><code>$ rdoc --o tmpdoc lib/rss*
+</code></pre>
+
+<p>I&#8217;m passing it in an output directory with op, since the doc directory is not
+an rdoc directory. rdoc will complain and refuse to overwrite those files,
+which is a good thing. I&#8217;m also passing in a pattern of what to compile
+documentation for, compiling all of it takes a few minutes! In this case, I
+chose to document the rss library.</p>
+
+<p>Now you have a website in rdocout. Open up its index.html, and poke around for
+what you&#8217;ve changed. If it all looks good, you&#8217;re ready to make a patch!</p>
+
+<pre><code>$ rm -r rdocout
+
+$ git add .
+
+$ git commit -m "adding documentation for $SOMETHING"
+</code></pre>
+
+<p>Now, you have two options here. One is to simply push the change up to GitHub,
+and make a pull request.</p>
+
+<pre><code>$ git push origin
+</code></pre>
+
+<p>&#8230; aaand pull request. The core Ruby development doesn&#8217;t really happen on
+GitHub though, and so your patch may take a while to get included. If you
+really want to do it right, submit a patch to RedMine. We&#8217;ll use git to make
+this patch:</p>
+
+<pre><code>$ git format-patch HEAD~1
+</code></pre>
+
+<p>This says &#8220;make a patch out of the last commit.&#8221; It&#8217;ll tell you a file name,
+it should start with 000.</p>
+
+<p>Now, sign up for the Ruby RedMine <a href="http://redmine.ruby-lang.org/account/register">here</a>. Once you&#8217;ve clicked the
+confirmation email, <a href="http://redmine.ruby-lang.org/projects/ruby-19/issues/new">open a new ticket</a>, and assign it to Eric Hodel,
+category DOC, and give it your Ruby version, even though it&#8217;s not a big deal
+here. Click &#8216;choose file&#8217; and pick your patch, then &#8216;create and continue&#8217; and
+BAM! You&#8217;re done!</p>
+
+<p>Let&#8217;s all pitch in and make this the best documented Ruby release ever! In
+writing documentation, you might even find some things that you&#8217;d like to help
+improve. ;)</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html">The First Week of rstat.us: Users, Press, Scaling, Oh My!</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-30T00:00:00-04:00" pubdate  data-updated="true" >Mar 30<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hey everyone. A lot of people have been asking me about <a href="http://rstat.us">rstat.us</a> lately,
+so I figured I&#8217;d tell a little bit of the story as it&#8217;s gone down so far.</p>
+
+<h2>Stats</h2>
+
+<p>First, here&#8217;s some numbers:</p>
+
+<ul>
+<li>Users: 4553</li>
+<li>Uniques: 25,000</li>
+<li>Pageviews: 119,385</li>
+<li>Pages/visit: 4.77</li>
+<li>Statuses posted: 9387</li>
+</ul>
+
+
+<p>Here&#8217;s some fun info: stats on statuses by language:</p>
+
+<ul>
+<li>german 118</li>
+<li>russian 1355</li>
+<li>none 97 &lt;- ha!</li>
+<li>english 4836</li>
+<li>spanish 1412</li>
+<li>dutch 98</li>
+<li>french 1155</li>
+<li>portuguese 272</li>
+<li>farsi 66</li>
+<li>pinyin 1</li>
+</ul>
+
+
+<h2>Code</h2>
+
+<p>Lines, by committer:</p>
+
+<ul>
+<li>28 AndrewVos</li>
+<li>124 BRIMIL01</li>
+<li>6 Blaine Cook</li>
+<li>107 Brendan Taylor</li>
+<li>924 Brian Miller</li>
+<li>45 Caley Woods</li>
+<li>162 Carol Nichols</li>
+<li>20 Claudio Perez Gamayo</li>
+<li>1347 Dominic Dagradi</li>
+<li>4 James Larkby-Lahet</li>
+<li>99 Jorge H. Cuadrado</li>
+<li>258 Kat Hagan</li>
+<li>10 Lauren Voswinkel</li>
+<li>143 LindseyB</li>
+<li>16 MenTaLguY</li>
+<li>3 Michael Stevens</li>
+<li>3 Murilo Santana</li>
+<li>10 Nate Good</li>
+<li>1 Peter Aronoff</li>
+<li>24 Shebanian</li>
+<li>44 Stephen Paul Weber</li>
+<li>1409 Steve Klabnik</li>
+<li>8 Tony Arcieri</li>
+<li>478 Zachary Scott</li>
+<li>104 burningTyger</li>
+<li>28 james cook</li>
+<li>56 kat</li>
+<li>200 wilkie</li>
+<li>10 wolfwood</li>
+</ul>
+
+
+<p>Also, wilkie has a lot more code in the 3 gems that we build off of, for our
+ostatus implementation.</p>
+
+<p>That makes for 29 unique committers. These stats were generated by git-blame.</p>
+
+<p>Just over 200 pull requests</p>
+
+<p>872 commits</p>
+
+<h2>The deal with Heroku</h2>
+
+<p>Crazy! Such good stuff. I&#8217;m really excited as to how it&#8217;s going, but there
+were a few rocky points along the way as well. Some people saw me tweeting in
+frustration with Heroku, so here&#8217;s the skinny:</p>
+
+<p>On Sunday, for some reason, our 3 line app.js file, as well as our
+favicon.ico, started to take 60 seconds to respond. This meant that a dyno was
+getting tied up, and since Heroku changed the way their mesh works, they kept
+routing requests to these screwed up dynos. This caused a rash of 500 errors,
+and I frantically filed a support ticket. This was the first time I&#8217;d had a
+paid app on Heroku, and they&#8217;ve always been fantastic. The Hackety Hack site
+was on the free account, and performed beautifully, with similar traffic.</p>
+
+<p>What it boils down to is this, though: Heroku took about 22 hours to respond
+to my support ticket, in any way. Not like &#8220;we&#8217;re looking at it, but it&#8217;s
+Sunday, so it&#8217;ll take a while.&#8221; Crickets. Meanwhile, the errors kept
+happening. Eventually, I heard something from them, where they pretty much
+said &#8216;I see other errors, try fixing those.&#8217; with no response on the actual
+root cause. I got an email from a Level2 person who promised to investigate
+and escalate, but by now, I still haven&#8217;t heard.</p>
+
+<p>I also had a smaller issue with MongoHQ. To their credit, I heard back Sunday
+night, and the issue with them was an annoyance, not a showstopper. I ended up
+hearing from the CEO, who ended up following up with me multiple times, and in
+a pretty timely fashion.</p>
+
+<p>So, we moved our hosting away from Heroku and onto Duostack. Now, full
+disclosure: I&#8217;m friends with the guys from DuoStack. That said, they took care
+of me. I found a small bug in their platform when deploying the app, but
+everything&#8217;s gone really well. Bunches of users have commented on how fast the
+site is now, and I&#8217;ve been really happy with it so far. We&#8217;ll see how it goes.</p>
+
+<h2>The Future</h2>
+
+<p>Anyway, here&#8217;s what&#8217;s next for <a href="http://rstat.us">rstat.us</a>: The biggest thing is getting to
+100% ostatus compliance. We spent lots of time this week getting screwed over
+by a bug in Google&#8217;s hub implementation, but now that it&#8217;s all taken care of
+now. While we work on that, we&#8217;re also getting ready to deploy a statusnet
+compliant API, so people can use statusnet clients on mobile and desktop. This
+is huge for me, as I&#8217;m really missing notifications.</p>
+
+<p>Other than that, just keep using it! Tell your friends! If you code, come join
+us on the IRC (#rstatus on freenode), and help file bugs and patch them!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/23/announcing-rstat-us.html">Announcing rstat.us</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-23T00:00:00-04:00" pubdate  data-updated="true" >Mar 23<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Whew.</p>
+
+<p>If you&#8217;ve been <a href="http://twitter.com/steveklabnik">following me on Twitter</a> at all lately, you&#8217;ll know that
+I&#8217;ve been working hard on a new project lately. Tonight, even though it&#8217;s
+late, I&#8217;m finally getting it out there. Please welcome <a href="http://rstat.us/">http://rstat.us/</a>
+to the world! (as soon as the DNS updates. ;) )</p>
+
+<p><a href="http://rstat.us">rstat.us</a> is a micro-blogging service, just like Twitter. There&#8217;s one big
+difference, though: it is distributed. Oh, and it&#8217;s 100% open source. So two
+things. It&#8217;s also integrated with Facebook and Twitter, so you can just log in
+with either of those accounts, and it&#8217;ll syndicate your posts. Well, just to
+Twitter right now, but we&#8217;re getting there.</p>
+
+<p>Here&#8217;s the other cool thing: Want to own your data? You can actually <a href="http://github.com/hotsh/rstat.us">get the
+code</a> and run a copy yourself! But you won&#8217;t get left out: you can follow
+anyone else that uses the <a href="http://ostatus.org/">ostatus</a> protocol, like <a href="http://identi.ca/">http://identi.ca/</a>,
+and it&#8217;ll Just Work. You just have to grab the URL to their feed, put it in,
+and it&#8217;s all good! But you probably shouldn&#8217;t do that yet. We&#8217;re still working
+on some features.</p>
+
+<p><a href="http://rstat.us">rstat.us</a> is still very much alpha quality. 7 or 8 of my best friends and
+I have been fighting off sleep, food, and tests for the last two weeks to put
+this together. Please <a href="http://rstat.us/">give it a try</a> and let me know what you think, tell
+me if you can break it, or anything else that&#8217;s particularly interesting. If
+you&#8217;re the coding type, please check out the <a href="http://github.com/hotsh/rstat.us/wiki">wiki</a> for a big old list of
+stuff we&#8217;d like to do.</p>
+
+<p>Oh, and of course, you should <a href="http://rstat.us/users/steveklabnik">follow me on rstat.us</a>.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher.html">Did You Hear? I&#8217;m Ruby Mendicant University&#8217;s First Visiting Teacher</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-18T00:00:00-04:00" pubdate  data-updated="true" >Mar 18<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve heard <a href="http://university.rubymendicant.com/">Ruby Mendicant University</a> (also known as RMU, not to confuse
+you Robert Morris alums!) described as &#8220;the best kept secret of the Ruby
+community.&#8221; High praise, indeed. If you haven&#8217;t heard about RMU before, check
+out this presentation by Andrew Cox: </p>
+
+<p>TL;DR: RMU is a free, online &#8216;unversity&#8217; from Gregory Brown, author of &#8216;Ruby
+Best Practices.&#8217; You enter an intermediate Rubyist, and you exit an expert. </p>
+
+<p>Anyway, RMU recently announced that <a href="http://university.rubymendicant.com/changelog/visiting-teacher-2011-t2-steve-klabnik">I&#8217;ll be their first visiting teacher</a>.
+Basically, I&#8217;ll be hanging out, giving advice, and just generally being even
+more accessible to RMU students than I already am. Greg and I have talked a
+lot about education, Ruby, and a lot of other things&#8230; between Hackety&#8217;s
+&#8216;nothing to intermediate&#8217; and RMU&#8217;s &#8216;intermediate to expert&#8217; approaches to
+learning, anyone wanting to get up to speed with Ruby should have no shortage
+of resources at their disposal.</p>
+
+<p>If you&#8217;re feeling like you&#8217;ve got the hang of Ruby, but want to take it to the
+next level, <a href="http://university.rubymendicant.com/admissions">applications are open</a>! Hopefully I&#8217;ll see you there.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/03/i-m-quitting-hacker-news.html">I&#8217;m Quitting Hacker News</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-03T00:00:00-05:00" pubdate  data-updated="true" >Mar 3<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been thinking about this post for a while.</p>
+
+<p>I freaking love Hacker News. It&#8217;s my favorite place on the Internet. It&#8217;s
+incredibly valuable. I have learned so much from my time there.  With that
+said, I feel like it&#8217;s taken up too much of my time.</p>
+
+<p>I&#8217;m trying to accomplish things. I got accepted to grad school. I&#8217;m trying to
+rebuild Shoes. I&#8217;m working on improving Hackety. I&#8217;m finding that I don&#8217;t have
+enough hours in the day to accomplish the things I want to accomplish. And
+arguing for the hundredth time about how artists will survive in a post-IP
+world, or how to get your first couple of users, or whatever it is that Google
+or Apple did this week hasn&#8217;t gotten boring yet, and that&#8217;s a problem.</p>
+
+<p>The only respectable solution is to go cold-turkey for a while.</p>
+
+<p>I&#8217;ve been doing good on some of my new years&#8217; resolutions, and bad on others.
+I haven&#8217;t spent a lot of time writing lately, and I have only been doing okay
+at my writing. Hacker News is cutting into that. I feel like I&#8217;m using it in
+the same way some use TV. Yeah, it&#8217;s significantly deeper, but I really should
+be reading more books and less HN. At least, that&#8217;s what&#8217;s right for me right
+now.</p>
+
+<p>I won&#8217;t be gone forever. I just need to spend more time elsewhere.</p>
+
+<p>With that said, I&#8217;ve been spending a <em>lot</em> of time on Shoes. I&#8217;ll just leave
+this here: <a href="https://github.com/shoes/shoes/tree/feature/gemify">https://github.com/shoes/shoes/tree/feature/gemify</a></p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/22/a-few-notes-on-foucault.html">A Few Notes on Foucault</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-01-22T00:00:00-05:00" pubdate  data-updated="true" >Jan 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve almost always been in a habit of reading. When I was younger, I spent a
+lot of time in the library. I&#8217;d just grab an entire series of novels, and read
+them all, right in a row. Sometimes I&#8217;d end up reading non-fiction too. I
+ended up with a lot of books on software.</p>
+
+<p>Then my local library got Internet access. Slowly, I started to spend less
+time in the stacks and more in front of a terminal. This wasn&#8217;t a bad thing; I
+still kept reading. What&#8217;s more, what was previously a one way street turned
+into two: I didn&#8217;t just read the Internet, I wrote it. I spent hours and hours
+discussing the things I&#8217;d read with others.</p>
+
+<p>In any case, as the years flew by, the things that I&#8217;ve been reading have
+become less and less substantial. Current events are fine and all, and
+pictures of cute cats are nice, but I feel like the volume of what I&#8217;ve been
+reading has gone up, but the quality has gone down. It happens. I can&#8217;t really
+be snide about not owning a TV while being subscribed to
+<a href="http://www.reddit.com/r/fffffffuuuuuuuuuuuu">/r/fffffffuuuuuuuuuuuu</a>. Reddit somehow has morphed into a place where you
+can feel superior, but it&#8217;s really just the same exact thing in different
+clothing. Combine this general unease with my aspirations for grad school in
+the fall, as well as my renewed interest in political philosophy, and my need
+to hit the books has become readily apparent.</p>
+
+<p>Luckily, I have an ally in this quest, and Jamie has given me a reading list.
+Since reading and writing are two sides of a single coin, I&#8217;ll be writing
+about the things that I read here. Like many other things I&#8217;ve written about
+in the past, I&#8217;m sure that putting my thoughts down on paper (?) will help to
+gel my understanding and thoughts. First up: Michel Foucault&#8217;s &#8220;Discipline and
+Punish.&#8221;</p>
+
+<p>I&#8217;ll get right to it: I really enjoyed reading this book. It&#8217;s partially
+because it took a lot of random things that I kind of knew and tied them to
+some experiences that I&#8217;ve had in a meaningful way. It&#8217;s also partially
+because I have a substantial infatuation with the conspiratorial; I re-read
+&#8220;1984&#8221; every year, and I often think about its all-knowing, all-seeing
+telescreen imagery when discussing anything vaguely political. &#8220;Discipline and
+Punish&#8221; gave me the same sort of images, but they were fewer, and more firmly
+rooted in history and reality. The book opens with a section named &#8220;Torture,&#8221;
+and the scene of Robert-François Damiens&#8217; punishments for attempted regicide.
+I&#8217;m sure that before the release of &#8220;Saw,&#8221; these images were even more
+shocking:</p>
+
+<p>  &#8230; he was to be &#8216;taken and conveyed in a cart, wearing nothing but a shirt, holding a torch of burningwax weighing two pounds&#8217;; then, &#8216;in the said cart, to the Place de Greve, where, on a scaffold that will be erected there, the flesh will be torn from his breasts, arms, thighs, and calves with red-hot pincers, his right hand, holding the knife with which he committed the said parricide, burnt with sulphur, and, on those places where the flesh will be torn away, poured molten lead, boiling oil, burning resin, wax, and sulphur melted together and then his body drawn and quartered by four horses and his limbs and body consumed by fire, reduced to ashes, and his ashes thrown to the winds.</p>
+
+<p>Let it never be said that the people of 1757 were not thorough. Regardless, by
+January of 1840, we&#8217;d transitioned to a prison system that looks pretty much
+the same as it does now. The book&#8217;s primary theme is discussing how we got
+from point A to point B, and then examining the &#8216;why&#8217; to explain how modern
+society has a new sovereign institution: the &#8216;carceral system.&#8217;</p>
+
+<p>Before we can examine that question, though, we need to ask why we used
+torture as a form of punishment in the first place. The reasoning is actually
+straightforward: during the period of monarchy, everything revolves around the
+monarch. He is sovereign in a more absolute way than we even initially think
+of; the pop-culture image of a king has more to do with something of a
+popularity contest or that he&#8217;s simply the guy on the top of the pyramid, but
+the nature of a monarch&#8217;s power runs more deeply than that. It was called
+&#8216;divine right&#8217; for a reason, the physical body of the sovereign was the
+representation of God himself, and since the entire world belongs to God, thus
+it belongs to and is a part of the monarch. It reminds me of the kind of
+doublethink necessary to grasp the Catholic conception of the Holy Trinity, in
+this case God the Father, the king his son, and the world rather than a Holy
+Ghost. All one, yet three at the same time. In any case, if the land itself is
+the literal body of the king, then any transgression is an act of defiance not
+only of the rule of the monarch, but is making war upon God himself. And since
+damage has been done to the body of God, so must an equivalent exchange be
+made with the body of the aggressor. Torture also has an element of the
+theatrical to it, and therefore demonstrates to all of those watching that
+they must also comply with the rule of law or face the consequences.</p>
+
+<p>However, eventually, torture became socially inconvenient. Basically, it was a
+case of the Streisand Effect: when you place that much attention on someone,
+you create a forum for sympathizers to create romantic images of their fallen
+hero. There&#8217;s a great historical example of this in the Christian mythos:
+consider the polarizing effect that Christ&#8217;s torture on the cross maintains to
+this day. History is littered with the songs of fallen heros, and a call to
+follow in their stead. Eventually, whenever a new convict was to be strung up
+at a gallows, there&#8217;d be a state of disarray. Foucault describes several
+images of rioters throwing stones and even in some cases killing the
+executioner.</p>
+
+<p>As a result of this, the nature of punishment slowly changed. Reformists
+argued that punishment was metered out unevenly, and inconsistently. Thus in
+the same way that monarchy gave way to democracy, the absolute right of the
+king to punish became distributed as well. However, centralized and
+distributed systems are quite different, and require different constructs to
+operate properly. Therefore, a distributed form of the right to punish would
+need some mechanism by which to operate. This mechanism is termed &#8220;discipline&#8221;
+by Foucault. Discipline creates a certain order all by itself, and he uses a
+great example of monks and monasteries to illustrate the concept of
+discipline. Think about all of these things that we consider virtuous:</p>
+
+<ul>
+<li>Studying is a disciplined form of reading</li>
+<li>Dieting is discipline applied to eating</li>
+<li>The image of a soldier is almost entirely one of discipline</li>
+<li>Morality is discipline applied to all of life</li>
+<li>Exercise is disciplined form of the body</li>
+</ul>
+
+
+<p>But discipline has even greater roots in our society. Think about Taylor&#8217;s
+Scientific Management, for example: it&#8217;s a means of imposing discipline on
+workers to maximize their production. Schooling is a way of giving children a
+&#8216;structured environment&#8217; (structure seems to be synonymous with discipline in
+many cases) to develop in. Churches are places for the soul to become
+disciplined.</p>
+
+<p>Submitting to discipline has deeper psychological effects as well. It creates
+the idea of a division: there&#8217;s those who follow the rules, and those that
+disregard them. And since we&#8217;ve established that those who follow the rules
+are virtuous, those who don&#8217;t must not be. Since those that don&#8217;t follow the
+rules are doing bad things, they should be subject to punishment, so that they
+can remain disciplined. And thus the system of rules can be used as the
+distributed form of this right to punish, replacing the absolute right of the
+monarch. Submitting to this mentality makes people into &#8216;docile bodies&#8217; that
+perfectly fit into this worldview.</p>
+
+<p>As an example of how far this disciplinary approach has gone, Foucault
+presents the Panopticon, which was a prison shaped like a pie, with a tower in
+the middle. Prisoners would be able to observe others directly across from
+themselves, and the guard who may or may not be in the tower would be able to
+watch all of the prisoners at once. Since you couldn&#8217;t tell if the guard was
+in the tower or not, discipline would become internalized, since you always
+had to assume that Big Brother is watching you&#8230; This way of thinking about
+society ends up creating an all-encompassing &#8216;carceral system&#8217; that we now
+live in.</p>
+
+<p>It&#8217;s also important to note that this carceral system is total and absolutely
+permeating every aspect of society, yet they aren&#8217;t presented as such.
+Foucault specifically mentions that it&#8217;s important to consider that the
+delinquent are still a part of the system, and not outside of it. Yet we&#8217;re
+constantly presented with images that serve to present the idea that there&#8217;s a
+&#8216;criminal underworld,&#8217; that those who lead a life of crime are part of a
+shadowy alternate universe. Foucault refers to this idea as &#8216;enclosure&#8217;:
+&#8220;Discipline sometimes requires enclosure, the specification of a place
+heterogeneous to all others and closed in upon itself. It is the protected
+space of disciplinary monotony.&#8221; The enclosure embodies this separation, since
+there&#8217;s a space both within and outside of the enclosure. A self and an Other.</p>
+
+<p>&#8230; so yeah. That&#8217;s my summary. I&#8217;m still digesting a lot of this stuff, and
+so I may have more to say about it later.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/02/goals-for-2011.html">Goals for 2011</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-01-02T00:00:00-05:00" pubdate  data-updated="true" >Jan 2<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This year I&#8217;m happy to report that I have much more upbeat plans than last
+year&#8217;s kind of sad post. With that said, here&#8217;s my 2011 goals:</p>
+
+<ul>
+<li><p>I want to work for other people 2 days per week on average for the year.</p></li>
+<li><p>I want to write something every day</p></li>
+<li><p>I want to keep building on the initial success that Hackety Hack&#8217;s 1.0 launch
+has brought. I&#8217;d like to get a new release out every month or so, with a 2.0 for
+Christmas 2011.</p></li>
+<li><p>I want to start exercising again. My current lifestyle is still too sedentary
+for my liking.</p></li>
+<li><p>I want to eat better.</p></li>
+<li><p>I want to start logging my activities every day.</p></li>
+</ul>
+
+
+<p>Most of these are kinda standard. I used to go to the gym all the time, but
+I&#8217;ve never eaten healthily. Both of these things are going to become more
+important as I age, however, and so I&#8217;m starting to actually give them serious
+consideration.</p>
+
+<p>Hackety Hack had an impressive 1.0 launch, but I have lots of work to do.
+Please check out the <a href="http://blog.hackety-hack.com/">Hackety Hack blog</a> tomorrow for a report on that.
+Basically, I now have a sizable userbase to attend to, and they&#8217;ve found a
+bunch of bugs that I need to iron out before starting to build more stuff.</p>
+
+<p>The logging is an idea that I got from <a href="http://www.sebastianmarshall.com/">Sebastian Marshall</a>. We&#8217;ve had some
+good conversation recently, and we talked briefly about the importance of
+measuring things. You can only improve things if you know what&#8217;s actually
+wrong&#8230; I&#8217;m going to be tracking the time that I do various activities, and
+seeing if I can improve. If I feel this is working, I&#8217;ll write about it in a
+month or so.</p>
+
+<p>I&#8217;ve already made some progress on all of these, actually. Obviously, most of
+them can only truly be realized in a year&#8217;s time, but here&#8217;s what I&#8217;ve got
+going:</p>
+
+<ul>
+<li><p>I&#8217;ve got my logging set up going. I&#8217;m trying to figure out how to make it as
+unobtrusive as possible, but I think I have a good first run at it.</p></li>
+<li><p>I&#8217;ve got a set up for the work situation, and if all goes well, that should
+be accomplished. I originally thought I&#8217;d have to front-load a bit, but it
+seems like I&#8217;ll be doing this most of the year.</p></li>
+<li><p>Working that little will enable me to really accomplish my Hackety goals.</p></li>
+<li><p>Now that Maria is graduated, she&#8217;s got some time to cook things, and she&#8217;s
+also interested in eating better, and her habits are better than mine already.
+Hopefully this will lead to success.</p></li>
+<li><p>Logging should help keep my eyes on the prize for my exercise and writing goals.</p></li>
+</ul>
+
+
+<p>So, that&#8217;s it! Good luck with your goals in the new year!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/12/25/hackety-hack-v1-0.html">Hackety Hack v1.0</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-12-25T00:00:00-05:00" pubdate  data-updated="true" >Dec 25<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&#8217;s been a long journey. I have a lot to say about this, but it&#8217;ll have to
+wait until I&#8217;m not in the middle of nowhere spending some time with Maria&#8217;s
+family. I just wanted to tell you all Merry Christmas, and point you at the
+<a href="http://blog.hackety-hack.com/post/2457961910/merry-christmas-and-a-1-0-announcement">Hackety Hack v1.0 release announcement</a> and the new
+<a href="http://hackety-hack.com/">Hackety Hack website</a>.</p>
+
+<p>Merry Christmas!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/11/17/the-hardest-decision-i-ve-ever-made.html">The Hardest Decision I&#8217;ve Ever Made.</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-11-17T00:00:00-05:00" pubdate  data-updated="true" >Nov 17<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ll cut to the chase: I&#8217;ve stepped down as CTO of CloudFab. I don&#8217;t
+want to discuss details, but life is too short to not be doing what
+you want with it. And, after a period of careful thought and
+consideration, it&#8217;s no longer the right thing for me. It was an
+amicable parting, and my replacements are already in place, and doing
+cool things. I&#8217;m happy with what I&#8217;ve accomplished, but it&#8217;s time  for me to
+move on.</p>
+
+<p>This raises the question: what am I moving on to? Here&#8217;s the answer:
+Hackety Hack. What I truly care about is teaching, writing, and
+discussing software. If I could do anything, I&#8217;d hack on Hackety,
+share what I know with others, and keep learning and playing with new
+things all day long.</p>
+
+<p>However, there&#8217;s a certain question of sustainability here: I&#8217;m not
+made of money, and I have lots of bills to pay. However, doing the
+&#8216;obvious&#8217; thing would be really, truly wrong: Hackety Hack is not and
+will never be a startup. It&#8217;s a social venture, if anything: it would
+be absolutely unquestioningly wrong for me to ever ask anyone for a
+single cent for it. It&#8217;d also be counterproductive: how could I share
+programming with everyone if I excluded those without disposable
+income?</p>
+
+<p>So to this end, Hackety cannot be all that I do. And while I really
+want to teach, I also have a lot to learn. Luckily, I have some great
+allies in this area: I&#8217;ve been working alongside two teachers at the
+University of Pittsburgh over the past month or so: one in the English
+department, and one in the Computer Science department. In doing so,
+I&#8217;ve come to realize that my place in life is actually in the middle:
+while I love the theoretical side of CS, I&#8217;m actually much more
+interested in the application. And teachers need to be effective
+communicators, so investing in writing is absolutely worthwhile for
+me. At the same time, I&#8217;ve really enjoyed every chance I&#8217;ve had to
+write: there&#8217;s a reason I keep three blogs now! I&#8217;m also incredibly
+interested in the parallels that exist between computer and human
+languages. I like the comparison between refactoring and composition.
+I think the two fields have a lot to learn from one another. It&#8217;s
+something I&#8217;d like to explore more.</p>
+
+<p>To do so, I&#8217;ll have to finish off my undergrad degree. Luckily, I&#8217;m
+very close, so I&#8217;ll be doing that in the spring. Afterward, it&#8217;s my
+intention to go to grad school in the English department, so I&#8217;m
+furiously working on my application, with the help of the
+aforementioned teacher. At the same time, I&#8217;ll possibly help teach or
+TA classes in the CS department as well. I&#8217;m hoping to combine my
+solid foundations in the hard sciences with the new perspective and
+improved analysis that the humanities can offer.</p>
+
+<p>I don&#8217;t think that academia is where I want to stay forever, but I
+think it&#8217;s a good place for me to grow for now. It&#8217;s time for me to
+invest in myself a little. I think I&#8217;ll end up a much better person in
+the end.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/09/24/trolling-is-a-art.html">Trolling Is a Art</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-09-24T00:00:00-04:00" pubdate  data-updated="true" >Sep 24<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I find it incredibly hard not to be judgmental.</p>
+
+<p>I&#8217;m not sure what part of my personality makes this happen, but even
+when I try to curb tearing down other people, I end up doing it
+anyway. I&#8217;m not sure if it&#8217;s just me, but I think part of the problem
+is that these kinds of things are rewarded.</p>
+
+<p><img src="/images/stevesajerk.png" alt="" /></p>
+
+<p>This is me, being a jerk.</p>
+
+<p>One of the reasons that I use my real name everywhere is to try to
+improve the civility of my discourse. When you&#8217;re anonymous, it&#8217;s
+really easy to be callous. And when I used a handle, I was even worse.
+But even now, I can think of three times when I accidentally was mean
+for basically no reason: That tweet, the Diaspora incident, and the
+only Hacker News comment I&#8217;ve ever deleted.</p>
+
+<p>In all three of these instances, it&#8217;s not so much that I was wrong.
+It&#8217;s that I ended up presenting my criticisms poorly. I think I did a
+decent job with the Diaspora one, but people still took it the wrong
+way, so I failed to communicate. I&#8217;m certainly not infallible. I
+guarantee you there are n00b errors and security holes in my own
+codebases. So I really shouldn&#8217;t be so quick to judge.
+That&#8217;s all I have to say about that. I&#8217;ll just have to do better going
+forward.</p>
+</div>
+  
+  
+
+
+  </article>
+
+<nav role="pagination">
+  <div>
+    
+      <a class="prev" href="/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</nav>
+
+</div>
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I&#8217;m Steve.</h4>
+<p>
+I write both code and prose. Here&#8217;s some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple To Contribute To Ruby&#8217;s Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

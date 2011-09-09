@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Break with the Past - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">A Break With the Past</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-27T00:00:00-04:00" pubdate  data-updated="true" >Apr 27<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.countdowntooauth.com/">Pretty soon</a>, Twitter is going to turn off Basic Authentication and switch
+entirely to OAuth. <a href="http://www.scripting.com/stories/2010/04/26/theToxicCoralReef.html">People are upset</a>. It&#8217;s natural. If apps aren&#8217;t updated,
+they&#8217;ll stop working, entirely. This could be bad.</p>
+
+<p>But in the long run, it won&#8217;t be.</p>
+
+<p>In any sort of long-term endeavor, things can go sour, due to accumulating
+cruft over time. You see this in married couples that argue every day, you see
+this in old-guard companies that have six layers of management, you see this
+in software of all kinds. You don&#8217;t want to break old stuff, so you support
+it. Rocking the boat may cause some problems. It could bring up old wounds.
+You might have to ask someone to improve. Things won&#8217;t ever be the same, and
+you&#8217;re gambling with the outcome, hoping that in the end, everything will be
+better.</p>
+
+<p>Sometimes, this gamble pays off big.</p>
+
+<p>Apple&#8217;s managed to do this three times in its history, in a huge way. They&#8217;ve
+reinvented themselves a few times, but there were three huge, backward-
+compatibility breaking changes that could have killed the company. The first
+was the transition from the 68k architecture to the PowerPC architecture, the
+eventual change from PowerPC to x86, and the transition from OS9 to OSX.</p>
+
+<p>Apple managed to make all of these transitions successfully, and it&#8217;s been one
+of the greatest benefits to the company. A huge part of why Windows is so
+horrible is that it goes above and beyond the call of duty with backwards
+compatibility; Microsoft never wants to rock the boat. When they try to, they
+get punished. Look at how poorly the transition to Vista went. So what made it
+go so right for Apple, and so wrong for Microsoft?</p>
+
+<p>The first thing that Apple did right with all of these transitions was being
+open about them. People were given ample time to move over to the new
+platform. I was young when the 68k change happened, so my remembering of that
+time might be fuzzy, but the OSX announcement certainly was made with ample
+time. An entire year elapsed between the public beta and the release of 10.1,
+which was widely considered the first version of OSX that was worth using. I
+remember buying a copy of 10.0, and Apple gave you an upgrade to 10.1 for $30,
+similar to the Snow Leopard upgrade. 10.0 was just too buggy to be considered
+a proper replacement. Anyway, that was a year, and that&#8217;s not counting the
+time between the announcement and the beta release. For the transition to
+Intel, the initial announcement was made in 2005, and Steve Jobs said the
+transition would happen over the next two years. That gave everyone plenty of
+time to get their ducks in a row.</p>
+
+<p>The second thing that Apple did correctly was provide ample tools for dealing
+with the transition. For the first switch, they provided a 68k emulator, and
+kept it going all the way up until the Intel transition. This meant that
+people didn&#8217;t have to re-write their apps from scratch, and gave them a big
+window for re-writing apps. Rosetta fulfills the same role for the
+PowerPC/Intel change. And during the OS9/OSX changeover, Apple not only let
+you emulate OS9, but also created the Carbon framework to bridge the gap
+between System 9 and Cocoa.</p>
+
+<p>Finally, Apple made these changes boldly, and didn&#8217;t back down. With any kind
+of massive change like this, unless someone forces the change through, people
+will stay with the old system, and the transition fails. You can see this
+happen with both the Python move to Python 3000, the move from Ruby 1.8 to
+1.9, and the move from XP to Vista. There&#8217;s a fine line between giving people
+leeway to make the transition and actually forcing them to do it. Apple did a
+poor job with this when it came to Adobe, who&#8217;s being an incredible laggard
+with Photoshop. It&#8217;s a massive application, sure, but Apple announced Carbon&#8217;s
+end of life ages ago, they really should have gotten their shit together.
+Generally, Apple&#8217;s not afraid to end-of-life products after the transition
+time is over, though. </p>
+
+<p>In any case, those seem to be the three things that make a transitional period
+work: transparency, tools, and finality. If Twitter wants to survive the
+Oauthcalypse (as if they won&#8217;t), they need to follow the same path. And they
+have been. They announced the move to Oauth over a year ago (I think), they&#8217;ve
+had libraries and examples out there for ages, and they&#8217;ve picked a date and
+they&#8217;re sticking to it.</p>
+
+<p>I&#8217;m glad they&#8217;re doing it. OAuth is an important part of Twitter&#8217;s future, and
+it&#8217;s good that they&#8217;re embracing it fully.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-04-27T00:00:00-04:00" pubdate  data-updated="true" >Apr 27<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2010/04/27/a-break-with-the-past.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I'm Making It Dead Simple To Contribute To Ruby's Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

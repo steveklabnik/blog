@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>I'm Making It Dead Simple To Contribute To Ruby's Documentation - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">I'm Making It Dead Simple to Contribute to Ruby's Documentation</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Okay! So, if you&#8217;d read <a href="/2011/05/10/contributing-to-ruby-s-documentation.html">my previous article on
+this</a>, you&#8217;d know how
+easy it is to contribute to Ruby&#8217;s Documentaiton.</p>
+
+<blockquote><p>But Steve, I&#8217;m <em>still</em> kinda scared.</p></blockquote>
+
+<p>Okay, so here we go: I&#8217;m making it even easier on you.</p>
+
+<p>Send me what you want changed, and how, and I&#8217;ll make a patch and submit
+it on your behalf.</p>
+
+<p>No, seriously, I will. I already did once. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873">This guy</a> posted something about how it was too hard, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875">so
+I made a patch for him</a>. And now Ruby is better because of it.</p>
+
+<h2>Patches don&#8217;t have to be patches</h2>
+
+<p>Seriously, I don&#8217;t even mean diff outputs. I just got this email:</p>
+
+<blockquote><p>I&#8217;m eager to contribute docs but I don&#8217;t know where to start: I don&#8217;t
+mean pulling down the repo and all that, I mean, I see this link
+here:http://segment7.net/projects/ruby/documentation_coverage.txt but
+all I see is a ton of &#8220;# is documented&#8221; comments. Where does a
+relative n00b begin? Poking around in the source code is, well,
+intimidating. I&#8217;m completely new to this but I take direction well.
+Just point me in the right direction. Just give me something to
+document, please!</p></blockquote>
+
+<p>I sent this back:</p>
+
+<blockquote><p>No code diving needed! That&#8217;s part of it. Let&#8217;s do this: Find the documentation for one of your favorite methods. Here, I&#8217;ll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:</p>
+
+<blockquote><p>Removes nil elements from the array. Returns nil if no changes were made, otherwise returns </i>ary</i>.</p></blockquote>
+
+<p>Why&#8217;s that </i> there? Total screw-up.  For example. So, send me this email:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There&#8217;s an extra </i> that&#8217;s screwing things up.</p>
+
+<p>-Jonathan&#8221;</p>
+
+<p>Done! I&#8217;ll go from there. How about this one:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394</p>
+
+<p>These docs kind of suck. What if I don&#8217;t know what Marshal is? There should at <em>least</em> be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like &#8220;You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393</p>
+
+<ul>
+<li>Jonathan&#8221;</li>
+</ul>
+
+
+<p>I&#8217;m sure you can find something that&#8217;s formatted wrong, or worded incorrectly, or anything else.</p>
+
+<p>-Steve</p></blockquote>
+
+<p>Now, the <em>closer</em> it is to an actual patch, the faster I&#8217;ll be able to
+do it. A vague &#8220;this documentation is confusing, but I&#8217;m not sure why&#8221;
+is helpful, but will take longer. I&#8217;d rather get that email than not. If
+you&#8217;re not sure, hit send.</p>
+
+<h2>Just Do It</h2>
+
+<p>And so I&#8217;ll do it again. Scared to deal with doc patches? I&#8217;ll make them
+up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
+
+<p>That&#8217;s all.</p>
+
+<p>Send me patches.
+<a href="mailto:steve@steveklabnik.com">steve@steveklabnik.com</a>. Do it.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I'm Making It Dead Simple To Contribute To Ruby's Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

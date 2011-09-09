@@ -1,0 +1,2412 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/index.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-06T00:00:00-04:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I often tell people that I learned Ruby via Rails. This is pretty much the worst
+way to do it, but I&#8217;d learned so many programming languages by then that it
+didn&#8217;t hinder me too much. The one thing that it did do, however, was give me a
+slightly twisted sense of how to properly design the classes needed in a Rails
+app. Luckily, I obsessively read other people&#8217;s code, and I&#8217;ve noticed that
+there&#8217;s one big thing that is common in most of the code that&#8217;s written by
+people whose design chops I respect.</p>
+
+<p>This particular thing is also seemingly unique to those people. It&#8217;s not
+something that people who don&#8217;t write good code attempt, but do badly. It&#8217;s like
+a flag, or signal. Now, when I see someone employ this, I instantly think &#8220;they
+get it.&#8221; Maybe I&#8217;m giving it too much credit, but this advanced design technique
+offers a ton of interconnected benefits throughout your Rails app, is easy to
+imploy, and speeds up your tests by an order of magnitude or more.
+Unfortunately, to many beginning Rails devs, it&#8217;s non-obvious, but I want <em>you</em>
+to write better code, and so I&#8217;m here to &#8216;break the secret,&#8217; if you will, and
+share this awesome, powerful technique with you.</p>
+
+<p>It&#8217;s called the &#8216;Plain Old Ruby Domain Object.&#8217;</p>
+
+<p>Yep, that&#8217;s right. A Ruby class that inherets from nothing. It&#8217;s so simple that
+it hides in plain sight. Loved by those who&#8217;ve mastered Rails, Plain Old Ruby
+Objects, or &#8220;POROs&#8221; as some like to call them, are a hidden weapon against
+complexity. Here&#8217;s what I mean. Examine this &#8216;simple&#8217; model:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We want to display an index page of all our posts, and do it by first letter.
+So we build up a dictionary, and then put our posts in it. I&#8217;m assuming we&#8217;re
+not paginating this, so don&#8217;t get caught up in querying for all Posts. The
+important thing is the idea: we can now display our posts by title:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='haml'><div class='line'><span class="p">-</span> <span class="no">Post</span><span class="o">.</span><span class="n">as_dictionary</span> <span class="k">do</span> <span class="o">|</span><span class="n">letter</span><span class="p">,</span> <span class="n">list</span><span class="o">|</span>
+</div><div class='line'>  <span class="nt">%p</span><span class="p">=</span> <span class="n">letter</span>
+</div><div class='line'>  <span class="nt">%ul</span>
+</div><div class='line'>  <span class="p">-</span> <span class="n">list</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</div><div class='line'>    <span class="nt">%li</span><span class="p">=</span> <span class="n">link_to</span> <span class="n">post</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Sure. And in one way, this code isn&#8217;t <em>bad</em>. It&#8217;s also not good: We&#8217;ve mixed a
+presentational concern into our model, which is supposed to represent buisness
+logic. So let&#8217;s fix that, via a Presenter:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@collection</span> <span class="o">=</span> <span class="n">collection</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="vi">@collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We can use it via <code>DictionaryPresenter.new(Post.all).as_dictionary</code>. This has
+tons of benefits: we&#8217;ve moved presentation logic out of the model. We&#8217;ve
+<em>already</em> added a new feature: any collection can now be displayed as a
+dictionary. We can easily write isolated tests for this presenter, and they will
+be <em>fast</em>.</p>
+
+<p>This post isn&#8217;t about the Presenter pattern, though, as much as I love it. This
+sort of concept appears in other places, too, &#8220;this domain concept deserves its
+own class.&#8221; Before we move to a different example, let&#8217;s expand on this further:
+if we want to sort our Posts by title, this class will work, but if we want to
+display, say, a User, it won&#8217;t, because Users don&#8217;t have titles. Furthermore,
+we&#8217;ll end up with a lot of Posts under &#8220;A,&#8221; because the word &#8220;a&#8221; is pretty
+common at the beginning of Posts, so we really want to take the second word in
+that case. We can make two kinds of presenters, but now we lose that generality,
+and the concept of &#8216;display by dictionary&#8217; has two representations in our system
+again. You guessed it: POROs to the rescue!</p>
+
+<p>Let&#8217;s change our presenter slightly, to also accept an organizational policy
+object:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@policy</span> <span class="o">=</span> <span class="n">policy</span>
+</div><div class='line'>    <span class="vi">@collection</span> <span class="o">=</span> <span class="n">collection</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="vi">@collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="vi">@policy</span><span class="o">.</span><span class="n">category_for</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we can inject a policy, and have them be different:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">UserCategorizationPolicy</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">category_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">PostCategorizationPolicy</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">category_for</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">starts_with?</span><span class="p">(</span><span class="s2">&quot;A &quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="o">[</span><span class="mi">1</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Bam!</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">DictionaryPresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">PostCategorizationPolicy</span><span class="p">,</span> <span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">)</span><span class="o">.</span><span class="n">as_dictionary</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah, so that&#8217;s getting a bit long. It happens. :) You can see that now each
+concept has one representation in our system. The presenter doesn&#8217;t care how
+things are organized, and the policies only dictate how things are organized. In
+fact, my names sorta suck, maybe it should be &#8220;UsernamePolicy&#8221; and
+&#8220;TitlePolicy&#8221;, actually. We don&#8217;t even care what class they are!</p>
+
+<p>It goes further than that in other directions, too. Combining the flexibility of
+Ruby with one of my favorite patterns from &#8220;Working Effectively with Legacy
+Code,&#8221; we can take complex computations and turn them into objects. Look at this
+code:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="c1">#&lt;snip&gt;</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">purchased_at</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="n">purchased_at</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="n">turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">time</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="p">(</span><span class="n">turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Yikes! This method prints a turnaround time, but as you can see, it&#8217;s a complex
+calculation. We&#8217;d be able to understand this much more easily of we used Extract
+Method a few times to break it up, but then we risk polluting our Quote class
+with more stuff that&#8217;s only relevant to pretty turnaround calculation. Also,
+please ignore that this is also presentation on the model; we just care that
+it&#8217;s a complex bit of code for this example.</p>
+
+<p>Okay, so here&#8217;s the first step of this refactoring, which Feathers calls &#8220;Break
+Out Method Object.&#8221; You can open your copy of &#8220;Working Effectively With Legacy
+Code&#8221; and turn to page 330 to read more. If you don&#8217;t have a copy, get one.
+Anyway, I digress. Here&#8217;s the plan of attack:</p>
+
+<ol>
+<li>Create a new class for the computation</li>
+<li>Define a method on that class to do the new work.</li>
+<li>Copy the body of the old method over, and change variable references to instance variables.</li>
+<li>Give it an initialize method that takes arguments to set the instance variables used in step 3.</li>
+<li>Make the old method delegate to the new class and method.</li>
+</ol>
+
+
+<p>I&#8217;ve changed this slightly for Ruby, since we can&#8217;t Lean On The Compiler, and a
+few of Feathers&#8217; steps are about doing this. Anyway, let&#8217;s try this on that
+code. Step 1:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="c1">#snip</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Two:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Three:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="vi">@turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="vi">@turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">time</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="p">(</span><span class="vi">@turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>I like to give it a generic name at first, and then give it a better one in step
+5, after we see what it really does. often our code will inform us of a good
+name.</p>
+
+<p>Four:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">purchased_at</span><span class="p">,</span> <span class="n">turnaround</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@purchased_at</span> <span class="o">=</span> <span class="n">purchased_at</span>
+</div><div class='line'>    <span class="vi">@turnaround</span> <span class="o">=</span> <span class="n">turnaround</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="c1">#snip</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Five:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="no">TurnaroundCalculator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">purchased_at</span><span class="p">,</span> <span class="n">turnaround</span><span class="p">)</span><span class="o">.</span><span class="n">calculate</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Done! We should be able to run our tests and see them pass. Even if &#8216;run our
+tests&#8217; consists of manually checking it out&#8230;</p>
+
+<p>So what&#8217;s the advantage here? Well, we now can start the refactoring process,
+but we&#8217;re in our own little clean room. We can extract methods into our
+TurnaroundCalcuator class without polluting Quote, we can write speedy tests
+for just the Calculator, and we&#8217;ve split out the idea of calculation into one
+place, where it can easily be changed later. Here&#8217;s our class, a few
+refactorings later:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+<span class='line'>41</span>
+<span class='line'>42</span>
+<span class='line'>43</span>
+<span class='line'>44</span>
+<span class='line'>45</span>
+<span class='line'>46</span>
+<span class='line'>47</span>
+<span class='line'>48</span>
+<span class='line'>49</span>
+<span class='line'>50</span>
+<span class='line'>51</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="vi">@turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">arrival_date</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="kp">protected</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">arrival_date</span>
+</div><div class='line'>    <span class="n">real_turnaround_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">real_turnaround_time</span>
+</div><div class='line'>    <span class="n">adjust_time_for_weekends</span><span class="p">(</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">turnaround_in_seconds</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">adjust_time_for_weekends</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">saturday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span> <span class="n">sunday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">time</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">saturday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">sunday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">turnaround_in_seconds</span>
+</div><div class='line'>    <span class="vi">@turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">start_time</span>
+</div><div class='line'>    <span class="vi">@purchased_at</span> <span class="ow">or</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">days_from_today</span>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="vi">@purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="vi">@turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow. This code I wrote three years ago isn&#8217;t perfect, but it&#8217;s almost
+understandable now. And each of the bits makes sense. This is after two or three
+waves of refactoring, which maybe I&#8217;ll cover in a separate post, becuase this
+was more illustrative than I thought&#8230; anyway, you get the idea. This is what I
+mean when I say that I shoot for roughly five-line methods in Ruby; if your code
+is well-factored, you can often get there.</p>
+
+<p>This idea of extracting domain objects that are pure Ruby is even in Rails
+itself. Check out this route:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;dashboard#index&#39;</span><span class="p">,</span> <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="no">LoggedInConstraint</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Huh? LoggedInConstraint?</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">LoggedInConstraint</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">matches?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">current_user</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Whoah. Yep. A domain object that describes our routing policy. Awesome. Also,
+validations, blatantly stolen from <a href="http://omgbloglol.com/post/392895742/improved-validations-in-rails-3">omgbloglol</a>:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">SomeClass</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="n">validate</span> <span class="ss">:category_id</span><span class="p">,</span> <span class="ss">:proper_category</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">ProperCategoryValidator</span> <span class="o">&lt;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">unless</span> <span class="n">record</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">category_ids</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span> <span class="n">attribute</span><span class="p">,</span> <span class="s1">&#39;has bad category.&#39;</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This isn&#8217;t a plain Ruby class, but you get the idea.</p>
+
+<p>Now, you might be thinking, &#8220;Steve: This isn&#8217;t just for Rails! You&#8217;ve lied!&#8221; Why
+yes, actually, you&#8217;ve caught me: this isn&#8217;t the secret to Rails OO, it&#8217;s more of
+a general OO design guideline. But there&#8217;s something special about Rails which
+seems to lure you into the trap of never breaking classes down. Maybe it&#8217;s that
+<code>lib/</code> feels like such a junk drawer. Maybe it&#8217;s that the fifteen minute
+examples only ever include ActiveRecord models. Maybe it&#8217;s that more Rails apps
+than not are (WARNING: UNSUBSTANTIATED CLAIM ALERT) closed source than open, so
+we don&#8217;t have as many good examples to draw upon. (I have this hunch since
+Rails is often used to build sites for companies. Gems? Sure? My web app? Not so
+much. I have no stats to back this up, though.)</p>
+
+<p>In summary: Extracting domain objects is good. They keep your tests fast, your
+code small, and make it easier to change things later. I have some more to say
+about this, specifically the &#8220;keeps test fast&#8221; part, but I&#8217;m already pushing it
+for length here. Until next time!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-04T00:00:00-04:00" pubdate  data-updated="true" >Sep 4<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>By now, the <a href="http://www.pomodorotechnique.com/">pomodoro technique</a> is pretty
+well-known amongst programmers. I forget where I heard of it first, but
+if you haven&#8217;t, here it is: Break your day up into 30 minute chunks.
+Work for 25 minutes, break for 5. Repeat. It&#8217;s easy to stay concentrated
+when you know a break is coming up soon, the fact that you can fit two
+in an hour fits with my natural sense of order in the world, and once
+you get in the rhythm, you Get Shit Done. Heck, I liked the idea so much
+that I <a href="http://rubygems.org/gems/pomodoro">made a Ruby gem</a>.</p>
+
+<p>That said, I hadn&#8217;t been following the technique for a while, because
+it&#8217;s easy to lose discipline. Happens to the best of us. Recently,
+though, it&#8217;s crept back into my workflow, largely thanks to Jeff
+Casimir. I was even lazy enough to not use my gem, and try something
+else. So I grabbed the software he uses from the App Store, and fired it
+up. It presented me with an interesting option to give my pomodoro a
+name before starting it. Pretty much without thinking, I typed &#8216;rstat.us
+rails3 port,&#8217; since that&#8217;s what I was working on, and away I went.</p>
+
+<p>The more I think about it, however, the more interesting the naming
+aspect becomes. I can see how long and how often I&#8217;m working on various
+things, and over the past few weeks, it&#8217;s been neat to examine. When
+doing some reading this morning, my groggy brain combined a few
+different things together:</p>
+
+<ul>
+<li>Programmers often don&#8217;t have the time to practice their craft</li>
+<li>I work on a lot of random software projects</li>
+<li>These projects are often of varying quality, especially regarding
+things like documentation and tests</li>
+<li>Almost none of the gems that have been released are at a 1.0 release
+(can anyone find this blog post for me? I can&#8217;t. It&#8217;s something about
+&#8220;Just Release It&#8221;&#8230;)</li>
+</ul>
+
+
+<p>So, with an aim of combining all these things, I&#8217;m going to give
+something a try, and you should too: I&#8217;m going to name at least one
+pomodoro a day &#8220;self-improvement,&#8221; and use that time to go back over my
+random projects on GitHub and clean them up. I&#8217;m going to use that time
+to start programming in a totally new language. I&#8217;m going to use that
+time to do that refactoring I&#8217;ve been avoiding. I&#8217;m going to use that
+time to read a book.</p>
+
+<p>Basically, I&#8217;m going to force myself to invest in myself. Make sure to
+find time to invest in you, too.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple to Contribute to Ruby&#8217;s Documentation</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Okay! So, if you&#8217;d read <a href="/2011/05/10/contributing-to-ruby-s-documentation.html">my previous article on
+this</a>, you&#8217;d know how
+easy it is to contribute to Ruby&#8217;s Documentaiton.</p>
+
+<blockquote><p>But Steve, I&#8217;m <em>still</em> kinda scared.</p></blockquote>
+
+<p>Okay, so here we go: I&#8217;m making it even easier on you.</p>
+
+<p>Send me what you want changed, and how, and I&#8217;ll make a patch and submit
+it on your behalf.</p>
+
+<p>No, seriously, I will. I already did once. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873">This guy</a> posted something about how it was too hard, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875">so
+I made a patch for him</a>. And now Ruby is better because of it.</p>
+
+<h2>Patches don&#8217;t have to be patches</h2>
+
+<p>Seriously, I don&#8217;t even mean diff outputs. I just got this email:</p>
+
+<blockquote><p>I&#8217;m eager to contribute docs but I don&#8217;t know where to start: I don&#8217;t
+mean pulling down the repo and all that, I mean, I see this link
+here:http://segment7.net/projects/ruby/documentation_coverage.txt but
+all I see is a ton of &#8220;# is documented&#8221; comments. Where does a
+relative n00b begin? Poking around in the source code is, well,
+intimidating. I&#8217;m completely new to this but I take direction well.
+Just point me in the right direction. Just give me something to
+document, please!</p></blockquote>
+
+<p>I sent this back:</p>
+
+<blockquote><p>No code diving needed! That&#8217;s part of it. Let&#8217;s do this: Find the documentation for one of your favorite methods. Here, I&#8217;ll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:</p>
+
+<blockquote><p>Removes nil elements from the array. Returns nil if no changes were made, otherwise returns </i>ary</i>.</p></blockquote>
+
+<p>Why&#8217;s that </i> there? Total screw-up.  For example. So, send me this email:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There&#8217;s an extra </i> that&#8217;s screwing things up.</p>
+
+<p>-Jonathan&#8221;</p>
+
+<p>Done! I&#8217;ll go from there. How about this one:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394</p>
+
+<p>These docs kind of suck. What if I don&#8217;t know what Marshal is? There should at <em>least</em> be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like &#8220;You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393</p>
+
+<ul>
+<li>Jonathan&#8221;</li>
+</ul>
+
+
+<p>I&#8217;m sure you can find something that&#8217;s formatted wrong, or worded incorrectly, or anything else.</p>
+
+<p>-Steve</p></blockquote>
+
+<p>Now, the <em>closer</em> it is to an actual patch, the faster I&#8217;ll be able to
+do it. A vague &#8220;this documentation is confusing, but I&#8217;m not sure why&#8221;
+is helpful, but will take longer. I&#8217;d rather get that email than not. If
+you&#8217;re not sure, hit send.</p>
+
+<h2>Just Do It</h2>
+
+<p>And so I&#8217;ll do it again. Scared to deal with doc patches? I&#8217;ll make them
+up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
+
+<p>That&#8217;s all.</p>
+
+<p>Send me patches.
+<a href="mailto:steve@steveklabnik.com">steve@steveklabnik.com</a>. Do it.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz Is Nice So We Are Nice</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-19T00:00:00-04:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rubyists have a saying, or at least, we used to. &#8220;Matz is nice so we are
+nice.&#8221; This has sort of been lost over the years&#8230; some people who have
+been around Ruby for a long time still say this, but it&#8217;s something
+that&#8217;s gone in and out of popularity.</p>
+
+<h2>Nice should be the default</h2>
+
+<p>Most of being nice, in a software context, is about being considerate.
+Not unnecessarily trash talking other people&#8217;s stuff. Not going out of
+your way to be a jerk. Try to be helpful. Treat others how you want to
+be treated.</p>
+
+<h2>Sometimes, the truth hurts</h2>
+
+<p>Being considerate of others, however, can only go so far. While a lot of
+what we do is subjective, a lot of is objective, too. If you&#8217;re building
+a new project, not saying &#8220;this is why we&#8217;re awesome&#8221; is silly. Old code
+is often bad. Other people&#8217;s code is often bad. The key in &#8220;not
+unnecessarily trash talking&#8217; is the <em>neccesary</em> part. There&#8217;s a
+difference between &#8220;My library is better&#8221; and &#8220;My library is better and
+their library sucks.&#8221;</p>
+
+<h2>The last thing I&#8217;ll say about RVM Drama</h2>
+
+<p>After talking to a few people, I guess I committed a bit of the sin I
+was trying to rail against: I got some feedback that it was thought that
+I was villainizing Sam, and a little easy on Wayne. This is natural,
+because I&#8217;m friends with Wayne and I don&#8217;t really know Sam, but in the
+interest of being nice myself, I just want to say this: I think that all
+that drama last week was largely a perfect storm of a few different
+factors, and I don&#8217;t think that Sam set out to hurt anyone specifically.
+If and when I ever have an issue with RVM, I&#8217;m totally going to try out
+rbenv. I like having options. I like there being multiple options.
+TMTOWTDI. And Sam builds a ton of other software that I really enjoy,
+like Sprockets, and pow. There&#8217;s a big difference between &#8220;that guy is
+an asshole&#8221; and &#8220;I think that that situation could have been handled
+better.&#8221;</p>
+
+<p>Let&#8217;s all build lots of cool software together.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source Is Made of People</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-12T00:00:00-04:00" pubdate  data-updated="true" >Aug 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Programmers like to think that software is the purest form of
+meritocracy. We like to consider ourselves scientists; what we do is
+entirely impersonal. I&#8217;m at Lone Star Ruby right now, and the first two
+talks are entirely about software as a science.</p>
+
+<p>But this is a fallacy. There&#8217;s a human element to open source that&#8217;s
+often totally forgotten, and it drives people away.</p>
+
+<h2>Software Celebrity and Hero Worship</h2>
+
+<p>We sort of acknowledge this, in a way. There are most certainly software
+celebrities, even if their celebrity is localized to the community in
+which they operate. I heard someone say this today:</p>
+
+<blockquote><p>If I can go to one Ruby conference and not hear anyone mention Zed
+Shaw or _why, I can die happy.</p></blockquote>
+
+<p>If I say &#8220;jnicklas&#8221; you say &#8220;Capybara.&#8221; If I say &#8220;DHH&#8221; you say &#8220;Rails.&#8221;
+If I say &#8220;matz&#8221; you say &#8220;Ruby.&#8221; We have our heroes, villains, and foils,
+just like anybody else. But we forget that in every celebrity, there is
+a real person in there. Actual people, who have real thoughts, feelings,
+ideas, emotions, and that spend all of their time working for free just
+to make your lives better out of the goodness of their heart. Often
+<em>after</em> working at day jobs, often <em>at the expense</em> of a personal life,
+often <em>straining relationships</em> with people they care about.</p>
+
+<h2>Competition Means Somebody Loses</h2>
+
+<p>I used to think that Git was great because it made forks trivial. It
+changed what we mean by &#8216;fork.&#8217; This is largely a good thing. But &#8216;the
+eff word&#8217; used to be a last resort. The nuclear option. You&#8217;re fed up,
+can&#8217;t take it anymore, and so this is what they&#8217;ve driven you to do.
+Forking was Serious Business.</p>
+
+<p>Now, GitHub has made it so easy to fork a project and distribute it to
+tons of people, people just fork things willy-nilly. And, from the
+outside, competition is good: in theory, it means that the good ideas
+work and the bad ideas don&#8217;t.</p>
+
+<p>(A small aside: forking in git is different than &#8216;forking&#8217; in svn. This
+overloading of terminology is unfortunate. The fork button is actually
+one of my favorite features of GitHub, because it makes contribution
+easier. But as it&#8217;s easier to publish new software, it&#8217;s easier to
+&#8216;fork&#8217; in the svn sense. It used to be a pain to start a new project,
+and GitHub&#8217;s made that so easy that it happens more often than I think
+it should.)</p>
+
+<p>But guess what: competition sucks. Cooperation is much better. One of
+the biggest problems with competition is that it means that somebody has
+to lose. For every winner, someone is a loser. That person is going to
+be hurting. In the case of open source, someone has spent (possibly)
+years of their life working on something, and now, all of that is gone.
+That shit stings.</p>
+
+<p>Sometimes, forks are necessary. Sometimes, there are approaches that are
+fundamentally different. Forking is still an option, even if it&#8217;s a last
+resort. I&#8217;m also not saying that feelings should totally trump technical
+merit. All I&#8217;m saying is this: consider the blood, sweat, and tears of
+others before you act. Just in general.</p>
+
+<p>It&#8217;s also not a zero-sum game, either. The pie can be grown. But that
+also doesn&#8217;t mean that it&#8217;s grown in a way that makes anyone feel good
+about it. There&#8217;s a difference between &#8220;We represent two sides of some
+coin&#8221; and &#8220;Those fuckers make shitty software.&#8221; Both approaches can grow
+the pie. One is far better than the other.</p>
+
+<p>What&#8217;s the human cost of rapid competition between software projects? Is
+this cost worth it?</p>
+
+<h2>Open Source: All take, no give</h2>
+
+<p>The Pareto Principle: 80% of the effects come from 20% of the causes.
+This is absolutely true in OSS, and it might be more imbalanced. A few
+people contribute, and lots of people use. Sometimes, this is a good
+thing: it&#8217;s actually what draws me to open source. I can help people in
+a scalable way. My code is currently being used by tens of thousands of
+people. This is awesome. Some documentation that I&#8217;ve written is being
+read by millions of people. This is way more awesome.</p>
+
+<p>But I rarely get any help with my projects. It&#8217;s really easy to let that
+get to a person.</p>
+
+<p>Do you know how many people have told me that what I do is important? I
+got given a Ruby Hero award for my work on Hackety and Shoes. Do you
+know how many commits I have in on them? Probably less than 200. Do you
+know why? I&#8217;ve spent weeks of my life trying to track down bugs, but some
+of them are too hard for me, at my current stage of programming-fu. And
+it gets depressing. And everyone that&#8217;s ever offered to help has flaked
+on me. And all the recognition for something that was largely done by
+someone else gets to me, really deeply. And I get tons of people
+screaming about Lion support, and &#8216;this doesn&#8217;t work,&#8217; and all sorts of
+things&#8230; and no patches. It&#8217;s why the &#8216;patches accepted&#8217; saying was
+coined: this shit grinds on you after a while.</p>
+
+<h2>All of my Heroes are Dying</h2>
+
+<p>Today, this situation with rbenv and rvm made me realize something:
+everyone that I truly, deeply respect in open source has either burned
+out or left. I&#8217;ve said once before that there are four people that I
+truly respect in software: Zed Shaw, _why, Yehuda Katz, and (more
+recently) Wayne Seguin (and also Aaron Patterson. Dammit. This list is
+getting long). All of these developers are brilliant, work hard, and are
+tirelessly supporting their communities. That is, until they were driven
+away. This isn&#8217;t totally applicable to Yehuda, but it happened to Zed.
+It happened to _why. And I can see it happening, right now, to Aaron
+and Wayne. And Yehuda isn&#8217;t really doing Ruby&#8230;</p>
+
+<p>But seeing this happen makes me deeply sad. For them personally, for my
+own selfish reasons, and that that&#8217;s the state of our communities.</p>
+
+<h2>Where Does This Leave Us?</h2>
+
+<p>I don&#8217;t have any answers. I only have a bunch of questions:</p>
+
+<ul>
+<li>Why do we drive people away from Open Source?</li>
+<li>Can we learn to work together, instead of competing?</li>
+<li>How can we better recognize this human element?</li>
+</ul>
+
+
+<p>If you don&#8217;t contribute to Open Source: please consider thanking someone
+that does open source, in a project that you love. Consider helping out,
+in even the smallest of ways.</p>
+
+<p>Thanks.</p>
+
+<p><a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">My next post is a bit of a follow-up to this</a>.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/08/07/some-people-understand-rest-and-http.html">Some People Understand REST and HTTP</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-07T00:00:00-04:00" pubdate  data-updated="true" >Aug 7<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is a follow-up post to my post <a href="/2011/07/03/nobody-understands-rest-or-http.html">here</a>. You probably want to
+read that first.</p>
+
+<h2>A few words on standards versus pragmatism</h2>
+
+<p>When I wrote my first post on this topic, I tried to take a stance that
+would be somewhat soft, yet forceful. Engineering is the art of making
+the proper trade-offs, and there are times when following specifications
+is simply not the correct decision. With that said, my motivation for
+both of these posts is to eradicate some of the ignorance that some
+developers have about certain areas of the HTTP spec and Fielding&#8217;s REST
+paper. If you understand the correct way, yet choose to do something
+else for an informed reason, that&#8217;s absolutely, 100% okay. There&#8217;s no
+use throwing out the baby with the bathwater. But ignorance is never a
+good thing, and most developers are ignorant when it comes to the
+details of REST.</p>
+
+<p>Secondly, while I think that REST is the best way to develop APIs, there
+are other valid architectural patterns, too. Yet calling non-REST APIs
+&#8216;RESTful&#8217; continues to confuse developers as to what &#8220;RESTful&#8221; means.
+I&#8217;m not sure what exactly we should call &#8220;RESTish&#8221; APIs (hey, there we
+go, hmmm&#8230;) but I&#8217;m also not under the illusion that I personally will
+be able to make a huge dent in this. Hopefully you, humble reader, will
+remember this when dealing with APIs in the future, and I&#8217;ll have made a
+tiny dent, though.</p>
+
+<h2>So who <em>does</em> understand REST?</h2>
+
+<p>As it turns out, there are two companies that you&#8217;ve probably heard of
+who have APIs that are much more RESTful than many others: <a href="http://www.twilio.com/docs/api/rest/">Twilio</a>
+and <a href="http://developer.github.com/">GitHub</a>. Let&#8217;s take a look at GitHub first.</p>
+
+<h3>GitHub: logically awesome</h3>
+
+<p>GitHub&#8217;s developer resources are not only beautiful, but thorough. In
+addition, they make use of lots more of REST.</p>
+
+<h4>The good</h4>
+
+<p>GitHub uses <a href="http://developer.github.com/v3/mimes/">custom MIME</a> types for all of their responses. They&#8217;re
+using the vendor extensions that I talked about in my post, too. For
+example:</p>
+
+<p>  application/vnd.github-issue.text+json</p>
+
+<p>Super cool.</p>
+
+<p>Their <a href="http://developer.github.com/v3/#authentication">authentication</a> works in three ways: HTTP Basic, OAuth via an
+Authentication Header, or via a parameter. This allows for a maximum
+amount of compatibility across user agents, and gives the user some
+amount of choice.</p>
+
+<p>Their <a href="http://developer.github.com/v3/#pagination">Pagination</a> uses a header I didn&#8217;t discuss in part I: the Link
+header. <a href="http://tools.ietf.org/html/rfc5988">Here</a>&#8217;s a link to the
+reference. Basically, Link headers enable HATEOAS for media types which
+aren&#8217;t hypertext. This is important, especially regarding JSON, since
+JSON isn&#8217;t hypermedia. More on this at the end of the post. Anyway, so
+pagination on GitHub:</p>
+
+<pre><code>$ curl -I "https://api.github.com/users/steveklabnik/gists"
+HTTP/1.1 200 OK
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:34:48 GMT
+Content-Type: application/json
+Connection: keep-alive
+Status: 200 OK
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4994
+Link: &lt;https://api.github.com/users/steveklabnik/gists?page=2&gt;; rel="next", &lt;https://api.github.com/users/steveklabnik/gists?page=33333&gt;; rel="last"
+Content-Length: 29841
+</code></pre>
+
+<p>The Link header there shows you how to get to the next page of results.
+You don&#8217;t need to know how to construct the URL, you just have to parse
+the header and follow it. This, for example, is a great way to connect a
+resource that&#8217;s not text-based, such as a PNG, to other resources.</p>
+
+<h4>The bad</h4>
+
+<p>There&#8217;s really only one place that GitHub doesn&#8217;t knock it out of the
+park with their new API, and that&#8217;s HATEOAS. GitHub&#8217;s API isn&#8217;t
+discoverable, because there&#8217;s no information at the root:</p>
+
+<pre><code>$ curl -I https://api.github.com/
+HTTP/1.1 302 Found
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:44:02 GMT
+Content-Type: text/html;charset=utf-8
+Connection: keep-alive
+Status: 302 Found
+X-RateLimit-Limit: 5000
+Location: http://developer.github.com
+X-RateLimit-Remaining: 4993
+Content-Length: 0
+</code></pre>
+
+<p>Well, at least, this is how they present it. If you ask for JSON:</p>
+
+<pre><code>$ curl -I https://api.github.com/ -H "Accept: application/json"
+HTTP/1.1 204 No Content
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:45:32 GMT
+Connection: keep-alive
+Status: 204 No Content
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4991
+Link: &lt;users/{user}&gt;; rel="user", &lt;repos/{user}/{repo}&gt;; rel="repo", &lt;gists&gt;; rel="gists"
+</code></pre>
+
+<p>You do get Links, but you have to construct things yourself. As a user,
+you get the same thing. It doesn&#8217;t change the links to point to your
+repos, it doesn&#8217;t give you links to anything else that you can do with
+the API.</p>
+
+<p>Instead, the root should give you a link to the particular resources
+that you can actually view. Maybe something like this:</p>
+
+<pre><code>$ curl -I https://api.github.com/ -H "Accept: application/json" -u
+</code></pre>
+
+<p>&#8220;username:password&#8221;</p>
+
+<pre><code>HTTP/1.1 204 No Content
+Server: nginx/1.0.4
+Date: Sun, 07 Aug 2011 16:45:32 GMT
+Connection: keep-alive
+Status: 204 No Content
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4991
+Link: &lt;/gists/public&gt;; rel="public_gists", &lt;/user/repos&gt;; rel="repos", &lt;gists&gt;; rel="gists"
+</code></pre>
+
+<p>And a bunch more, for all of the other resources that are available.
+This would make the API truly discoverable, and you wouldn&#8217;t be forced
+to read their gorgeous documentation. :)</p>
+
+<h3>Twilio</h3>
+
+<p>I&#8217;ve always really enjoyed Twilio. Their API is incredibly simple to
+use. I once hooked up a little &#8220;Text me when someone orders something
+from my site&#8221; script, and it took me about fifteen minutes. Good stuff.</p>
+
+<h4>The good</h4>
+
+<p>Twilio has got the HATEOAS thing down. Check it out, their home page
+says that the base URL is &#8220;https://api.twilio.com/2010-04-01&#8221;. Without
+looking at any of the rest of their docs, (I glanced at a page or two,
+but I didn&#8217;t really read them fully yet), I did this:</p>
+
+<pre><code>$ curl https://api.twilio.com/2010-04-01
+&lt;?xml version="1.0"?&gt;
+&lt;TwilioResponse&gt;
+  &lt;Version&gt;
+    &lt;Name&gt;2010-04-01&lt;/Name&gt;
+    &lt;Uri&gt;/2010-04-01&lt;/Uri&gt;
+    &lt;SubresourceUris&gt;
+      &lt;Accounts&gt;/2010-04-01/Accounts&lt;/Accounts&gt;
+    &lt;/SubresourceUris&gt;
+  &lt;/Version&gt;
+&lt;/TwilioResponse&gt;
+</code></pre>
+
+<p>I introduced some formatting. Hmm, okay, Accounts. Let&#8217;s check this out:</p>
+
+<pre><code>$ curl https://api.twilio.com/2010-04-01/Accounts&lt;?xml version="1.0"?&gt;
+&lt;TwilioResponse&gt;&lt;RestException&gt;&lt;Status&gt;401&lt;/Status&gt;&lt;Message&gt;Authenticate&lt;/Message&gt;&lt;Code&gt;20003&lt;/Code&gt;&lt;MoreInfo&gt;http://www.twilio.com/docs/errors/20003&lt;/MoreInfo&gt;&lt;/RestException&gt;&lt;/TwilioResponse&gt;
+</code></pre>
+
+<p>Okay, so I have to be authenticated. If I was, I&#8217;d get something like
+this:</p>
+
+<pre><code>&lt;TwilioResponse&gt;
+  &lt;Account&gt;
+    &lt;Sid&gt;ACba8bc05eacf94afdae398e642c9cc32d&lt;/Sid&gt;
+    &lt;FriendlyName&gt;Do you like my friendly name?&lt;/FriendlyName&gt;
+    &lt;Type&gt;Full&lt;/Type&gt;
+    &lt;Status&gt;active&lt;/Status&gt;
+    &lt;DateCreated&gt;Wed, 04 Aug 2010 21:37:41 +0000&lt;/DateCreated&gt;
+    &lt;DateUpdated&gt;Fri, 06 Aug 2010 01:15:02 +0000&lt;/DateUpdated&gt;
+    &lt;AuthToken&gt;redacted&lt;/AuthToken&gt;
+    &lt;Uri&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d&lt;/Uri&gt;
+    &lt;SubresourceUris&gt;
+      &lt;AvailablePhoneNumbers&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/AvailablePhoneNumbers&lt;/AvailablePhoneNumbers&gt;
+      &lt;Calls&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Calls&lt;/Calls&gt;
+      &lt;Conferences&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Conferences&lt;/Conferences&gt;
+      &lt;IncomingPhoneNumbers&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/IncomingPhoneNumbers&lt;/IncomingPhoneNumbers&gt;
+      &lt;Notifications&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Notifications&lt;/Notifications&gt;
+      &lt;OutgoingCallerIds&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/OutgoingCallerIds&lt;/OutgoingCallerIds&gt;
+      &lt;Recordings&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Recordings&lt;/Recordings&gt;
+      &lt;Sandbox&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Sandbox&lt;/Sandbox&gt;
+      &lt;SMSMessages&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/SMS/Messages&lt;/SMSMessages&gt;
+      &lt;Transcriptions&gt;/2010-04-01/Accounts/ACba8bc05eacf94afdae398e642c9cc32d/Transcriptions&lt;/Transcriptions&gt;
+    &lt;/SubresourceUris&gt;
+  &lt;/Account&gt;
+&lt;/TwilioResponse&gt;
+</code></pre>
+
+<p>Awesome. I can see my all of the other resources that I can interact
+with. Other than knowing how to authenticate, I can follow the links
+from the endpoint, and discover their entire API. Rock. This is the way
+things are supposed to be.</p>
+
+<h4>The bad</h4>
+
+<p>This:</p>
+
+<pre><code>$ curl https://api.twilio.com/2010-04-01/Accounts -H "Accept: application/json"
+&lt;?xml version="1.0"?&gt;
+&lt;TwilioResponse&gt;&lt;RestException&gt;&lt;Status&gt;401&lt;/Status&gt;&lt;Message&gt;Authenticate&lt;/Message&gt;&lt;Code&gt;20003&lt;/Code&gt;&lt;MoreInfo&gt;http://www.twilio.com/docs/errors/20003&lt;/MoreInfo&gt;&lt;/RestException&gt;&lt;/TwilioResponse&gt;
+</code></pre>
+
+<p>Versus this:</p>
+
+<pre><code>$ curl https://api.twilio.com/2010-04-01/Accounts.json
+{"status":401,"message":"Authenticate","code":20003,"more_info":"http:\/\/www.twilio.com\/docs\/errors\/20003"}
+</code></pre>
+
+<p>:/ Returning JSON when your resource ends with &#8216;.json&#8217; isn&#8217;t bad, but
+not respecting the Accept header, even when you return the right MIME
+type, is just unfortunate.</p>
+
+<h2>&#8230; and a little Announcement</h2>
+
+<p>It seems that this is a topic that people are really interested in. Part
+I of this article was pretty well-received, and I got lots of great
+email and feedback from people. It was also made pretty clear by <a href="http://twitter.com/#!/wayneeseguin/status/97733413611638784">a few</a> people that
+they want more content from me on this topic.</p>
+
+<p>So I decided to write a book about it. You can check out the site for
+&#8221;<a href="http://getsomere.st">Get Some REST</a>&#8221;, and put in your email address. Then you&#8217;ll get
+updated when I start pre-release sales.</p>
+
+<p>So what&#8217;s in &#8220;Get Some REST&#8221;? It&#8217;s going to be a full description of how
+to build RESTful web applications, from the ground up. Designing your
+resources, laying out an API, all the details. I&#8217;m going to try to keep
+most of the content language-agnostic, but provide code samples in
+Rails 3.1, as well.</p>
+
+<p>I plan on writing a bunch of content, and then releasing the book at
+half-price in beta. Early adopters will be able to get their two cents
+in, and I&#8217;ll cover things they still have questions on. It&#8217;ll be
+available under a liberal license, in PDF, ePub, all that good stuff.</p>
+
+<p>I&#8217;ve also set up a Twitter account at <a href="http://twitter.com/#!/getsomerestbook">@getsomerestbook</a>. I&#8217;ll be tweeting updates about the book, and also other good content
+related to RESTful design. Oh, and if you&#8217;re on
+<a href="http://rstat.us">rstat.us</a>, I also have an account that&#8217;ll syndicate
+the same content at <a href="http://rstat.us/users/getsomerestbook">@getsomerestbook</a> too.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter.html">Twitter Is Too Important to Be Owned by Twitter</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-07-24T00:00:00-04:00" pubdate  data-updated="true" >Jul 24<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I spoke on a panel at <a href="http://therealtimereport.com/">RTLM NY &#8216;11</a>, I got a little rise out of
+the crowd when I said &#8220;Twitter is too important to be owned by Twitter.&#8221;
+This is still absolutely true, and yesterday was a great example of
+that: the #fuckyouwashington debacle.</p>
+
+<p>If you haven&#8217;t heard, <a href="http://twitter.com/#!/jeffjarvis">Jeff Jarvis</a>
+started something on Twitter last night:</p>
+
+<!-- http://twitter.com/#!/jeffjarvis/status/94919366818279424 -->
+
+
+<p> <style type='text/css'>.bbpBox94919366818279424 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}</style> <div class='bbpBox94919366818279424'><p class='bbpTweet'>Hey, Washington assholes, it&#8217;s our country, our economy, our money. Stop fucking with it.<span class='timestamp'><a title='Sat Jul 23 23:58:35 +0000 2011' href='http://twitter.com/#!/jeffjarvis/status/94919366818279424'>less than a minute ago</a> via <a href="http://www.echofon.com/" rel="nofollow">Echofon</a> <a href='http://twitter.com/intent/favorite?tweet_id=94919366818279424'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png' /> Favorite</a> <a href='http://twitter.com/intent/retweet?tweet_id=94919366818279424'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png' /> Retweet</a> <a href='http://twitter.com/intent/tweet?in_reply_to=94919366818279424'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/reply.png' /> Reply</a></span><span class='metadata'><span class='author'><a href='http://twitter.com/jeffjarvis'><img src='http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg' /></a><strong><a href='http://twitter.com/jeffjarvis'>Jeff Jarvis</a></strong><br/>jeffjarvis</span></span></p></div> <!-- end of tweet --></p>
+
+<!-- http://twitter.com/#!/jeffjarvis/status/94920264428699648 -->
+
+
+<p> <style type='text/css'>.bbpBox94920264428699648 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}</style> <div class='bbpBox94920264428699648'><p class='bbpTweet'>People, it&#8217;s time to get fucking pissed off.<span class='timestamp'><a title='Sun Jul 24 00:02:09 +0000 2011' href='http://twitter.com/#!/jeffjarvis/status/94920264428699648'>less than a minute ago</a> via <a href="http://www.echofon.com/" rel="nofollow">Echofon</a> <a href='http://twitter.com/intent/favorite?tweet_id=94920264428699648'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png' /> Favorite</a> <a href='http://twitter.com/intent/retweet?tweet_id=94920264428699648'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png' /> Retweet</a> <a href='http://twitter.com/intent/tweet?in_reply_to=94920264428699648'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/reply.png' /> Reply</a></span><span class='metadata'><span class='author'><a href='http://twitter.com/jeffjarvis'><img src='http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg' /></a><strong><a href='http://twitter.com/jeffjarvis'>Jeff Jarvis</a></strong><br/>jeffjarvis</span></span></p></div> <!-- end of tweet --></p>
+
+<!-- http://twitter.com/#!/jeffjarvis/status/94920803346419712 -->
+
+
+<p> <style type='text/css'>.bbpBox94920803346419712 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}</style> <div class='bbpBox94920803346419712'><p class='bbpTweet'>Can we start a Twitter chant: FUCK YOU, WASHINGTON! Pass it on.<span class='timestamp'><a title='Sun Jul 24 00:04:17 +0000 2011' href='http://twitter.com/#!/jeffjarvis/status/94920803346419712'>less than a minute ago</a> via <a href="http://www.echofon.com/" rel="nofollow">Echofon</a> <a href='http://twitter.com/intent/favorite?tweet_id=94920803346419712'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png' /> Favorite</a> <a href='http://twitter.com/intent/retweet?tweet_id=94920803346419712'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png' /> Retweet</a> <a href='http://twitter.com/intent/tweet?in_reply_to=94920803346419712'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/reply.png' /> Reply</a></span><span class='metadata'><span class='author'><a href='http://twitter.com/jeffjarvis'><img src='http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg' /></a><strong><a href='http://twitter.com/jeffjarvis'>Jeff Jarvis</a></strong><br/>jeffjarvis</span></span></p></div> <!-- end of tweet --></p>
+
+<p>Lots of people were talking about the possibility of a <a href="http://www.msnbc.msn.com/id/43864749/ns/politics-capitol_hill/t/congressional-leaders-work-avert-default/">government
+default</a>, but it ended up being a catch-all for any sort of venting
+that citizens had against their government. And they had <a href="https://plus.google.com/105076678694475690385/posts/iFyTBwVmyKs">a large
+variety of things to say.</a> But then, of course, this happens:</p>
+
+<!-- http://twitter.com/#!/jeffjarvis/status/94945261050273792 -->
+
+
+<p> <style type='text/css'>.bbpBox94945261050273792 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}</style> <div class='bbpBox94945261050273792'><p class='bbpTweet'>Search for trending topic Schmucks and then search for <a href="http://twitter.com/search?q=%23fuckyouwashington" title="#fuckyouwashington" class="tweet-url hashtag" rel="nofollow">#fuckyouwashington</a>. No comparison. Blowing past it.<span class='timestamp'><a title='Sun Jul 24 01:41:28 +0000 2011' href='http://twitter.com/#!/jeffjarvis/status/94945261050273792'>less than a minute ago</a> via <a href="http://www.echofon.com/" rel="nofollow">Echofon</a> <a href='http://twitter.com/intent/favorite?tweet_id=94945261050273792'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png' /> Favorite</a> <a href='http://twitter.com/intent/retweet?tweet_id=94945261050273792'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png' /> Retweet</a> <a href='http://twitter.com/intent/tweet?in_reply_to=94945261050273792'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/reply.png' /> Reply</a></span><span class='metadata'><span class='author'><a href='http://twitter.com/jeffjarvis'><img src='http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg' /></a><strong><a href='http://twitter.com/jeffjarvis'>Jeff Jarvis</a></strong><br/>jeffjarvis</span></span></p></div> <!-- end of tweet --></p>
+
+<!-- http://twitter.com/#!/jaycousins/status/95106114391261184 -->
+
+
+<p> <style type='text/css'>.bbpBox95106114391261184 {background:url(http://a2.twimg.com/profile_background_images/32742344/jaytwitter.jpg) #9AE4E8;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}</style> <div class='bbpBox95106114391261184'><p class='bbpTweet'>WTF! <a href="http://twitter.com/search?q=%23fuckyouwashington" title="#fuckyouwashington" class="tweet-url hashtag" rel="nofollow">#fuckyouwashington</a> blocked from trending but not <a href="http://twitter.com/search?q=%23blamethemuslims" title="#blamethemuslims" class="tweet-url hashtag" rel="nofollow">#blamethemuslims</a> (mmm <a href="http://twitter.com/search?q=%23fuckyoutwitter" title="#fuckyoutwitter" class="tweet-url hashtag" rel="nofollow">#fuckyoutwitter</a> ?)<span class='timestamp'><a title='Sun Jul 24 12:20:39 +0000 2011' href='http://twitter.com/#!/jaycousins/status/95106114391261184'>less than a minute ago</a> via web <a href='http://twitter.com/intent/favorite?tweet_id=95106114391261184'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png' /> Favorite</a> <a href='http://twitter.com/intent/retweet?tweet_id=95106114391261184'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png' /> Retweet</a> <a href='http://twitter.com/intent/tweet?in_reply_to=95106114391261184'><img src='http://si0.twimg.com/images/dev/cms/intents/icons/reply.png' /> Reply</a></span><span class='metadata'><span class='author'><a href='http://twitter.com/jaycousins'><img src='http://a2.twimg.com/profile_images/384407232/me5_normal.jpg' /></a><strong><a href='http://twitter.com/jaycousins'>jaycousins</a></strong><br/>jaycousins</span></span></p></div> <!-- end of tweet --></p>
+
+<p>As of right this second, when I <a href="http://twitter.com/#!/search/realtime/%23fuckyouwashington">search for #fuckyouwashington on
+Twitter</a>, they&#8217;re coming in at two or three a second. It&#8217;s crazy. And
+it&#8217;s really interesting to read what people have to say, pro and con,
+picking their own issues, all of that stuff. Yet, it&#8217;s been removed from
+the trending topics.</p>
+
+<p>Now, maybe this particular trend was simply blocked because of the
+profanity. Sure, whatever. I don&#8217;t like that, but some might. And
+Twitter certainly allows all kinds of trends to stick around that would
+also be &#8216;offensive,&#8217; for example, #babymakingsong, #turnoff, and
+ #itsalwaystheuglypeople are currently trending. Don&#8217;t even get me
+started on trends like #whatblackgirlslike #whatwhitegirls like and the
+other racially charged topics. Sure, fine, it&#8217;s their site, they can do
+whatever they want.</p>
+
+<p>That, however, is the root of the issue: they can do whatever they want.
+And we&#8217;re all beholden to them. Nothing we can do. Maybe I&#8217;m not
+sensitive to four letter words, and I <em>do</em> want to hear about things
+like this. Too bad, Twitter says no. Maybe I don&#8217;t want <a href="http://venturebeat.com/2011/07/08/twitter-adding-promoted-tweets-to-your-stream-this-summer/">promoted tweets
+added to my stream</a>. Too bad, Twitter says yes.</p>
+
+<p>And that&#8217;s why I&#8217;m feeling worse and worse about Twitter every day. It
+sucks, because I really like Twiter, the website. But Twitter, the
+company, really bums me out. They promised all of us nerds long ago that
+they wouldn&#8217;t do this kind of thing, and they&#8217;re not keeping that
+promise. Which means I&#8217;m not really getting emotionally invested in
+Twitter any more. It&#8217;s still valuable enough to me to keep using, but I
+can&#8217;t care about it the way I used to.</p>
+
+<p>This is why we&#8217;re still hacking away at <a href="http://rstat.us">rstat.us</a>. If you haven&#8217;t
+heard about it before, you can <a href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html">read my release announcement</a>. If
+you&#8217;re lazier than that, here&#8217;s the summary: rstat.us is a distributed,
+open-source Twitter. You can use our public node at the website, or get
+your own copy of the code and run your own, make whatever customizations
+you&#8217;d like, and you&#8217;re still on equal footing with everyone else in the
+network. We&#8217;re on the cusp of a 1.0 announcement, and I&#8217;d love to have
+been able to make that in this post, but we&#8217;re still working out some
+last kinks. If you&#8217;ve seen it before, you won&#8217;t find much differences
+right now, but we have 100% standards compliance, a complete visual
+refresh, and some other fun goodies waiting in the wings, ready to come
+out shortly.</p>
+
+<p>Just remember: if you use a service like Twitter that&#8217;s controlled by a
+company like Twitter, you have to play by their rules. And sometimes,
+they&#8217;ll change the rules, and it&#8217;ll be time to move on.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/07/03/nobody-understands-rest-or-http.html">Nobody Understands REST or HTTP</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-07-03T00:00:00-04:00" pubdate  data-updated="true" >Jul 3<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Update: Part II of this post is <a href="/2011/08/07/some-people-understand-rest-and-http.html">here</a>. Check it out, and there&#8217;s an announcement at the end!</p>
+
+<p>The more that I&#8217;ve learned about web development, the more that I&#8217;ve
+come to appreciate the thoroughness and thoughtfulness of the authors of
+the HTTP RFC and Roy Fielding&#8217;s dissertation. It seems like the answers
+to most problems come down to &#8220;There&#8217;s a section of the spec for that.&#8221;
+Now, obviously, they&#8217;re not infallible, and I&#8217;m not saying that there&#8217;s
+zero room for improvement. But it really disappoints me when people
+don&#8217;t understand the way that a given issue is supposed to be solved,
+and so they make up a partial solution that solves their given case but
+doesn&#8217;t jive well with the way that everything else works. There are
+valid criticisms of the specs, but they have to come from an informed
+place about what the spec says in the first place.</p>
+
+<p>Let&#8217;s talk about a few cases where either REST or HTTP (which is clearly
+RESTful in its design) solves a common web development problem.</p>
+
+<h3>I need to design my API</h3>
+
+<p>This one is a bit more general, but the others build off of it, so bear
+with me.</p>
+
+<p>The core idea of REST is right there in the name: &#8220;Representational
+State Transfer&#8221; It&#8217;s about transferring representations of the state&#8230;
+of resources. Okay, so one part isn&#8217;t in the name. But still, let&#8217;s
+break this down.</p>
+
+<h4>Resources</h4>
+
+<p>From <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_1">Fielding&#8217;s dissertation</a>:</p>
+
+<blockquote><p>The key abstraction of information in REST is a resource. Any information
+that can be named can be a resource: a document or image, a temporal service
+(e.g. &#8220;today&#8217;s weather in Los Angeles&#8221;), a collection of other resources, a
+non-virtual object (e.g. a person), and so on. In other words, any concept that
+might be the target of an author&#8217;s hypertext reference must fit within the
+definition of a resource. A resource is a conceptual mapping to a set of
+entities, not the entity that corresponds to the mapping at any particular
+point in time.</p></blockquote>
+
+<p>When we interact with a RESTful system, we&#8217;re interacting with a set of
+resources. Clients request resources from the server in a variety of
+ways. But the key thing here is that resources are <em>nouns</em>. So a RESTful
+API consists of a set of URIs that map entities in your system to
+endpoints, and then you use HTTP itself for the verbs. If your URLs have
+action words in them, you&#8217;re doing it wrong. Let&#8217;s look at an example of
+this, from the early days of Rails. When Rails first started messing
+around with REST, the URLs looked like this:</p>
+
+<pre><code>/posts/show/1
+</code></pre>
+
+<p>If you use Rails today, you&#8217;ll note that the corresponding URL is
+this:</p>
+
+<pre><code>/posts/1
+</code></pre>
+
+<p>Why? Well, it&#8217;s because the &#8216;show&#8217; is unnecessary; you&#8217;re performing a
+GET request, and that demonstrates that you want to show that resource.
+It doesn&#8217;t need to be in the URL.</p>
+
+<h4>A digression about actions</h4>
+
+<p>Sometimes, you need to perform some sort of action, though. Verbs are
+useful. So how&#8217;s this fit in? Let&#8217;s consider the example of transferring
+money from one Account to another. You might decided to build a URI like
+this:</p>
+
+<pre><code>POST /accounts/1/transfer/500.00/to/2
+</code></pre>
+
+<p>to transfer $500 from Account 1 to Account 2. But this is wrong! What
+you really need to do is consider the nouns. You&#8217;re not transferring
+money, you&#8217;re creating a Transaction resource:</p>
+
+<pre><code>POST /transactions HTTP/1.1
+Host: &lt;snip, and all other headers&gt;
+
+from=1&amp;to=2&amp;amount=500.00
+</code></pre>
+
+<p>Got it? So then, it returns the URI for your new Transaction:</p>
+
+<pre><code>HTTP/1.1 201 OK
+Date: Sun, 3 Jul 2011 23:59:59 GMT
+Content-Type: application/json
+Content-Length: 12345
+Location: http://foo.com/transactions/1
+
+{"transaction":{"id":1,"uri":"/transactions/1","type":"transfer"}}
+</code></pre>
+
+<p>Whoah, <a href="http://timelessrepo.com/haters-gonna-hateoas">HATEOS</a>! Also, it
+may or may not be a good idea to return this JSON as the body; the
+important thing is that we have the Location header which tells us where
+our new resource is. If we give a client the ID, they might try to
+construct their own URL, and the URI is a little redundant, since we
+have one in the Location. Regardless, I&#8217;m leaving that JSON there,
+because that&#8217;s the way I typed it first. I&#8217;d love to <a href="mailto:steve@steveklabnik.com">hear your thoughts
+on this</a> if you feel strongly one way or
+the other.</p>
+
+<p>EDIT: I&#8217;ve since decided that yes, including the URI is a bad idea. The
+Location header makes much more sense. More on this in Part ii, yet to
+come.</p>
+
+<p>Anyway, so now we can GET our Transaction:</p>
+
+<pre><code>GET /transactions/1 HTTP/1.1
+Accept: application/json
+</code></pre>
+
+<p>and the response:</p>
+
+<pre><code>HTTP/1.1 blah blah blah
+
+{"id":1,"type":"transfer","status":"in-progress"}
+</code></pre>
+
+<p>So we know it&#8217;s working. We can continue to poll the URI and see when
+our transaction is finished, or if it failed, or whatever. Easy! But
+it&#8217;s about manipulating those nouns.</p>
+
+<h4>Representations</h4>
+
+<p>You&#8217;ll notice a pair of headers in the above HTTP requests and
+responses: Accept and Content-Type. These describe the different
+&#8216;representation&#8217; of any given resource. From <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_2">Fielding</a>:</p>
+
+<blockquote><p>REST components perform actions on a resource by using a representation to
+capture the current or intended state of that resource and transferring that
+representation between components. A representation is a sequence of bytes,
+plus representation metadata to describe those bytes. Other commonly used but
+less precise names for a representation include: document, file, and HTTP
+message entity, instance, or variant.</p>
+
+<p>A representation consists of data, metadata describing the data, and, on
+occasion, metadata to describe the metadata (usually for the purpose of
+verifying message integrity).</p></blockquote>
+
+<p>So <code>/accounts/1</code> represents a resource. But it doesn&#8217;t include the form
+that the resource takes. That&#8217;s what these two headers are for.</p>
+
+<p>This is also why adding <code>.html</code> to the end of your URLs is kinda silly.
+If I request <code>/accounts/1.html</code> with an <code>Accept</code> header of
+<code>application/json</code>, then I&#8217;ll get JSON. The <code>Content-Type</code> header is the
+server telling us what kind of representation it&#8217;s sending back as well.
+The important thing, though, is that a given resource can have many
+different representations. Ideally, there should be one unambiguous
+source of information in a system, and you can get different
+representations using <code>Accept</code>.</p>
+
+<h4>State and Transfer</h4>
+
+<p>This is more about the way HTTP is designed, so I&#8217;ll just keep this
+short: Requests are designed to be stateless, and the server holds all
+of the state for its resources. This is important for caching and a few
+other things, but it&#8217;s sort of out of the scope of this post.</p>
+
+<p>Okay. With all of that out of the way, let&#8217;s talk about some more
+specific problems that REST/HTTP solve.</p>
+
+<h3>I want my API to be versioned</h3>
+
+<p>The first thing that people do when they want a versioned API is to
+shove a /v1/ in the URL. <em><em>THIS IS BAD!!!!!1</em></em>. <code>Accept</code> solves this
+problem. What you&#8217;re really asking for is &#8220;I&#8217;d like the version two
+representation of this resource.&#8221; So use accept!</p>
+
+<p>Here&#8217;s an example:</p>
+
+<pre><code>GET /accounts/1 HTTP/1.1
+Accept: application/vnd.steveklabnik-v2+json
+</code></pre>
+
+<p>You&#8217;ll notice a few things: we have a + in our MIME type, and before it
+is a bunch of junk that wasn&#8217;t there before. It breaks down into three
+things: <code>vnd</code>, my name, and <code>v2</code>. You can guess what v2 means, but what
+about <code>vnd</code>. It&#8217;s a <a href="http://tools.ietf.org/html/rfc4288#section-3.2">Vendor MIME Type</a>.
+After all, we don&#8217;t really want just any old JSON, we want my specific
+form of JSON. This lets us still have our one URL to represent our
+resource, yet version everything appropriately.</p>
+
+<p>I got a comment from <a href="http://avdi.org/">Avdi Grimm</a> about this, too:</p>
+
+<blockquote><p>Here&#8217;s an article you might find interesting: <a href="http://www.informit.com/articles/article.aspx?p=1566460">http://www.informit.com/articles/article.aspx?p=1566460</a></p>
+
+<p>The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:</p>
+
+<pre><code>vnd.example-com.foo+json; version=1.0
+</code></pre>
+
+<p>Sadly, Rails does not (yet) understand this format.</p></blockquote>
+
+<h3>I&#8217;d like my content to be displayed in multiple languages</h3>
+
+<p>This is related, but a little different. What about pages in different
+languages? Again, we have a question of representation, not one of
+content. /en/whatever is not appropriate here. Turns out, <a href="http://tools.ietf.org/html/rfc2616#section-14.4">there&#8217;s a
+header for that: Accept-Language</a>.
+Respect the headers, and everything works out.</p>
+
+<p>Oh, and I should say this, too: this doesn&#8217;t solve the problem of &#8220;I&#8217;d
+like to read this article in Spanish, even though I usually browse in
+English.&#8221; Giving your users the option to view your content in different
+ways is a good thing. Personally, I&#8217;d consider this to fall out in two
+ways:</p>
+
+<ul>
+<li>It&#8217;s temporary. Stick this option in the session, and if they have the
+option set, it trumps the header. You&#8217;re still respecting their usual
+preferences, but allowing them to override it.</li>
+<li>It&#8217;s more permanent. Make it some aspect of their account, and it
+trumps a specific header. Same deal.</li>
+</ul>
+
+
+<h3>I&#8217;d like my content to have a mobile view</h3>
+
+<p>Sounds like I&#8217;m beating a dead horse, but again: it&#8217;s a representation
+question. In this case, you&#8217;d like to vary the response by the
+User-Agent: give one that&#8217;s mobile-friendly. There&#8217;s a whole list of
+<a href="http://www.w3.org/TR/mobile-bp/">mobile best practices</a> that the w3c
+recommends, but the short of it is this: the User-Agent should let you
+know that you&#8217;re dealing with a mobile device. For example, here&#8217;s the
+first iPhone UA:</p>
+
+<pre><code>Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
+</code></pre>
+
+<p>Then, once detecting you have a mobile User-Agent, you&#8217;d give back a
+mobile version of the site. Hosting it on a subdomain is a minor sin,
+but really, like I said above, this is really a question of
+representation, and so having two URLs that point to the same resource
+is kinda awkward.</p>
+
+<p>Whatever you do, for the love of users, please don&#8217;t detect these
+headers, then redirect your users to m.whatever.com, at the root. One of my
+local news websites does this, and it means that every time I try to follow a
+link from Twitter in my mobile browser, I don&#8217;t see their article, I see
+their homepage. It&#8217;s infuriating.</p>
+
+<h3>I&#8217;d like to hide some of my content</h3>
+
+<p>Every once in a while, you see a story like this: <a href="http://www.boingboing.net/2010/10/25/local-newspaper-boas.html">Local paper boasts
+ultimate passive-agressive paywall policy</a>.
+Now, I find paywalls distasteful, but this is not the way to do it.
+There are technological means to limit content on the web: making users
+be logged-in to read things, for example.</p>
+
+<p>When this was discussed on Hacker News, <a href="http://news.ycombinator.com/item?id=1834075">here&#8217;s</a>
+what I had to say:</p>
+
+<p>nkurz:</p>
+
+<blockquote><p>I presume if I had an unattended roadside vegetable stand with a cash-box, that I&#8217;d be able to prosecute someone who took vegetables without paying, certainly if they also made off with the cash-box. Why is this different on the web? And if a written prohibition has no legal standing, why do so many companies pay lawyers to write click-through &#8220;terms of service&#8221; agreements?</p></blockquote>
+
+<p>me:</p>
+
+<blockquote><blockquote><p>Why is this different on the web?</p></blockquote>
+
+<p>Let&#8217;s go through what happens when I visit a web site. I type a URL in my bar, and hit enter. My web browser makes a request via http to a server, and the server inspects the request, determines if I should see the content or not, and returns either a 200 if I am allowed, and a 403 if I&#8217;m not. So, by viewing their pages, I&#8217;m literally asking permission, and being allowed.</p>
+
+<p>It sounds to me like a misconfiguration of their server; it&#8217;s not doing what they want it to.</p></blockquote>
+
+<h3>I&#8217;d like to do some crazy ajax, yet have permalinks</h3>
+
+<p>This is an example of where the spec is obviously deficient, and so
+something had to be done.</p>
+
+<p>As the web grew, AJAXy &#8216;web applications&#8217; started to become more and
+more the norm. And so applications wanted to provide deep-linking
+capabilities to users, but there&#8217;s a problem: they couldn&#8217;t manipulate
+the URL with Javascript without causing a redirect. They <em>could</em>
+manipulate the anchor, though. You know, that part after the #. So,
+Google came up with a convention: <a href="http://code.google.com/web/ajaxcrawling/docs/getting-started.html">Ajax Fragments</a>.
+This fixed the problem in the short term, but then the spec got fixed in
+the long term: <a href="http://dev.w3.org/html5/spec-author-view/history.html">pushState</a>.
+This lets you still provide a nice deep URL to your users, but not have
+that awkward #!.</p>
+
+<p>In this case, there was a legitimate technical issue with the spec, and
+so it&#8217;s valid to invent something. But then the standard improved, and
+so people should stop using #! as HTML5 gains browser support.</p>
+
+<h3>In conclusion</h3>
+
+<p>Seriously, most of the problems that you&#8217;re solving are social, not
+technical. The web is decades old at this point, most people have
+considered these kinds of problems in the past. That doesn&#8217;t mean that
+they always have the right answer, but they usually do have an answer,
+and it&#8217;d behoove you to know what it is before you invent something on
+your own.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/05/21/single-text-many-masters.html">Single Text, Many Masters</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-21T00:00:00-04:00" pubdate  data-updated="true" >May 21<span>st</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hey everyone. Here&#8217;s a draft of an essay I&#8217;ve been working on. I&#8217;d love
+to hear your feedback.</p>
+
+<p>The word &#8216;engineering&#8217; has a deep connection to the word &#8216;trade-offs&#8217; in
+my mind. Most engineering decisions come down to evaluating a few
+differing alternatives, and often multiple factors end up being
+negatively correlated. You can make something stronger, but then it will
+be heavier. It can be made faster, but then it&#8217;s significantly more
+expensive. A good engineer is able to take all of these factors into
+account, and design a system such that it maximizes its effectiveness
+across the sum of all of the relevant constraints. No matter if you consider
+the act of writing software an art, science, or engineering, its indisputable
+that designing complex software systems is identical in this respect. There are
+dozens of different metrics that system architects take into consideration while
+crafting a plan of attack, but but there&#8217;s a deeper question of balance
+here that&#8217;s significantly different than these more traditional
+engineering issues.</p>
+
+<p>Text, in the form of source code, presents unique challenges of
+composition. These difficulties all stem from the same root: source code is a
+singular text, but must be intelligible to multiple, simultaneous
+audiences. More traditional forms of authorship still take audience into
+consideration, of course, but the decision to engage a diverse group of
+people is the choice of the writer. While mass appeal may be
+something that certain authors strive to attain, it&#8217;s not an inherent
+property of their chosen form of expression. Source code, while text,
+inhabits a multiplicity of forms, and software developers are confronted
+with this inherent multi-faceted complexity when composing any
+particular software work. Some of these forms suit certain audiences
+better than others, and so it falls to the programmer to manage which
+form they are currently working in, consider which audience they are
+attempting to write for, and arrange all of these forms amongst one
+another in such a way that any particular audience is able to navigate
+and extract the proper information from the source without confusion.</p>
+
+<p>In this post, I&#8217;ll expand on the concept of audiences for code, and in a
+future post, I&#8217;ll explore the simultaneous forms that code takes.</p>
+
+<h2>The multitude of audiences</h2>
+
+<h3>The default audience: the computer</h3>
+
+<blockquote><p>Science is what we understand well enough to explain to a computer. Art
+is everything else we do.</p>
+
+<ul>
+<li>Don Knuth</li>
+</ul>
+</blockquote>
+
+<p>This may seem obvious, but the when considering the question of &#8220;Who are
+programs written for?&#8221;, many would say &#8220;The computer. Duh.&#8221; In many
+ways, a computer is the primary reader of a particular piece of source
+code. The code that&#8217;s given to a computer will be executed billions of
+times per second, repeated, recalculated, and re-interpreted over and
+over and over again.</p>
+
+<p>The computer&#8217;s native understanding of software comes from machine
+code. Machine code are the binary numbers that the CPU loads into memory
+and processes directly. For example, here&#8217;s a line of machine code for
+an x86 machine that puts the value &#8216;97&#8217; into the AL register, graciously
+stolen <a href="http://en.wikipedia.org/wiki/Assembly_language#Assembly_language">from
+Wikipedia</a>:</p>
+
+<pre><code>10110000 01100001
+</code></pre>
+
+<p>While most would consider this unintelligible, computers were actually
+programmed this way at one time. My uncle actually did this by flipping
+switches to set the binary and pushed a button to store it in memory.
+Unfortunately, what&#8217;s good for the computer isn&#8217;t good for the human
+programmer. This is why assembly language was created. Assembly language
+has a 1 to 1 mapping to machine code, but is much easier for humans to
+understand. Here&#8217;s that same line in assembly:</p>
+
+<pre><code>MOV AL, 61h       ; Load AL with 97 decimal (61 hex)
+</code></pre>
+
+<p>The <code>MOV</code> corresponds with <code>10110</code>, <code>AL</code> maps to <code>000</code>, and 61 hex is
+<code>01100001</code>. <code>MOV</code> is short for &#8216;move,&#8217; though, and this mnemonic is just
+a bit easier to understand than <code>10110</code>. This is the most basic example
+of a compositional trade-off. It&#8217;s not a true trade-off, because they
+map perfectly to one another, but it illustrates the difference between
+composing in a language that the computer understands and one that&#8217;s
+more natural for the programmer. Another important concept comes into
+play, that of <em>compilation</em>. Virtually every work of composition created
+in software is automatically translated to another form before it is
+executed. We&#8217;ll address this concept more fully when we discuss form
+later.</p>
+
+<p>If that&#8217;s where assembly stopped, it would remain a 1 to 1 mapping.
+However, virtually every assembly language also offers macros, and this
+moves the code further away from the machine and destroys the
+synchrony of the two forms. Here&#8217;s an example:</p>
+
+<pre><code>MOV EAX, [EBX]
+</code></pre>
+
+<p>The <code>[]</code> characters change the meaning of <code>EBX</code>, rather than be the
+value stored in that particular register, they imply that the value is a
+memory address, and we want to move the contents of that address to
+<code>EAX</code>. The generated machine code could now be processed into multiple
+valid assembly forms, and so the transformation is only perfect in one
+direction, even if it&#8217;s possible to &#8216;decompile&#8217; it into one of those
+possible encodings. This is considered to be an acceptable trade-off for
+human readability; we very rarely want to turn machine code back into
+assembly.</p>
+
+<p>There&#8217;s also a jump between higher level languages, as well. Here&#8217;s the
+assembly statements that adds 2 and 3 together:</p>
+
+<pre><code>MOV EAX, 2
+ADD EAX, 3
+</code></pre>
+
+<p><code>ADD</code>, of course, is the statement that adds a number to the register
+that&#8217;s given. Now <code>EAX</code> has the value 5. Here&#8217;s the same code, but in C:</p>
+
+<pre><code>int x = 2;
+x = x + 3;
+</code></pre>
+
+<p>Pretty simple. You can see how the C is much easier to understand; we
+say what type <code>x</code> is (an integer), and it&#8217;s a bit more explicit. <code>x</code> is
+equal to <code>x</code> + three. However, since the C is divorced from the machine,
+and is written for the person, we can change our compiler to make
+assembly code that works on a different kind of processor architecture.
+If we were to compile the above C for x86_64, a 64 bit version of x86,
+we might get some assembly that&#8217;d look like this:</p>
+
+<pre><code>MOVL RAX, 2
+ADDL RAX, 3
+</code></pre>
+
+<p>While this code looks similar to the above, it is quite different. This
+uses the native 64 bit types, rather than the 32 bit types above. The
+other important thing is that by writing code that&#8217;s divorced from the
+machine, and written for people, we&#8217;re able to translate it into the
+code for multiple machines. If we had written the assembly above, when
+moving to another architecture, it would have required a total re-write.
+And while this particular sample looks very similar, a more complex
+piece of code will be significantly divergent, but I don&#8217;t want to go
+into the details of two kinds of assembly code. Because we can define
+the languages for humans, and the language of computers is somewhat
+beholden to the physical machine itself, it&#8217;s significantly easier to do
+the translation from C to the two kinds of machines, rather than trying
+to translate from one machine to another. What we lose in this kind of
+translation, though, is efficiency. Code that was hand-crafted for each
+machine would be more performant, and better represent each individual
+platform.</p>
+
+<p>Even though we may choose to use a language that&#8217;s more understandable
+to people, it still has to be understood by the computer in some form.
+This translation will introduce some amount of penalty, and so it&#8217;s
+important that this gets taken into consideration. Sometimes, code must
+be written in a way that&#8217;s not easy for a person to read, because it&#8217;s
+easier for the computer to be efficient with a more opaque
+implementation.</p>
+
+<h3>The reflexive audience: the programmer himself</h3>
+
+<blockquote><p>Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are, by
+definition, not smart enough to debug it.</p>
+
+<ul>
+<li>Brian Kernighan</li>
+</ul>
+</blockquote>
+
+<p>Everyone who writes code has experienced this at some time or another.
+You write a whole bunch of code, and then a few months goes by, and you
+take a look at it, and it&#8217;s absolutely unintelligible. This happens
+because at the time of inception, the author of a particular piece of
+code has an incredibly close relationship to it. As it was just written,
+the code is obvious to the author. They&#8217;re in the proper mindset to
+understand the intention that was drawn upon to necessitate bringing
+those lines into the world, and so no extra explanation is necessary. As
+time goes on, however, the author becomes more close to the third
+audience, other programmers. It&#8217;s important for coders to recognize this
+fact, and take preventative steps to ameliorate this confusion.</p>
+
+<p>Even though the author will approach the position of the other audience
+eventually, this audience is distinct because there is a certain level
+of explanation that sits between undocumented, inexpressive code and
+code that&#8217;s well explained, and this is the position most code is in. An
+explanation that&#8217;s helpful to those who understand the code, but not to
+those who don&#8217;t is better than nothing. This sort of code may be overly
+contextual, and could use some added information to improve its clarity.</p>
+
+<h3>The other audience: colleagues and coworkers</h3>
+
+<blockquote><p>Always code as if the guy who ends up maintaining your code is a violent
+psychopath who knows where you live.</p>
+
+<ul>
+<li>Martin Golding</li>
+</ul>
+</blockquote>
+
+<p>As I touched on earlier, there&#8217;s a similarity between the &#8216;other&#8217;
+audience and the reflexive. The primary distinction is drawn around the
+proximity to the source. The other does not have the advantage of having
+authored the code, and therefore doesn&#8217;t have the native&#8217;s understanding
+of the underlying logical organization of the source. This disadvantage
+can be overcome via composing in such a manner that the meaning is
+emergent from the design. Even if it&#8217;s too complex to be obvious, good
+documentation can address this particular deficiency.</p>
+
+<p>Ultimately, much of software design is about modeling. Software that
+solves a particular problem should emulate the nature of the challenge
+it&#8217;s attempting to address. If this can be achieved, it&#8217;s significantly
+easier for those who understand the problem to figure out how the
+software works. Therefore, good design can help improve the
+effectiveness of a given piece of source to communicate its intent.
+Along a similar vector, if the design is similar to code that solves a
+particular issue, it&#8217;s easier to understand. As an example, a friend
+recently asked for feedback about an interface that he&#8217;d designed. It
+loaded a save game file for StarCraft 2. This is what he came up with:</p>
+
+<pre><code>replay_file = File.new("spec/fixtures/1v1-game1.sc2replay")
+@replay = SC2Refinery::Parser.parse(replay_file)
+</code></pre>
+
+<p>However, Ruby already has several kinds of code in its standard library
+that loads some information from disk and parses it into some kind of
+data structure that you can use in your program. The JSON, YAML, and
+Marshall classes already use a set of methods to import and export data,
+and they&#8217;re named <code>load</code> and <code>dump</code>, and they&#8217;re part of the class
+directly. Also, in this case, the user of the code shouldn&#8217;t need to
+deal with the creation of a file, since it&#8217;s unreasonable to assume that
+a game replay would come from any other source. Therefore, after some
+discussion, he adopted the following interface instead:</p>
+
+<pre><code>@replay = SC2Refinery.load("spec/fixtures/1v1-game1.sc2replay")
+</code></pre>
+
+<p>This is much nicer to use, and is much simpler. While it may not seem
+like a whole lot, when rules like this are applied across an entire
+codebase, they can significantly increase understanding. Multiple
+reductions of mental overhead add up quickly.</p>
+
+<p>My new favorite trick for adding a little bit of modeling that
+significantly reduces overhead for the user is the Presenter Pattern.
+Jeff Casimir demonstrated this very clearly in his presentation at
+RailsConf 2011, &#8221;<a href="http://dl.dropbox.com/u/69001/Fat%20Models%20Aren%27t%20Enough%20-%20RailsConf.pdf">Fat Models Aren&#8217;t
+Enough</a>&#8221;.
+Here&#8217;s a slightly modified example. Imagine that we have a system that
+manages students, and we&#8217;d like to display a report card for them. We
+might start with some code that looks like this:</p>
+
+<pre><code>student = Student.find(options[:student_id])
+term = Term.find(options[:term_id])
+report_type = ReportType.find(options[:report_type])
+
+puts "#{student.last_name}, #{student.first_name}"
+puts "#{report_type.report_title} for #{term.start_date} to #{term.end_date}"
+student.courses.each do |course|
+  course_report = student.report_data_for_course(course)
+  puts course_report.to_s
+end
+</code></pre>
+
+<p>Honestly, until this past week, this is the exact code that I would have
+written. But it turns out that we can do better. Basically, we&#8217;re
+displaying some information that comes from a combination of three
+different objects. If we think about it some more, we&#8217;re really trying
+to display a report card. So let&#8217;s make an object that represents the
+card, and delegates to its sub-objects. It will then know how to display
+itself.</p>
+
+<pre><code>class ReportCard
+  delegate :start_date, :end_date, :to =&gt; :term
+  delegate :first_name, :last_name, :courses, :report_data_for_course, :to =&gt; :student
+  delegate :report_title, :to =&gt; :report_type
+
+  def initialize(params)
+    @student = Student.find params[:student_id]
+    @term = Term.find params[:term_id]
+    @report_type = ReportType.find params[:report_type_id]
+  end
+
+  def student_name
+    [last_name, first_name].join(", ")
+  end
+
+  def title
+    "#{report_title} for #{start_date} to #{end_date}"
+  end
+
+  def course_reports
+    out = ""
+    courses.each do |course|
+      out += report_data_for_course(course)
+    end
+    out
+  end
+end
+</code></pre>
+
+<p>Now, this is a lot of code. However, as you can see, it&#8217;s all focused on
+composing the information and exposing an interface that makes sense for
+a report card. Using it is super easy:</p>
+
+<pre><code>report = ReportCard.new(options)
+puts report.student_name
+puts report.title
+puts report.course_reports
+</code></pre>
+
+<p>Bam! It&#8217;s incredibly obvious. This code is much more clear than before.
+We&#8217;ll see if I&#8217;m still as hot on this pattern as I am now in a few
+months, but I feel the extra object adds a significant amount of
+clarity.</p>
+
+<p>If the model is too hard to create, or if additional clarity is needed,
+documentation in the form of comments can also help to improve the
+understanding of the &#8216;other&#8217; audience. Comments can be a difficult form
+of prose to write, because they need to be written at the correct level
+of abstraction. If they simply repeat what the code does, they&#8217;re
+useless, and if they&#8217;re too high-level, certain details and semantics
+may not be made clear.</p>
+
+<p>Individual bits of code can also be made more clear by developing a
+narrative within any particular method that&#8217;s being written. Telling a
+story with code may not be something you&#8217;ve considered before, but it&#8217;s
+really about maintaining a proper flow in the actions your code is
+taking. For example, if there&#8217;s a bunch of error handling strewn about
+inside of a method, it&#8217;s less clear than bunching all of the error
+handling near the end. Most code should be an act in three parts: input,
+processing, and output. If these three parts are mixed together, it can
+appear much more complicated.</p>
+
+<h3>The forgotten audience: end-users</h3>
+
+<blockquote><p>If I asked my customers what they wanted, they&#8217;d have told me, &#8220;A
+faster horse.&#8221;</p>
+
+<ul>
+<li>Henry Ford</li>
+</ul>
+</blockquote>
+
+<p>In the end, all software is used by someone. Use-value is the driving
+force of virtually all code. Code that doesn&#8217;t do anything may be making
+some kind of important philosophical statement, but isn&#8217;t really the
+sort that I&#8217;m talking about.</p>
+
+<p>The introduction of a user imposes significant restrictions upon the way
+that code is composed. End-users do not need to understand the code
+itself, but they do need to be able to understand its external
+interfaces. These needs place an imposition on the way that the code
+needs to be written, because it <em>must</em> address this issue of interface.
+Sometimes, interface requirements can create a burden on the internal
+implementation. Needing to support certain behaviors and forms can
+create complexity for an implementor.</p>
+
+<p>Documentation created for end users must be completely different than
+that which is created for those inspecting the code itself. Most
+end-users will not be literate in the arts of software development, and
+so approach the software object in an entirely different way than those
+who write code do. Yet, the same semantics must be passed on to them,
+but at a higher level. There&#8217;s a strong movement within the community to
+start designing software with this kind of end-user documentation in
+mind, called <a href="http://tom.preston-werner.com/2010/08/23/readme-driven-development.html">README driven development</a>.
+There are advantages to thinking on this level when beginning, but a
+nice effect of doing it first is that you can ensure it gets done. A
+surprising amount of software has poor documentation for its users,
+because it&#8217;s created after the software is finished, and at that time
+there&#8217;s intense pressure to ship it out the door. Writing down
+information for the end user first ensures that it&#8217;s done properly, that
+all development works in accordance with the documentation, and that all
+of the use-cases for an end-user have been thought of and are being
+addressed.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/05/12/the-next-iteration-of-my-blog.html">The Next Iteration of My Blog</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-12T00:00:00-04:00" pubdate  data-updated="true" >May 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well well well, some things never change. Long ago, I hosted my own
+blog, and here we are again. I&#8217;ve moved everything over to Jekyll, if
+that means anything to you. You can now <a href="https://github.com/steveklabnik/blog">look at my blog on
+GitHub</a>. Big thanks to <a href="http://www.jstorimer.com/2009/12/29/jekyll-on-heroku.html">this
+article</a> for
+lots of help and pointers with final deployment stuff, and <a href="http://mikeferrier.ca/2011/04/29/blogging-with-jekyll-haml-sass-and-jammit/">this one</a> for haml and sass and stuff. Yay!</p>
+
+<h2>New-ish beginnings</h2>
+
+<p>So why&#8217;d I do this? Well, this is just part of moving more towards
+hosting all of my own services, and not relying on services that others
+provide. This isn&#8217;t some sort of argument over individualism vs.
+collectivism, it&#8217;s more about <a href="http://nomoresharecropping.org/">No More Sharecropping</a>.</p>
+
+<p>I&#8217;m still relying on people for hosting, of course. Nobody is 100%
+removed, but with my own backup of everything, I&#8217;m in total control
+here. It&#8217;s really minimal work to keep this going, and only a few hours
+of setup to move everything over.</p>
+
+<h2>A small change in focus, too</h2>
+
+<p>I&#8217;m also going to stop bitching about politics so often, and try to be
+more constructive in general. I have a lot to say about this new
+humanities angle that my life has taken as of late. Hence, I&#8217;ve changed
+the title of my blog. And you can expect more posts along those lines.
+More about books, more about art and code, less whining. One may think
+I&#8217;m maturing or something&#8230;</p>
+</div>
+  
+  
+
+
+  </article>
+
+<nav role="pagination">
+  <div>
+    
+      <a class="prev" href="/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</nav>
+
+</div>
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I&#8217;m Steve.</h4>
+<p>
+I write both code and prose. Here&#8217;s some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple To Contribute To Ruby&#8217;s Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

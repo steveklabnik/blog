@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Writing a "su" feature with Authlogic - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Writing a "Su" Feature With Authlogic</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-05T00:00:00-05:00" pubdate  data-updated="true" >Mar 5<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Sometimes, when responding to a support request, it&#8217;s nice to see what your
+users see. At the same time, you don&#8217;t want to ask your users for their
+passwords, out of respect for their privacy. So what do you do?</p>
+
+<p>Well, *NIX systems have a program called su.  Here&#8217;s what man su has to say:</p>
+
+<blockquote><p>NAME
+       su - run a shell with substitute user and group IDs</p>
+
+<p>SYNOPSIS
+       su [OPTION]&#8230; [-] [USER [ARG]&#8230;]</p>
+
+<p>DESCRIPTION
+       Change the effective user id and group id to that of USER.</p></blockquote>
+
+<p>su can be thought of as &#8220;substitute user&#8221; or &#8220;switch user.&#8221; It&#8217;s a command
+system administrators use to assume the identity of one of their users, or a
+way for someone with the root password on the system to switch to the root
+account itself. So how can we incorporate this into a web application?</p>
+
+<p>Well, we want to first log ourselves out, and then log in as the user we&#8217;re
+su-ing to. That&#8217;s it. The tricky part, however, comes in when we&#8217;re logging
+in: as we said before, we don&#8217;t want to ask for their password. Luckily,
+Authlogic provides a way to create our UserSession object directly from a User
+object by just passing it to create.</p>
+
+<p>This lets us write a controller method to do this pretty easily:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+  current_user_session.destroy
+  UserSession.create!(@user)
+  flash[:notice] = "You've been su-d to that user."
+  redirect_to dashboard_path
+end
+</code></pre>
+
+<p>Add in a route:</p>
+
+<pre><code>map.admin_su "/admin/su/:id", :controller =&gt; "admin", :action =&gt; "su"
+</code></pre>
+
+<p>And to a view somewhere in your administrative tools:</p>
+
+<pre><code>&lt;%= link_to "log in as this user", admin_su_path(@user) %&gt;
+</code></pre>
+
+<p>And we&#8217;re good to go!</p>
+
+<p>One last thing about this, though: You don&#8217;t want to let anyone who&#8217;s not an
+administrator do this, for obvious reasons. My administrative controllers
+always include a block like this:</p>
+
+<pre><code>access_control do
+  allow :admin
+end
+</code></pre>
+
+<p>acl9 makes this really easy, but it&#8217;s really important.</p>
+
+<p>So there you have it. Easy as pie.</p>
+
+<p>EDIT: This post made the Rails subreddit, and <a href="http://www.reddit.com/r/rails/comments/cb0da/writing_a_su_feature_with_authlogic/c0rf26w">brettbender posted his code</a>
+to get you back to admin. Here it is:</p>
+
+<blockquote><p>I used this article to help build a su feature for a rails app I&#8217;m working
+on. thought I would share the code to let you su / exit-su back to the
+original user you were logged in as. You just need to add a link somewhere
+persistent if your session contains an entry for :su_user that links to the
+unsu action.</p>
+
+<p>Inside your admin controller, make sure you limit access to these actions:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+
+  # change these 3 lines to apply to your session representation
+  session[:su_user] = self.current_user.id
+  self.current_user = @user
+
+  flash[:notice] = "You've been logged in as #{@user.login}."
+  redirect_to "/"
+end
+
+def unsu
+  redirect_url = "/"
+  if(session.has_key?(:su_user))
+    self.current_user = User.find session[:su_user]
+    session.delete :su_user
+    flash[:notice] = "You have exited your switch user session. You are
+    redirect_url = "/admin/users/"
+  else
+    flash[:error] = "Sorry, we couldn't find your original user."
+  end
+
+  redirect_to redirect_url
+end
+</code></pre></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-05T00:00:00-05:00" pubdate  data-updated="true" >Mar 5<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2010/03/05/writing-a-su-feature-with-authlogic.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I'm Making It Dead Simple To Contribute To Ruby's Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>
