@@ -4,6 +4,8 @@ title: The Secret to Rails OO Design
 layout: post
 ---
 
+UPDATE: I also have a follow-up [here](/2011/09/09/better-ruby-presenters.html).
+
 I often tell people that I learned Ruby via Rails. This is pretty much the worst
 way to do it, but I'd learned so many programming languages by then that it
 didn't hinder me too much. The one thing that it did do, however, was give me a

@@ -16,9 +16,10 @@ In Ruby, everything is an object. Every bit of information and code can be given
 {% endblockquote %}
 
 ... except helpers. Why is it in Ruby that everything is an object, even
-integers, yet as soon as we need to format a date, we all turn into Djikstra and
-bust out structured programming? Actually, come to think of it, Djikstra
+integers, yet as soon as we need to format a date, we all turn into Dijkstra and
+bust out structured programming? Actually, come to think of it, Dijkstra
 wouldn't even write any code, because it's beneath him, but you get the idea.
+(if you don't get this, it's a joke. About proofs, telescopes, and CS...)
 Helpers are like a compliment that you don't want to give, but feel obligated
 to: "Yeah, I mean, well, you tried, and that's what counts, right?"
 

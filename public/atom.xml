@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-09T08:25:37-04:00</updated>
+  <updated>2011-09-09T11:35:30-04:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -27,9 +27,10 @@ on a few things. So here we go. Let&amp;#8217;s rap about the Presenter pattern,
 
 
 &lt;p&gt;&amp;#8230; except helpers. Why is it in Ruby that everything is an object, even
-integers, yet as soon as we need to format a date, we all turn into Djikstra and
-bust out structured programming? Actually, come to think of it, Djikstra
+integers, yet as soon as we need to format a date, we all turn into Dijkstra and
+bust out structured programming? Actually, come to think of it, Dijkstra
 wouldn&amp;#8217;t even write any code, because it&amp;#8217;s beneath him, but you get the idea.
+(if you don&amp;#8217;t get this, it&amp;#8217;s a joke. About proofs, telescopes, and CS&amp;#8230;)
 Helpers are like a compliment that you don&amp;#8217;t want to give, but feel obligated
 to: &amp;#8220;Yeah, I mean, well, you tried, and that&amp;#8217;s what counts, right?&amp;#8221;&lt;/p&gt;
 
@@ -439,7 +440,9 @@ you do stuff like this:&lt;/p&gt;
     <link href="http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html"/>
     <updated>2011-09-06T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design</id>
-    <content type="html">&lt;p&gt;I often tell people that I learned Ruby via Rails. This is pretty much the worst
+    <content type="html">&lt;p&gt;UPDATE: I also have a follow-up &lt;a href=&quot;http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I often tell people that I learned Ruby via Rails. This is pretty much the worst
 way to do it, but I&amp;#8217;d learned so many programming languages by then that it
 didn&amp;#8217;t hinder me too much. The one thing that it did do, however, was give me a
 slightly twisted sense of how to properly design the classes needed in a Rails
