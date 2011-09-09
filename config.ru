@@ -4,7 +4,7 @@ require 'sinatra/base'
 # The project root directory
 $root = ::File.dirname(__FILE__)
 
-require_relative 'redirects'
+require './redirects'
 
 class SinatraStaticServer < Sinatra::Base
 
