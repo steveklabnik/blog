@@ -64,6 +64,450 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/09/better-ruby-presenters.html">Better Ruby Presenters</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-09T12:00:00-04:00" pubdate  data-updated="true" >Sep 9<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My <a href="/2011/09/06/the-secret-to-rails-oo-design.html">last blog post</a> caused a bit
+of a stir in some circles. I got a bunch of emails. Apparently, I need to expand
+on a few things. So here we go. Let&#8217;s rap about the Presenter pattern, shall we?</p>
+
+<h2>No seriously, helpers suck</h2>
+
+<blockquote><p>In Ruby, everything is an object. Every bit of information and code can be given their own properties and actions.</p><footer><strong>ruby-lang: about</strong><cite><a href='http://www.ruby-lang.org/en/about/'>www.ruby-lang.org/en/about/&hellip;</a></cite></footer></blockquote>
+
+
+<p>&#8230; except helpers. Why is it in Ruby that everything is an object, even
+integers, yet as soon as we need to format a date, we all turn into Djikstra and
+bust out structured programming? Actually, come to think of it, Djikstra
+wouldn&#8217;t even write any code, because it&#8217;s beneath him, but you get the idea.
+Helpers are like a compliment that you don&#8217;t want to give, but feel obligated
+to: &#8220;Yeah, I mean, well, you tried, and that&#8217;s what counts, right?&#8221;</p>
+
+<p>This is the topic of a future post, but when programming in a langauge, you want
+to work with its primary methods of abstraction. In Ruby, that&#8217;s objects, and
+there&#8217;s a good reason for that: functions don&#8217;t provide a sufficient amount of
+power to tackle hard problems. I don&#8217;t want to get into this either, but there&#8217;s
+a reason that objects exist, and that nobody&#8217;s making procedural languages
+anymore.  No biggie. C has a special place in my heart.</p>
+
+<p>But I digress: objects > functions. At least in the context of getting stuff
+done in Ruby. This pretty much applies to most of the rest of the points in this
+post, so just keep that in the back of your brain.</p>
+
+<h2>Why not a class method?</h2>
+
+<p>Well, first of all, <a href="http://nicksda.apotomo.de/2011/07/are-class-methods-evil/">class methods also suck</a>. Here&#8217;s the
+issue: Can you tell me the difference between these two methods?</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">foo</span>
+</div><div class='line'>  <span class="s2">&quot;hello&quot;</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">Bar</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">foo</span>
+</div><div class='line'>    <span class="s2">&quot;hello&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">foo</span>
+</div><div class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">foo</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, that&#8217;s right. You can see it clearly from the last two lines: class methods
+are functions that happen to be namespaced. That means they&#8217;re slightly better,
+but really, <code>DictionaryPresenter.as_dictionary(something)</code> might as well just be
+a helper. At least <code>as_dictionary(something)</code> is shorter.</p>
+
+<p>Here&#8217;s another reason: I didn&#8217;t make that method be a class method, even though
+there was no state, becuase a really real presenter (I mean, that was a real
+world example, but&#8230;) generally works a little different. Usually, I make
+presenters that actually stand in for the objects they&#8217;re presenting. Check
+this out. Here&#8217;s the presenter I showed you:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@collection</span> <span class="o">=</span> <span class="n">collection</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="vi">@collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>The real-world presenter that I used this for looked like this:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="kp">include</span> <span class="no">Enumerable</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="vi">@dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>    <span class="vi">@dictionary</span><span class="o">.</span><span class="n">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8230; or close to this. There was an &#8216;other&#8217; category, and a few other things&#8230;
+but you get the idea. Now, instead of this:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="vi">@posts</span> <span class="o">=</span> <span class="no">DictionaryPresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">)</span><span class="o">.</span><span class="n">as_dictionary</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>You do this:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="vi">@posts</span> <span class="o">=</span> <span class="no">DictionaryPresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>And the presenter actually stands in for the hash. A subtle but important
+difference. This gives you more options, because you have a real, live object
+instead of just some random processing. With this simplistic presenter, you
+might not see a huge benefit, but often, you&#8217;ll want something a bit more
+complicated. And since this was what I had in my head, I didn&#8217;t make
+<code>as_dictionary</code> be a static method.</p>
+
+<p>Oh, and presenters that decorate a single object rather than a collection
+often implement <code>method_missing</code>, so that you only <em>add</em> methods rather than
+hide most of them. Some don&#8217;t. It depends.</p>
+
+<h2>Blocks vs. Policy</h2>
+
+<p>I also showed off a Ruby version of a design pattern known as the Policy
+pattern, or sometimes the Strategy pattern. Turns out that Policy is often
+a bit heavyweight for Ruby, especially in an example like this, so I wanted
+to show you an alternate version of it, taking advantage of a Ruby feature:
+blocks.</p>
+
+<p>For reference, the old code, put into the new code:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="kp">include</span> <span class="no">Enumerable</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="vi">@dictionary</span><span class="o">[</span><span class="vi">@policy</span><span class="o">.</span><span class="n">category_for</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>    <span class="vi">@dictionary</span><span class="o">.</span><span class="n">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">UserCategorizationPolicy</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">category_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We could use blocks instead:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="kp">include</span> <span class="no">Enumerable</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="vi">@dictionary</span><span class="o">[</span><span class="n">blk</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>    <span class="vi">@dictionary</span><span class="o">.</span><span class="n">each</span> <span class="o">&amp;</span><span class="n">blk</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="no">DictionaryPresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</div><div class='line'>  <span class="n">item</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>While this is shorter, and a bit more Rubyish, it also means that we lose the
+reficiation of our concept of a policy. While this is <em>shorter</em>, I find it more
+confusing. Why am I giving this one line block to the presenter? It&#8217;s not really
+clear to me. And I can&#8217;t give a better name to item&#8230; and if I want to change
+the policy, it has to be done in every place we use the presenter&#8230;</p>
+
+<p>This does get to the root of another thing that will end up being a follow-up:
+What&#8217;s the difference between closures and objects? If you don&#8217;t know, maybe
+this will get you thinking:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1">#ugh, this is slightly odd, thanks Ruby!</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="nb">proc</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">if</span> <span class="nb">block_given?</span>
+</div><div class='line'>    <span class="n">blk</span><span class="o">.</span><span class="n">call</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="nb">proc</span><span class="o">.</span><span class="n">call</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="nb">proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+</div><div class='line'>  <span class="nb">puts</span> <span class="s2">&quot;a proc!&quot;</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">MyProc</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">call</span>
+</div><div class='line'>    <span class="nb">puts</span> <span class="s2">&quot;an object!&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">my_proc</span> <span class="o">=</span> <span class="no">MyProc</span><span class="o">.</span><span class="n">new</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">apply</span> <span class="k">do</span>
+</div><div class='line'>  <span class="nb">puts</span> <span class="s2">&quot;a block!&quot;</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">apply</span> <span class="nb">proc</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">apply</span> <span class="n">my_proc</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Chew on that a while.</p>
+
+<h2>This is too verbose</h2>
+
+<p>Absolutely. <code>DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary</code>
+is too long. 100% there. Good thing that I&#8217;d <em>actually</em> write this:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">Dictionary</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">,</span> <span class="no">ByTitle</span><span class="p">)</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>I switched the arguments around, because it reads better. When writing blog
+posts, you have to balance writing code samples that explain what you&#8217;re
+trying to say, and ones that are &#8216;real.&#8217; I tend to be a bit more verbose with
+things like this, because it&#8217;s easier for someone who just jumps in to remember
+what all the parts are&#8230; then again, by <em>not</em> showing the &#8216;real code,&#8217; people
+might end up implementing the crappy, verbose version. It&#8217;s always a trade-off,
+and I may or may not make the right choice. It happens.</p>
+
+<p>And yes, even earlier in this blog post: I said <code>DictionaryPresenter</code> and I&#8217;d
+really just say <code>Dictionary</code>.</p>
+
+<h2>Where does all of this go?</h2>
+
+<p>You&#8217;ve got two options, and only one of them is good: You should make a
+directory in app for your presenters. In this case, I&#8217;d be running
+<code>touch app/presenters/dictionary.rb</code> pretty quick. The other case is to
+put things in lib. This whole debacle uncovers something that @avdi went
+on a rant about over the last few days: models don&#8217;t have to inherit from
+anything. Here&#8217;s what Wikipedia says about models:</p>
+
+<blockquote><p>The model manages the behaviour and data of the application domain, responds to requests for information about its state (usually from the view), and responds to instructions to change state (usually from the controller). In event-driven systems, the model notifies observers (usually views) when the information changes so that they can react.</p><footer><strong>MVC</strong><cite><a href='http://en.wikipedia.org/wiki/Model–view–controller#Concepts'>en.wikipedia.org/wiki/&hellip;</a></cite></footer></blockquote>
+
+
+<p>See anything about &#8220;saves stuff to the database?&#8221; Okay, &#8216;manages&#8230; data&#8217; could
+be, but the point is, it&#8217;s not <em>required</em>. Models are the reification of a
+concept that exists in your application domain. Persistance is not required for
+every concept.</p>
+
+<p>Therefore, if it relates to your problem domain, it goes in app. If it doesn&#8217;t,
+it goes in lib. Something like <code>Dictionary</code>? Depends on how important you think
+it is. It&#8217;s probably pretty important; that&#8217;s why you made it a class.</p>
+
+<h2>Design Patterns? Are you serious?</h2>
+
+<p>Yes. Design patterns don&#8217;t suck, Design patterns <em>in Java</em> suck. I&#8217;m not even
+going to start this one here, expect more in this space soon.</p>
+
+<p>Design patterns are great, and they&#8217;re totally useful in Ruby.</p>
+
+<h2>In conclusion: A shout-out</h2>
+
+<p>I hope you&#8217;ve enjoyed this small digression on Presenters. If you&#8217;re gonna use
+presenters in your application, I encourage you to write simple ones as simple
+Ruby classes, but if they get slightly more complicated, you need to check out
+<a href="https://github.com/jcasimir/draper">Draper</a> by my buddy Jeff Casimir. It lets
+you do stuff like this:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">ArticleDecorator</span> <span class="o">&lt;</span> <span class="no">ApplicationDecorator</span>
+</div><div class='line'>  <span class="n">decorates</span> <span class="ss">:article</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">author_name</span>
+</div><div class='line'>    <span class="n">model</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">last_name</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">ArticleDecorator</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</div><div class='line'><span class="n">article</span><span class="o">.</span><span class="n">author_name</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>There&#8217;s a lot of features to it, so check it out on GitHub. Totally worthwhile.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a></h1>
     
     
@@ -2205,63 +2649,6 @@ addressed.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/05/12/the-next-iteration-of-my-blog.html">The Next Iteration of My Blog</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-05-12T00:00:00-04:00" pubdate  data-updated="true" >May 12<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Well well well, some things never change. Long ago, I hosted my own
-blog, and here we are again. I&#8217;ve moved everything over to Jekyll, if
-that means anything to you. You can now <a href="https://github.com/steveklabnik/blog">look at my blog on
-GitHub</a>. Big thanks to <a href="http://www.jstorimer.com/2009/12/29/jekyll-on-heroku.html">this
-article</a> for
-lots of help and pointers with final deployment stuff, and <a href="http://mikeferrier.ca/2011/04/29/blogging-with-jekyll-haml-sass-and-jammit/">this one</a> for haml and sass and stuff. Yay!</p>
-
-<h2>New-ish beginnings</h2>
-
-<p>So why&#8217;d I do this? Well, this is just part of moving more towards
-hosting all of my own services, and not relying on services that others
-provide. This isn&#8217;t some sort of argument over individualism vs.
-collectivism, it&#8217;s more about <a href="http://nomoresharecropping.org/">No More Sharecropping</a>.</p>
-
-<p>I&#8217;m still relying on people for hosting, of course. Nobody is 100%
-removed, but with my own backup of everything, I&#8217;m in total control
-here. It&#8217;s really minimal work to keep this going, and only a few hours
-of setup to move everything over.</p>
-
-<h2>A small change in focus, too</h2>
-
-<p>I&#8217;m also going to stop bitching about politics so often, and try to be
-more constructive in general. I have a lot to say about this new
-humanities angle that my life has taken as of late. Hence, I&#8217;ve changed
-the title of my blog. And you can expect more posts along those lines.
-More about books, more about art and code, less whining. One may think
-I&#8217;m maturing or something&#8230;</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -2290,6 +2677,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/09/better-ruby-presenters.html">Better Ruby Presenters</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a>
       </li>
     
@@ -2303,10 +2694,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/08/12/we-forget-that-open-source-is-made-of-people.html">We Forget That Open Source is Made of People</a>
       </li>
     
   </ul>
