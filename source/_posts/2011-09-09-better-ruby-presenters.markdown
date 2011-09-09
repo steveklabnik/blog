@@ -60,7 +60,7 @@ but really, `DictionaryPresenter.as_dictionary(something)` might as well just be
 a helper. At least `as_dictionary(something)` is shorter.
 
 Here's another reason: I didn't make that method be a class method, even though
-there was no state, becuase a really real presenter (I mean, that was a real
+there was no state, because a really real presenter (I mean, that was a real
 world example, but...) generally works a little different. Usually, I make
 presenters that actually stand in for the objects they're presenting. Check
 this out. Here's the presenter I showed you:
@@ -145,7 +145,7 @@ class DictionaryPresenter
     @dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
 
     collection.each do |p|
-      @dictionary[@policy.category_for(p)] << p
+      @dictionary[policy.category_for(p)] << p
     end
   end
 
