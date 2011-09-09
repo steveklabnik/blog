@@ -5,8 +5,8 @@ layout: post
 ---
 
 I often tell people that I learned Ruby via Rails. This is pretty much the worst
-way to do it, but I'd learned so many programming languages by then that it didn't
-hinder me too much. The one thing that it did do, however, was give me a
+way to do it, but I'd learned so many programming languages by then that it
+didn't hinder me too much. The one thing that it did do, however, was give me a
 slightly twisted sense of how to properly design the classes needed in a Rails
 app. Luckily, I obsessively read other people's code, and I've noticed that
 there's one big thing that is common in most of the code that's written by
@@ -29,48 +29,54 @@ it hides in plain sight. Loved by those who've mastered Rails, Plain Old Ruby
 Objects, or "POROs" as some like to call them, are a hidden weapon against
 complexity. Here's what I mean. Examine this 'simple' model:
 
-    class Post < ActiveRecord::Base
-      def self.as_dictionary
-        dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+{% codeblock lang:ruby %}
+class Post < ActiveRecord::Base
+  def self.as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
 
-        Post.all.each do |p|
-          dictionary[p.title[0]] << p
-        end
-
-        dictionary
-      end
+    Post.all.each do |p|
+      dictionary[p.title[0]] << p
     end
+
+    dictionary
+  end
+end
+{% endcodeblock %}
 
 We want to display an index page of all our posts, and do it by first letter.
 So we build up a dictionary, and then put our posts in it. I'm assuming we're
 not paginating this, so don't get caught up in querying for all Posts. The
 important thing is the idea: we can now display our posts by title:
 
-    - Post.as_dictionary do |letter, list|
-      %p= letter
-      %ul
-      - list.each do |post|
-        %li= link_to post
+{% codeblock lang:haml %}
+- Post.as_dictionary do |letter, list|
+  %p= letter
+  %ul
+  - list.each do |post|
+    %li= link_to post
+{% endcodeblock %}
 
 Sure. And in one way, this code isn't _bad_. It's also not good: We've mixed a
 presentational concern into our model, which is supposed to represent buisness
 logic. So let's fix that, via a Presenter:
 
-    class DictionaryPresenter
-      def initialize(collection)
-        @collection = collection
-      end
+{% codeblock lang:ruby %}
+class DictionaryPresenter
+  def initialize(collection)
+    @collection = collection
+  end
 
-      def as_dictionary
-        dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+  def as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
 
-        @collection.each do |p|
-          dictionary[p.title[0]] << p
-        end
-
-        dictionary
-      end
+    @collection.each do |p|
+      dictionary[p.title[0]] << p
     end
+
+    dictionary
+  end
+end
+{% endcodeblock %}
 
 We can use it via `DictionaryPresenter.new(Post.all).as_dictionary`. This has
 tons of benefits: we've moved presentation logic out of the model. We've
@@ -92,44 +98,50 @@ again. You guessed it: POROs to the rescue!
 Let's change our presenter slightly, to also accept an organizational policy
 object:
 
-    class DictionaryPresenter
-      def initialize(policy, collection)
-        @policy = policy
-        @collection = collection
-      end
+{% codeblock lang:ruby %}
+class DictionaryPresenter
+  def initialize(policy, collection)
+    @policy = policy
+    @collection = collection
+  end
 
-      def as_dictionary
-        dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
+  def as_dictionary
+    dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
 
-        @collection.each do |p|
-          dictionary[@policy.category_for(p)] << p
-        end
-
-        dictionary
-      end
+    @collection.each do |p|
+      dictionary[@policy.category_for(p)] << p
     end
+
+    dictionary
+  end
+end
+{% endcodeblock %}
 
 Now, we can inject a policy, and have them be different:
 
-    class UserCategorizationPolicy
-      def self.category_for(user)
-        user.username[0]
-      end
-    end
+{% codeblock lang:ruby %}
+class UserCategorizationPolicy
+  def self.category_for(user)
+    user.username[0]
+  end
+end
 
-    class PostCategorizationPolicy
-      def self.category_for(post)
-        if post.starts_with?("A ")
-          post.title.split[1][0]
-        else
-          post.title[0]
-        end
-      end
+class PostCategorizationPolicy
+  def self.category_for(post)
+    if post.starts_with?("A ")
+      post.title.split[1][0]
+    else
+      post.title[0]
     end
+  end
+end
+{% endcodeblock %}
 
 Bam!
 
-    DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary
+{% codeblock lang:ruby %}
+DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary
+{% endcodeblock %}
 
 Yeah, so that's getting a bit long. It happens. :) You can see that now each
 concept has one representation in our system. The presenter doesn't care how
@@ -142,27 +154,29 @@ Ruby with one of my favorite patterns from "Working Effectively with Legacy
 Code," we can take complex computations and turn them into objects. Look at this
 code:
 
-    class Quote < ActiveRecord::Base
-      #<snip>
-      def pretty_turnaround
-        return "" if turnaround.nil?
-        if purchased_at
-          offset = purchased_at
-          days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
-        else
-          offset = Time.now
-          days_from_today = turnaround + 1
-        end
-        time = offset + (turnaround * 60 * 60 * 24)
-        if(time.strftime("%a") == "Sat")
-          time += 2 * 60 * 60 * 24
-        elsif(time.strftime("%a") == "Sun")
-          time += 1 * 60 * 60 * 24
-        end
-
-        "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
-      end
+{% codeblock lang:ruby %}
+class Quote < ActiveRecord::Base
+  #<snip>
+  def pretty_turnaround
+    return "" if turnaround.nil?
+    if purchased_at
+      offset = purchased_at
+      days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      offset = Time.now
+      days_from_today = turnaround + 1
     end
+    time = offset + (turnaround * 60 * 60 * 24)
+    if(time.strftime("%a") == "Sat")
+      time += 2 * 60 * 60 * 24
+    elsif(time.strftime("%a") == "Sun")
+      time += 1 * 60 * 60 * 24
+    end
+
+    "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
+  end
+end
+{% endcodeblock %}
 
 Yikes! This method prints a turnaround time, but as you can see, it's a complex
 calculation. We'd be able to understand this much more easily of we used Extract
@@ -186,68 +200,79 @@ I've changed this slightly for Ruby, since we can't Lean On The Compiler, and a
 few of Feathers' steps are about doing this. Anyway, let's try this on that
 code. Step 1:
 
-    class Quote < ActiveRecord::Base
-      def pretty_turnaround
-        #snip
-      end
+{% codeblock lang:ruby %}
+class Quote < ActiveRecord::Base
+  def pretty_turnaround
+    #snip
+  end
 
-      class TurnaroundCalculator
-      end
-    end
+  class TurnaroundCalculator
+  end
+end
+{% endcodeblock %}
 
 Two:
 
-    class TurnaroundCalculator
-      def calculate
-      end
-    end
+{% codeblock lang:ruby %}
+class TurnaroundCalculator
+  def calculate
+  end
+end
+{% endcodeblock %}
 
 Three:
 
-    class TurnaroundCalculator
-      def calculate
-        return "" if @turnaround.nil?
-        if @purchased_at
-          offset = @purchased_at
-          days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
-        else
-          offset = Time.now
-          days_from_today = @turnaround + 1
-        end
-        time = offset + (@turnaround * 60 * 60 * 24)
-        if(time.strftime("%a") == "Sat")
-          time += 2 * 60 * 60 * 24
-        elsif(time.strftime("%a") == "Sun")
-          time += 1 * 60 * 60 * 24
-        end
-
-        "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
-      end
+{% codeblock lang:ruby %}
+class TurnaroundCalculator
+  def calculate
+    return "" if @turnaround.nil?
+    if @purchased_at
+      offset = @purchased_at
+      days_from_today = ((Time.now - purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      offset = Time.now
+      days_from_today = @turnaround + 1
     end
+    time = offset + (@turnaround * 60 * 60 * 24)
+    if(time.strftime("%a") == "Sat")
+      time += 2 * 60 * 60 * 24
+    elsif(time.strftime("%a") == "Sun")
+      time += 1 * 60 * 60 * 24
+    end
+
+    "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
+  end
+end
+{% endcodeblock %}
 
 I like to give it a generic name at first, and then give it a better one in step
 5, after we see what it really does. often our code will inform us of a good
 name.
 
 Four:
-    class TurnaroundCalculator
-      def initialize(purchased_at, turnaround)
-        @purchased_at = purchased_at
-        @turnaround = turnaround
-      end
 
-      def calculate
-        #snip
-      end
-    end
+{% codeblock lang:ruby %}
+class TurnaroundCalculator
+  def initialize(purchased_at, turnaround)
+    @purchased_at = purchased_at
+    @turnaround = turnaround
+  end
+
+  def calculate
+    #snip
+  end
+end
+{% endcodeblock %}
 
 Five:
 
-    class Quote < ActiveRecord::Base
-      def pretty_turnaround
-        TurnaroundCalculator.new(purchased_at, turnaround).calculate
-      end
-    end
+{% codeblock lang:ruby %}
+class Quote < ActiveRecord::Base
+  def pretty_turnaround
+    TurnaroundCalculator.new(purchased_at, turnaround).calculate
+  end
+end
+{% endcodeblock %}
 
 Done! We should be able to run our tests and see them pass. Even if 'run our
 tests' consists of manually checking it out...
@@ -259,57 +284,59 @@ for just the Calculator, and we've split out the idea of calculation into one
 place, where it can easily be changed later. Here's our class, a few
 refactorings later:
 
-    class TurnaroundCalculator
-      def calculate
-        return "" if @turnaround.nil?
+{% codeblock lang:ruby %}
+class TurnaroundCalculator
+  def calculate
+    return "" if @turnaround.nil?
 
-        "#{arrival_date} (#{days_from_today} business days from today)"
-      end
+    "#{arrival_date} (#{days_from_today} business days from today)"
+  end
 
-      protected
+  protected
 
-      def arrival_date
-        real_turnaround_time.strftime("%A %d %B")
-      end
+  def arrival_date
+    real_turnaround_time.strftime("%A %d %B")
+  end
 
-      def real_turnaround_time
-        adjust_time_for_weekends(start_time + turnaround_in_seconds)
-      end
+  def real_turnaround_time
+    adjust_time_for_weekends(start_time + turnaround_in_seconds)
+  end
 
-      def adjust_time_for_weekends(time)
-        if saturday?(time)
-          time + 2 * 60 * 60 * 24
-        elsif sunday?(time)
-          time + 1 * 60 * 60 * 24
-        else
-          time
-        end
-      end
-
-      def saturday?(time)
-        time.strftime("%a") == "Sat"
-      end
-
-      def sunday?(time)
-        time.strftime("%a") == "Sun"
-      end
-
-      def turnaround_in_seconds
-        @turnaround * 60 * 60 * 24
-      end
-
-      def start_time
-        @purchased_at or Time.now
-      end
-
-      def days_from_today
-        if @purchased_at
-          ((Time.now - @purchased_at.to_time) / 60 / 60 / 24).floor + 1
-        else
-          @turnaround + 1
-        end
-      end
+  def adjust_time_for_weekends(time)
+    if saturday?(time)
+      time + 2 * 60 * 60 * 24
+    elsif sunday?(time)
+      time + 1 * 60 * 60 * 24
+    else
+      time
     end
+  end
+
+  def saturday?(time)
+    time.strftime("%a") == "Sat"
+  end
+
+  def sunday?(time)
+    time.strftime("%a") == "Sun"
+  end
+
+  def turnaround_in_seconds
+    @turnaround * 60 * 60 * 24
+  end
+
+  def start_time
+    @purchased_at or Time.now
+  end
+
+  def days_from_today
+    if @purchased_at
+      ((Time.now - @purchased_at.to_time) / 60 / 60 / 24).floor + 1
+    else
+      @turnaround + 1
+    end
+  end
+end
+{% endcodeblock %}
 
 Wow. This code I wrote three years ago isn't perfect, but it's almost
 understandable now. And each of the bits makes sense. This is after two or three
@@ -321,30 +348,36 @@ is well-factored, you can often get there.
 This idea of extracting domain objects that are pure Ruby is even in Rails
 itself. Check out this route:
 
-    root :to => 'dashboard#index', :constraints => LoggedInConstraint
+{% codeblock lang:ruby %}
+root :to => 'dashboard#index', :constraints => LoggedInConstraint
+{% endcodeblock %}
 
 Huh? LoggedInConstraint?
 
-    class LoggedInConstraint
-      def self.matches?(request)
-        current_user
-      end
-    end
+{% codeblock lang:ruby %}
+class LoggedInConstraint
+  def self.matches?(request)
+    current_user
+  end
+end
+{% endcodeblock %}
 
 Whoah. Yep. A domain object that describes our routing policy. Awesome. Also,
 validations, blatantly stolen from [omgbloglol](http://omgbloglol.com/post/392895742/improved-validations-in-rails-3):
 
-    def SomeClass < ActiveRecord::Base
-      validate :category_id, :proper_category => true
-    end
+{% codeblock lang:ruby %}
+def SomeClass < ActiveRecord::Base
+  validate :category_id, :proper_category => true
+end
 
-    class ProperCategoryValidator < ActiveModel::EachValidator
-      def validate_each(record, attribute, value)
-        unless record.user.category_ids.include?(value)
-          record.errors.add attribute, 'has bad category.'
-        end
-      end
+class ProperCategoryValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless record.user.category_ids.include?(value)
+      record.errors.add attribute, 'has bad category.'
     end
+  end
+end
+{% endcodeblock %}
 
 This isn't a plain Ruby class, but you get the idea.
 

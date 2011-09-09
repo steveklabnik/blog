@@ -1,10 +1,17 @@
 source "http://rubygems.org"
 
-gem "rack", "=1.2.1" # wtf duostack
-gem "jekyll"
-gem "pygmentize"
-gem "rdiscount"
-gem "haml"
-gem "sass"
-gem "sinatra"
-gem "coffee-script"
+group :development do
+  gem 'rake'
+  gem 'rack'
+  gem 'jekyll'
+  gem 'rdiscount'
+  gem 'pygments.rb'
+  gem 'RedCloth'
+  gem 'haml', '>= 3.1'
+  gem 'compass', '>= 0.11'
+  gem 'rubypants'
+  gem 'rb-fsevent'
+  gem 'stringex'
+end
+
+gem 'sinatra', '1.2.6'
