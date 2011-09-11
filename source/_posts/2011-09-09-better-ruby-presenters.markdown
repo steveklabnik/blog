@@ -186,7 +186,8 @@ end
 {% endcodeblock %}
 
 While this is shorter, and a bit more Rubyish, it also means that we lose the
-reficiation of our concept of a policy. While this is _shorter_, I find it more
+[reification](http://en.wikipedia.org/wiki/Reification_(computer_science)) of
+our concept of a policy. While this is _shorter_, I find it more
 confusing. Why am I giving this one line block to the presenter? It's not really
 clear to me. And I can't give a better name to item... and if I want to change
 the policy, it has to be done in every place we use the presenter...
