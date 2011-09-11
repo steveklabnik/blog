@@ -148,7 +148,7 @@ but really, <code>DictionaryPresenter.as_dictionary(something)</code> might as w
 a helper. At least <code>as_dictionary(something)</code> is shorter.</p>
 
 <p>Here&#8217;s another reason: I didn&#8217;t make that method be a class method, even though
-there was no state, becuase a really real presenter (I mean, that was a real
+there was no state, because a really real presenter (I mean, that was a real
 world example, but&#8230;) generally works a little different. Usually, I make
 presenters that actually stand in for the objects they&#8217;re presenting. Check
 this out. Here&#8217;s the presenter I showed you:</p>
@@ -285,7 +285,7 @@ blocks.</p>
 </div><div class='line'>    <span class="vi">@dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
 </div><div class='line'>
 </div><div class='line'>    <span class="n">collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
-</div><div class='line'>      <span class="vi">@dictionary</span><span class="o">[</span><span class="vi">@policy</span><span class="o">.</span><span class="n">category_for</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>      <span class="vi">@dictionary</span><span class="o">[</span><span class="n">policy</span><span class="o">.</span><span class="n">category_for</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
 </div><div class='line'>    <span class="k">end</span>
 </div><div class='line'>  <span class="k">end</span>
 </div><div class='line'>
@@ -346,7 +346,8 @@ blocks.</p>
 
 
 <p>While this is shorter, and a bit more Rubyish, it also means that we lose the
-reficiation of our concept of a policy. While this is <em>shorter</em>, I find it more
+<a href="http://en.wikipedia.org/wiki/Reification_(computer_science">reification</a>) of
+our concept of a policy. While this is <em>shorter</em>, I find it more
 confusing. Why am I giving this one line block to the presenter? It&#8217;s not really
 clear to me. And I can&#8217;t give a better name to item&#8230; and if I want to change
 the policy, it has to be done in every place we use the presenter&#8230;</p>

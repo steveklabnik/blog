@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-09T11:35:30-04:00</updated>
+  <updated>2011-09-11T12:21:18-04:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -83,7 +83,7 @@ but really, &lt;code&gt;DictionaryPresenter.as_dictionary(something)&lt;/code&gt
 a helper. At least &lt;code&gt;as_dictionary(something)&lt;/code&gt; is shorter.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#8217;s another reason: I didn&amp;#8217;t make that method be a class method, even though
-there was no state, becuase a really real presenter (I mean, that was a real
+there was no state, because a really real presenter (I mean, that was a real
 world example, but&amp;#8230;) generally works a little different. Usually, I make
 presenters that actually stand in for the objects they&amp;#8217;re presenting. Check
 this out. Here&amp;#8217;s the presenter I showed you:&lt;/p&gt;
@@ -220,7 +220,7 @@ blocks.&lt;/p&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;vi&quot;&gt;@dictionary&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;A&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Z&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;vi&quot;&gt;@dictionary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@policy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;vi&quot;&gt;@dictionary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;policy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
@@ -281,7 +281,8 @@ blocks.&lt;/p&gt;
 
 
 &lt;p&gt;While this is shorter, and a bit more Rubyish, it also means that we lose the
-reficiation of our concept of a policy. While this is &lt;em&gt;shorter&lt;/em&gt;, I find it more
+&lt;a href=&quot;http://en.wikipedia.org/wiki/Reification_(computer_science&quot;&gt;reification&lt;/a&gt;) of
+our concept of a policy. While this is &lt;em&gt;shorter&lt;/em&gt;, I find it more
 confusing. Why am I giving this one line block to the presenter? It&amp;#8217;s not really
 clear to me. And I can&amp;#8217;t give a better name to item&amp;#8230; and if I want to change
 the policy, it has to be done in every place we use the presenter&amp;#8230;&lt;/p&gt;
