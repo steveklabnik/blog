@@ -121,7 +121,7 @@ Mocks, and to some degree RSpec, are like the Hydrogen Peroxide of programming: 
 {% endblockquote %}
 
 This test class is insane. It runs faster than many people's integration tests,
-clocking in at about 0.4 seconds. But that's still an order of magnitude faster
+clocking in at about 0.4 seconds. But that's still an order of magnitude slower
 than I'd like. A suite with 200 tests would still take over a minute. Also, look
 at all this junk that we have to do for setup.
 

@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-22T08:42:32-07:00</updated>
+  <updated>2011-09-22T08:57:51-07:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -201,7 +201,7 @@ ended up with this running test:&lt;/p&gt;
 
 
 &lt;p&gt;This test class is insane. It runs faster than many people&amp;#8217;s integration tests,
-clocking in at about 0.4 seconds. But that&amp;#8217;s still an order of magnitude faster
+clocking in at about 0.4 seconds. But that&amp;#8217;s still an order of magnitude slower
 than I&amp;#8217;d like. A suite with 200 tests would still take over a minute. Also, look
 at all this junk that we have to do for setup.&lt;/p&gt;
 
