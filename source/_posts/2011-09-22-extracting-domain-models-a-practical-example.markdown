@@ -57,9 +57,9 @@ describe "salmon update" do
 
     salmon = double(:to_xml => "<xml></xml>")
     uri = double(:host => "localhost", :port => "9001", :path => "/")
-    Ostatus::Salmon.should_recieve(:new).and_return(salmon)
-    Uri.should_recieve(:parse).and_return(uri)
-    Net::HTTP.should_recieve(:new).and_return(mock(:post => true))
+    Ostatus::Salmon.should_receive(:new).and_return(salmon)
+    Uri.should_receive(:parse).and_return(uri)
+    Net::HTTP.should_receive(:new).and_return(mock(:post => true))
 
     user = User.create
     user.send_mention_notification(update.id, feed.id)
