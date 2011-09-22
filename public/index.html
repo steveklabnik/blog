@@ -64,6 +64,1048 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/22/extracting-domain-models-a-practical-example.html">Extracting Domain Models: A Practical Example</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-22T10:25:00-07:00" pubdate  data-updated="true" >Sep 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hey everyone! We&#8217;ve been doing a lot of refactoring on rstat.us lately, and I
+wanted to share with you a refactoring that I did. It&#8217;s a real-world example
+of doing the domain models concept that I&#8217;ve been talking about lately.</p>
+
+<h2>Step one: check the tests</h2>
+
+<blockquote><p>I don&#8217;t know how much more emphasized step 1 of refactoring could be: don&#8217;t touch anything that doesn&#8217;t have coverage. Otherwise, you&#8217;re not refactoring; you&#8217;re just changing shit.
+- Hamlet D&#8217;Arcy</p></blockquote>
+
+<p>One of the best reasons to extract extra domain models is that they&#8217;re often
+much easier to test. They have less dependencies, less code, and are much
+simpler than the Mega Models that happen if you have a 1-1 model to table
+ratio.</p>
+
+<p>Let&#8217;s check out the code. It&#8217;s in our User model:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb </span><a href='https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L209'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send an update to a remote user as a Salmon notification</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_mention_notification</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">f</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">u</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">update_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>  <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>  <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>You&#8217;re probably saying &#8220;this is pretty reasonable.&#8221; Prepare to get shocked&#8230;</p>
+
+<p>This code has very little to do with the user, other than using some of the
+User&#8217;s attributes. This really could be factored out into a domain object
+whose job it is to push Salmon notifications. But first, let&#8217;s see if we can get
+some tests in place so we know <em>everything</em> isn&#8217;t broken. Examining this method,
+we need two things: an <code>update_id</code> and a <code>feed_id</code>. Here&#8217;s my first stab at an
+integration test:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">describe</span> <span class="s2">&quot;salmon update&quot;</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;integration regression test&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">create</span>
+</div><div class='line'>    <span class="n">update</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">create</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&lt;xml&gt;&lt;/xml&gt;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;9001&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Ostatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_recieve</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Uri</span><span class="o">.</span><span class="n">should_recieve</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_recieve</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">mock</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span>
+</div><div class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">send_mention_notification</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This is an integration test, we&#8217;re obviously testing stuff with a ton of models.
+After running <code>ruby test/models/notify_via_salmon.rb</code> about a zillion times, I
+ended up with this running test:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;rspec/mocks&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;mongo_mapper&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;whatlanguage&#39;</span>
+</div><div class='line'><span class="no">MongoMapper</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="no">Mongo</span><span class="o">::</span><span class="no">Connection</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">)</span>
+</div><div class='line'><span class="no">MongoMapper</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="s1">&#39;rstatus-test&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/feed&#39;</span>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/update&#39;</span>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/author&#39;</span>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/authorization&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="vg">$:</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">)</span>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/user&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;ostatus&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="s2">&quot;salmon update&quot;</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:destroy</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;integration regression test&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">author</span> <span class="o">=</span> <span class="no">Author</span><span class="o">.</span><span class="n">create</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:username</span> <span class="o">=&gt;</span> <span class="s2">&quot;steve&quot;</span><span class="p">,</span> <span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">author</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">feed</span>
+</div><div class='line'>    <span class="n">update</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:feed_id</span> <span class="o">=&gt;</span> <span class="n">feed</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="ss">:author_id</span> <span class="o">=&gt;</span> <span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;hello world&quot;</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&lt;xml&gt;&lt;/xml&gt;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;9001&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">URI</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">mock</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">send_mention_notification</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Holy. Fuck. Seriously. Let me just quote <a href="http://avdi.org">Avdi Grimm</a>:</p>
+
+<blockquote><p>Mocks, and to some degree RSpec, are like the Hydrogen Peroxide of programming: they fizz up where they encounter subtle technical debt.</p><footer><strong>Avdi Grimm,</strong><cite><a href='http://avdi.org/devblog/2011/04/07/rspec-is-for-the-literate/'>&#8220;Rspec Is for the Literate&#8221;</a></cite></footer></blockquote>
+
+
+<p>This test class is insane. It runs faster than many people&#8217;s integration tests,
+clocking in at about 0.4 seconds. But that&#8217;s still an order of magnitude faster
+than I&#8217;d like. A suite with 200 tests would still take over a minute. Also, look
+at all this junk that we have to do for setup.</p>
+
+<p>All of this pain and effort doesn&#8217;t mean that testing sucks: it means that our
+implementation is terrible. So let&#8217;s use that to guide us. We&#8217;ll try to fix this
+code by eliminating all of this junk.</p>
+
+<h2>Step two: simple extraction</h2>
+
+<p>First, let&#8217;s extract this out to a domain model. Here&#8217;s the new code:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send an update to a remote user as a Salmon notification</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_mention_notification</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">NotifyViaSalmon</span>
+</div><div class='line'>  <span class="kp">extend</span> <span class="nb">self</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">f</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>    <span class="n">u</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">update_id</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, when we run the test (via <code>ruby test/models/notify_via_salmon_test.rb</code>) we
+see an error:</p>
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="mi">1</span><span class="p">)</span> <span class="no">Error</span><span class="p">:</span>
+</div><div class='line'><span class="n">test_0001_integration_regression_test</span><span class="p">(</span><span class="no">SalmonUpdateSpec</span><span class="p">):</span>
+</div><div class='line'><span class="no">NameError</span><span class="p">:</span> <span class="n">undefined</span> <span class="n">local</span> <span class="n">variable</span> <span class="ow">or</span> <span class="nb">method</span> <span class="sb">`author&#39; for NotifyViaSalmon:Module</span>
+</div><div class='line'><span class="sb">    /Users/steveklabnik/src/rstat.us/app/models/notify_via_salmon.rb:8:in `</span><span class="n">mention</span><span class="err">&#39;</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a form of Lean On The Compiler. This test is now failing because it&#8217;s
+relying on stuff that used to be internal to the User, and we don&#8217;t have that
+stuff now. After doing this a few times, we&#8217;re left with this:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send an update to a remote user as a Salmon notification</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_mention_notification</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">NotifyViaSalmon</span>
+</div><div class='line'>  <span class="kp">extend</span> <span class="nb">self</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">f</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>    <span class="n">u</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">update_id</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay. Now we&#8217;re cooking. We have a test that&#8217;s isolated, yet still does what we
+thought it did before.</p>
+
+<h2>Step three: break dependencies</h2>
+
+<p>Next step: let&#8217;s break the hard dependency this method has on both Feed and
+Update. We can do this by moving the finds up into the User method instead of
+keeping them in the mention method:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send an update to a remote user as a Salmon notification</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_mention_notification</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">update</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">update_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">NotifyViaSalmon</span>
+</div><div class='line'>  <span class="kp">extend</span> <span class="nb">self</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay. Tests passing. Sweet. Now we can try testing <em>just</em> the mention method.
+Let&#8217;s try it by killing most of that crap that was in our test:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;rspec/mocks&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/notify_via_salmon&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="s2">&quot;salmon update&quot;</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;integration regression test&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="n">stub</span><span class="p">,</span> <span class="n">stub</span><span class="p">,</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&#8217;s try running this and seeing what happens:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="err">$</span> <span class="n">ruby</span> <span class="nb">test</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">notify_via_salmon_test</span><span class="o">.</span><span class="n">rb</span>
+</div><div class='line'><span class="no">Loaded</span> <span class="n">suite</span> <span class="nb">test</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">notify_via_salmon_test</span>
+</div><div class='line'><span class="no">Started</span>
+</div><div class='line'><span class="n">E</span>
+</div><div class='line'><span class="no">Finished</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="mo">000</span><span class="mi">992</span> <span class="n">seconds</span><span class="o">.</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="mi">1</span><span class="p">)</span> <span class="no">Error</span><span class="p">:</span>
+</div><div class='line'><span class="n">test_0001_integration_regression_test</span><span class="p">(</span><span class="no">SalmonUpdateSpec</span><span class="p">):</span>
+</div><div class='line'><span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="no">MockExpectationError</span><span class="p">:</span> <span class="no">Stub</span> <span class="n">received</span> <span class="n">unexpected</span> <span class="n">message</span> <span class="ss">:author</span> <span class="n">with</span> <span class="p">(</span><span class="n">no</span> <span class="n">args</span><span class="p">)</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>First of all, daaaaamn. 0.001 seconds. Nice. Secondly, okay, we are getting some
+messages sent to our stubs. Let&#8217;s flesh them out to make things pass:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;rspec/mocks&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;ostatus&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/notify_via_salmon&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="s2">&quot;salmon update&quot;</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;integration regression test&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">update</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">URI</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">stub</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay! Note how similar this looks to the previous test. We&#8217;re still mocking a
+bunch of &#8216;external&#8217; stuff. But other than that, our test is pretty simple: we
+make three stubs, and we call our mention method.</p>
+
+<h3>Step four: repeat</h3>
+
+<p>We could do some more work on this method. There are a few things that are
+a bit smelly: the nested stub of User is not great. The fact that we&#8217;re stubbing
+out three external dependencies isn&#8217;t great. But before we get to that, let&#8217;s
+check out another method that looks similar:
+<code>send_{follow,unfollow}_notification</code>. Here&#8217;s some code:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb </span><a href='https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L167'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send Salmon notification so that the remote user</span>
+</div><div class='line'><span class="c1"># knows this user is following them</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_follow_notification</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">f</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_follow</span><span class="p">(</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>  <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1"># Send Salmon notification so that the remote user</span>
+</div><div class='line'><span class="c1"># knows this user has stopped following them</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_unfollow_notification</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">f</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_unfollow</span><span class="p">(</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>  <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Look familliar? Yep! 90% the same code! We&#8217;ll do the same process to these
+methods, just like the other one. Check out this code and test:</p>
+
+<figure role=code><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Send Salmon notification so that the remote user</span>
+</div><div class='line'><span class="c1"># knows this user is following them</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_follow_notification</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">follow</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1"># Send Salmon notification so that the remote user</span>
+</div><div class='line'><span class="c1"># knows this user has stopped following them</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_unfollow_notification</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">unfollow</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1"># Send an update to a remote user as a Salmon notification</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">send_mention_notification</span> <span class="n">update_id</span><span class="p">,</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">to_feed_id</span>
+</div><div class='line'>  <span class="n">update</span> <span class="o">=</span> <span class="no">Update</span><span class="o">.</span><span class="n">first</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">update_id</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">NotifyViaSalmon</span>
+</div><div class='line'>  <span class="kp">extend</span> <span class="nb">self</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">follow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_follow</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">unfollow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_unfollow</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+<span class='line'>41</span>
+<span class='line'>42</span>
+<span class='line'>43</span>
+<span class='line'>44</span>
+<span class='line'>45</span>
+<span class='line'>46</span>
+<span class='line'>47</span>
+<span class='line'>48</span>
+<span class='line'>49</span>
+<span class='line'>50</span>
+<span class='line'>51</span>
+<span class='line'>52</span>
+<span class='line'>53</span>
+<span class='line'>54</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;rspec/mocks&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;ostatus&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/notify_via_salmon&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="no">NotifyViaSalmon</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.mention&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">update</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">URI</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">stub</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.follow&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:from_follow</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">URI</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">stub</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">follow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.unfollow&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:from_unfollow</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">URI</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:parse</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:new</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">stub</span><span class="p">(</span><span class="ss">:post</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">unfollow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can see some of these patterns start to emerge, eh? All of this stuff is
+starting to come together. Let&#8217;s get rid of the URI and Net::HTTP stuff, as it&#8217;s
+just straight up identical in all three. Pretty basic Extract Method:</p>
+
+<figure role=code><figcaption><span>app/models/notify_via_salmon.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">NotifyViaSalmon</span>
+</div><div class='line'>  <span class="kp">extend</span> <span class="nb">self</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">base_uri</span> <span class="o">=</span> <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="n">base_uri</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">send_to_salmon_endpoint</span><span class="p">(</span><span class="n">salmon</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">follow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_follow</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">send_to_salmon_endpoint</span><span class="p">(</span><span class="n">salmon</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">unfollow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_unfollow</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">send_to_salmon_endpoint</span><span class="p">(</span><span class="n">salmon</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">to_rsa_keypair</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="kp">protected</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">send_to_salmon_endpoint</span><span class="p">(</span><span class="n">salmon</span><span class="p">,</span> <span class="n">keypair</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">envelope</span> <span class="o">=</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span> <span class="n">keypair</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Send envelope to Author&#39;s Salmon endpoint</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We run our tests, it still all works. Now we can just mock out the endpoint
+method, and all of our tests on the individual methods become much, much simpler:</p>
+
+<figure role=code><figcaption><span>test/models/notify_via_salmon_test.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+<span class='line'>41</span>
+<span class='line'>42</span>
+<span class='line'>43</span>
+<span class='line'>44</span>
+<span class='line'>45</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;rspec/mocks&#39;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;ostatus&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../app/models/notify_via_salmon&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="no">NotifyViaSalmon</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">before</span> <span class="ss">:each</span> <span class="k">do</span>
+</div><div class='line'>    <span class="no">RSpec</span><span class="o">::</span><span class="no">Mocks</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.mention&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">update</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:send_to_salmon_endpoint</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">mention</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.follow&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:from_follow</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:send_to_salmon_endpoint</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">follow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">it</span> <span class="s2">&quot;.unfollow&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="ss">:to_rsa_keypair</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">feed</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:author</span> <span class="o">=&gt;</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:salmon_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:to_atom</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">salmon</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:to_xml</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:from_unfollow</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:send_to_salmon_endpoint</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">NotifyViaSalmon</span><span class="o">.</span><span class="n">unfollow</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We&#8217;ve managed to get rid of all of the mocking of the URI stuff. It&#8217;s all
+details now. We also have great information about what is actually needed for
+this test: we know exactly what our objects expect the caller to pass. We&#8217;re
+only depending on ourselves and some external libraries. Our tests are fast.
+Overall, I&#8217;m feeling much better about this code than I was before.</p>
+
+<h2>In conclusion</h2>
+
+<p>I hope you&#8217;ll take a few things away from this post.</p>
+
+<p><strong>Start with tests first!</strong> If you don&#8217;t do this, it&#8217;s very easy to introduce
+simple errors. Don&#8217;t be that guy. You know, the one that has to make <a href="https://github.com/hotsh/rstat.us/pull/398/files">pull requests like this&#8230;</a>
+I suck.</p>
+
+<p><strong>Don&#8217;t be afraid to change the tests!</strong> As soon as you&#8217;ve verified that you&#8217;ve
+transcribed the code correctly, don&#8217;t be afraid to just nuke things and start
+again. Especially if you have integration level tests that confirm that your
+features actually <em>work</em>, your unit tests are expendable. If they&#8217;re not useful,
+kill them!</p>
+
+<p><strong>Mock like a motherfucker.</strong> When done correctly, mocks allow you to help
+design your code better, make your tests fast, and truly isolate the unit under
+test. It&#8217;s pretty much all upside, unless you suck at them.</p>
+
+<p><strong>Extract, extract, extract!</strong> Adele Goldberg once said, “In Smalltalk,
+everything happens somewhere else.” Make tons of little methods. They help
+to provide seams that are useful for testing. Smaller methods are also easier to
+understand.</p>
+
+<p><strong>Refactoring is a marathon.</strong> Even with all this work, this code isn&#8217;t the best.
+The tests could even use a little TLC. But it&#8217;s still better than it was before.
+Those who ship, win. Make things a little better, <code>git commit &amp;&amp; git push</code>, repeat.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/09/better-ruby-presenters.html">Better Ruby Presenters</a></h1>
     
     
@@ -77,7 +1119,7 @@
 
 
 
-<time datetime="2011-09-09T12:00:00-04:00" pubdate  data-updated="true" >Sep 9<span>th</span>, 2011</time></p>
+<time datetime="2011-09-09T12:00:00-07:00" pubdate  data-updated="true" >Sep 9<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -523,7 +1565,7 @@ you do stuff like this:</p>
 
 
 
-<time datetime="2011-09-06T00:00:00-04:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
+<time datetime="2011-09-06T00:00:00-07:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1149,7 +2191,7 @@ for length here. Until next time!</p>
 
 
 
-<time datetime="2011-09-04T00:00:00-04:00" pubdate  data-updated="true" >Sep 4<span>th</span>, 2011</time></p>
+<time datetime="2011-09-04T00:00:00-07:00" pubdate  data-updated="true" >Sep 4<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1224,7 +2266,7 @@ find time to invest in you, too.</p>
 
 
 
-<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+<time datetime="2011-08-22T00:00:00-07:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
     
   </header>
 
@@ -1326,7 +2368,7 @@ up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
 
 
 
-<time datetime="2011-08-19T00:00:00-04:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2011</time></p>
+<time datetime="2011-08-19T00:00:00-07:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1395,7 +2437,7 @@ better.&#8221;</p>
 
 
 
-<time datetime="2011-08-12T00:00:00-04:00" pubdate  data-updated="true" >Aug 12<span>th</span>, 2011</time></p>
+<time datetime="2011-08-12T00:00:00-07:00" pubdate  data-updated="true" >Aug 12<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1553,7 +2595,7 @@ in even the smallest of ways.</p>
 
 
 
-<time datetime="2011-08-07T00:00:00-04:00" pubdate  data-updated="true" >Aug 7<span>th</span>, 2011</time></p>
+<time datetime="2011-08-07T00:00:00-07:00" pubdate  data-updated="true" >Aug 7<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1830,7 +2872,7 @@ the same content at <a href="http://rstat.us/users/getsomerestbook">@getsomerest
 
 
 
-<time datetime="2011-07-24T00:00:00-04:00" pubdate  data-updated="true" >Jul 24<span>th</span>, 2011</time></p>
+<time datetime="2011-07-24T00:00:00-07:00" pubdate  data-updated="true" >Jul 24<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -1943,7 +2985,7 @@ they&#8217;ll change the rules, and it&#8217;ll be time to move on.</p>
 
 
 
-<time datetime="2011-07-03T00:00:00-04:00" pubdate  data-updated="true" >Jul 3<span>rd</span>, 2011</time></p>
+<time datetime="2011-07-03T00:00:00-07:00" pubdate  data-updated="true" >Jul 3<span>rd</span>, 2011</time></p>
     
   </header>
 
@@ -2249,410 +3291,6 @@ your own.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/05/21/single-text-many-masters.html">Single Text, Many Masters</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-05-21T00:00:00-04:00" pubdate  data-updated="true" >May 21<span>st</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Hey everyone. Here&#8217;s a draft of an essay I&#8217;ve been working on. I&#8217;d love
-to hear your feedback.</p>
-
-<p>The word &#8216;engineering&#8217; has a deep connection to the word &#8216;trade-offs&#8217; in
-my mind. Most engineering decisions come down to evaluating a few
-differing alternatives, and often multiple factors end up being
-negatively correlated. You can make something stronger, but then it will
-be heavier. It can be made faster, but then it&#8217;s significantly more
-expensive. A good engineer is able to take all of these factors into
-account, and design a system such that it maximizes its effectiveness
-across the sum of all of the relevant constraints. No matter if you consider
-the act of writing software an art, science, or engineering, its indisputable
-that designing complex software systems is identical in this respect. There are
-dozens of different metrics that system architects take into consideration while
-crafting a plan of attack, but but there&#8217;s a deeper question of balance
-here that&#8217;s significantly different than these more traditional
-engineering issues.</p>
-
-<p>Text, in the form of source code, presents unique challenges of
-composition. These difficulties all stem from the same root: source code is a
-singular text, but must be intelligible to multiple, simultaneous
-audiences. More traditional forms of authorship still take audience into
-consideration, of course, but the decision to engage a diverse group of
-people is the choice of the writer. While mass appeal may be
-something that certain authors strive to attain, it&#8217;s not an inherent
-property of their chosen form of expression. Source code, while text,
-inhabits a multiplicity of forms, and software developers are confronted
-with this inherent multi-faceted complexity when composing any
-particular software work. Some of these forms suit certain audiences
-better than others, and so it falls to the programmer to manage which
-form they are currently working in, consider which audience they are
-attempting to write for, and arrange all of these forms amongst one
-another in such a way that any particular audience is able to navigate
-and extract the proper information from the source without confusion.</p>
-
-<p>In this post, I&#8217;ll expand on the concept of audiences for code, and in a
-future post, I&#8217;ll explore the simultaneous forms that code takes.</p>
-
-<h2>The multitude of audiences</h2>
-
-<h3>The default audience: the computer</h3>
-
-<blockquote><p>Science is what we understand well enough to explain to a computer. Art
-is everything else we do.</p>
-
-<ul>
-<li>Don Knuth</li>
-</ul>
-</blockquote>
-
-<p>This may seem obvious, but the when considering the question of &#8220;Who are
-programs written for?&#8221;, many would say &#8220;The computer. Duh.&#8221; In many
-ways, a computer is the primary reader of a particular piece of source
-code. The code that&#8217;s given to a computer will be executed billions of
-times per second, repeated, recalculated, and re-interpreted over and
-over and over again.</p>
-
-<p>The computer&#8217;s native understanding of software comes from machine
-code. Machine code are the binary numbers that the CPU loads into memory
-and processes directly. For example, here&#8217;s a line of machine code for
-an x86 machine that puts the value &#8216;97&#8217; into the AL register, graciously
-stolen <a href="http://en.wikipedia.org/wiki/Assembly_language#Assembly_language">from
-Wikipedia</a>:</p>
-
-<pre><code>10110000 01100001
-</code></pre>
-
-<p>While most would consider this unintelligible, computers were actually
-programmed this way at one time. My uncle actually did this by flipping
-switches to set the binary and pushed a button to store it in memory.
-Unfortunately, what&#8217;s good for the computer isn&#8217;t good for the human
-programmer. This is why assembly language was created. Assembly language
-has a 1 to 1 mapping to machine code, but is much easier for humans to
-understand. Here&#8217;s that same line in assembly:</p>
-
-<pre><code>MOV AL, 61h       ; Load AL with 97 decimal (61 hex)
-</code></pre>
-
-<p>The <code>MOV</code> corresponds with <code>10110</code>, <code>AL</code> maps to <code>000</code>, and 61 hex is
-<code>01100001</code>. <code>MOV</code> is short for &#8216;move,&#8217; though, and this mnemonic is just
-a bit easier to understand than <code>10110</code>. This is the most basic example
-of a compositional trade-off. It&#8217;s not a true trade-off, because they
-map perfectly to one another, but it illustrates the difference between
-composing in a language that the computer understands and one that&#8217;s
-more natural for the programmer. Another important concept comes into
-play, that of <em>compilation</em>. Virtually every work of composition created
-in software is automatically translated to another form before it is
-executed. We&#8217;ll address this concept more fully when we discuss form
-later.</p>
-
-<p>If that&#8217;s where assembly stopped, it would remain a 1 to 1 mapping.
-However, virtually every assembly language also offers macros, and this
-moves the code further away from the machine and destroys the
-synchrony of the two forms. Here&#8217;s an example:</p>
-
-<pre><code>MOV EAX, [EBX]
-</code></pre>
-
-<p>The <code>[]</code> characters change the meaning of <code>EBX</code>, rather than be the
-value stored in that particular register, they imply that the value is a
-memory address, and we want to move the contents of that address to
-<code>EAX</code>. The generated machine code could now be processed into multiple
-valid assembly forms, and so the transformation is only perfect in one
-direction, even if it&#8217;s possible to &#8216;decompile&#8217; it into one of those
-possible encodings. This is considered to be an acceptable trade-off for
-human readability; we very rarely want to turn machine code back into
-assembly.</p>
-
-<p>There&#8217;s also a jump between higher level languages, as well. Here&#8217;s the
-assembly statements that adds 2 and 3 together:</p>
-
-<pre><code>MOV EAX, 2
-ADD EAX, 3
-</code></pre>
-
-<p><code>ADD</code>, of course, is the statement that adds a number to the register
-that&#8217;s given. Now <code>EAX</code> has the value 5. Here&#8217;s the same code, but in C:</p>
-
-<pre><code>int x = 2;
-x = x + 3;
-</code></pre>
-
-<p>Pretty simple. You can see how the C is much easier to understand; we
-say what type <code>x</code> is (an integer), and it&#8217;s a bit more explicit. <code>x</code> is
-equal to <code>x</code> + three. However, since the C is divorced from the machine,
-and is written for the person, we can change our compiler to make
-assembly code that works on a different kind of processor architecture.
-If we were to compile the above C for x86_64, a 64 bit version of x86,
-we might get some assembly that&#8217;d look like this:</p>
-
-<pre><code>MOVL RAX, 2
-ADDL RAX, 3
-</code></pre>
-
-<p>While this code looks similar to the above, it is quite different. This
-uses the native 64 bit types, rather than the 32 bit types above. The
-other important thing is that by writing code that&#8217;s divorced from the
-machine, and written for people, we&#8217;re able to translate it into the
-code for multiple machines. If we had written the assembly above, when
-moving to another architecture, it would have required a total re-write.
-And while this particular sample looks very similar, a more complex
-piece of code will be significantly divergent, but I don&#8217;t want to go
-into the details of two kinds of assembly code. Because we can define
-the languages for humans, and the language of computers is somewhat
-beholden to the physical machine itself, it&#8217;s significantly easier to do
-the translation from C to the two kinds of machines, rather than trying
-to translate from one machine to another. What we lose in this kind of
-translation, though, is efficiency. Code that was hand-crafted for each
-machine would be more performant, and better represent each individual
-platform.</p>
-
-<p>Even though we may choose to use a language that&#8217;s more understandable
-to people, it still has to be understood by the computer in some form.
-This translation will introduce some amount of penalty, and so it&#8217;s
-important that this gets taken into consideration. Sometimes, code must
-be written in a way that&#8217;s not easy for a person to read, because it&#8217;s
-easier for the computer to be efficient with a more opaque
-implementation.</p>
-
-<h3>The reflexive audience: the programmer himself</h3>
-
-<blockquote><p>Debugging is twice as hard as writing the code in the first place.
-Therefore, if you write the code as cleverly as possible, you are, by
-definition, not smart enough to debug it.</p>
-
-<ul>
-<li>Brian Kernighan</li>
-</ul>
-</blockquote>
-
-<p>Everyone who writes code has experienced this at some time or another.
-You write a whole bunch of code, and then a few months goes by, and you
-take a look at it, and it&#8217;s absolutely unintelligible. This happens
-because at the time of inception, the author of a particular piece of
-code has an incredibly close relationship to it. As it was just written,
-the code is obvious to the author. They&#8217;re in the proper mindset to
-understand the intention that was drawn upon to necessitate bringing
-those lines into the world, and so no extra explanation is necessary. As
-time goes on, however, the author becomes more close to the third
-audience, other programmers. It&#8217;s important for coders to recognize this
-fact, and take preventative steps to ameliorate this confusion.</p>
-
-<p>Even though the author will approach the position of the other audience
-eventually, this audience is distinct because there is a certain level
-of explanation that sits between undocumented, inexpressive code and
-code that&#8217;s well explained, and this is the position most code is in. An
-explanation that&#8217;s helpful to those who understand the code, but not to
-those who don&#8217;t is better than nothing. This sort of code may be overly
-contextual, and could use some added information to improve its clarity.</p>
-
-<h3>The other audience: colleagues and coworkers</h3>
-
-<blockquote><p>Always code as if the guy who ends up maintaining your code is a violent
-psychopath who knows where you live.</p>
-
-<ul>
-<li>Martin Golding</li>
-</ul>
-</blockquote>
-
-<p>As I touched on earlier, there&#8217;s a similarity between the &#8216;other&#8217;
-audience and the reflexive. The primary distinction is drawn around the
-proximity to the source. The other does not have the advantage of having
-authored the code, and therefore doesn&#8217;t have the native&#8217;s understanding
-of the underlying logical organization of the source. This disadvantage
-can be overcome via composing in such a manner that the meaning is
-emergent from the design. Even if it&#8217;s too complex to be obvious, good
-documentation can address this particular deficiency.</p>
-
-<p>Ultimately, much of software design is about modeling. Software that
-solves a particular problem should emulate the nature of the challenge
-it&#8217;s attempting to address. If this can be achieved, it&#8217;s significantly
-easier for those who understand the problem to figure out how the
-software works. Therefore, good design can help improve the
-effectiveness of a given piece of source to communicate its intent.
-Along a similar vector, if the design is similar to code that solves a
-particular issue, it&#8217;s easier to understand. As an example, a friend
-recently asked for feedback about an interface that he&#8217;d designed. It
-loaded a save game file for StarCraft 2. This is what he came up with:</p>
-
-<pre><code>replay_file = File.new("spec/fixtures/1v1-game1.sc2replay")
-@replay = SC2Refinery::Parser.parse(replay_file)
-</code></pre>
-
-<p>However, Ruby already has several kinds of code in its standard library
-that loads some information from disk and parses it into some kind of
-data structure that you can use in your program. The JSON, YAML, and
-Marshall classes already use a set of methods to import and export data,
-and they&#8217;re named <code>load</code> and <code>dump</code>, and they&#8217;re part of the class
-directly. Also, in this case, the user of the code shouldn&#8217;t need to
-deal with the creation of a file, since it&#8217;s unreasonable to assume that
-a game replay would come from any other source. Therefore, after some
-discussion, he adopted the following interface instead:</p>
-
-<pre><code>@replay = SC2Refinery.load("spec/fixtures/1v1-game1.sc2replay")
-</code></pre>
-
-<p>This is much nicer to use, and is much simpler. While it may not seem
-like a whole lot, when rules like this are applied across an entire
-codebase, they can significantly increase understanding. Multiple
-reductions of mental overhead add up quickly.</p>
-
-<p>My new favorite trick for adding a little bit of modeling that
-significantly reduces overhead for the user is the Presenter Pattern.
-Jeff Casimir demonstrated this very clearly in his presentation at
-RailsConf 2011, &#8221;<a href="http://dl.dropbox.com/u/69001/Fat%20Models%20Aren%27t%20Enough%20-%20RailsConf.pdf">Fat Models Aren&#8217;t
-Enough</a>&#8221;.
-Here&#8217;s a slightly modified example. Imagine that we have a system that
-manages students, and we&#8217;d like to display a report card for them. We
-might start with some code that looks like this:</p>
-
-<pre><code>student = Student.find(options[:student_id])
-term = Term.find(options[:term_id])
-report_type = ReportType.find(options[:report_type])
-
-puts "#{student.last_name}, #{student.first_name}"
-puts "#{report_type.report_title} for #{term.start_date} to #{term.end_date}"
-student.courses.each do |course|
-  course_report = student.report_data_for_course(course)
-  puts course_report.to_s
-end
-</code></pre>
-
-<p>Honestly, until this past week, this is the exact code that I would have
-written. But it turns out that we can do better. Basically, we&#8217;re
-displaying some information that comes from a combination of three
-different objects. If we think about it some more, we&#8217;re really trying
-to display a report card. So let&#8217;s make an object that represents the
-card, and delegates to its sub-objects. It will then know how to display
-itself.</p>
-
-<pre><code>class ReportCard
-  delegate :start_date, :end_date, :to =&gt; :term
-  delegate :first_name, :last_name, :courses, :report_data_for_course, :to =&gt; :student
-  delegate :report_title, :to =&gt; :report_type
-
-  def initialize(params)
-    @student = Student.find params[:student_id]
-    @term = Term.find params[:term_id]
-    @report_type = ReportType.find params[:report_type_id]
-  end
-
-  def student_name
-    [last_name, first_name].join(", ")
-  end
-
-  def title
-    "#{report_title} for #{start_date} to #{end_date}"
-  end
-
-  def course_reports
-    out = ""
-    courses.each do |course|
-      out += report_data_for_course(course)
-    end
-    out
-  end
-end
-</code></pre>
-
-<p>Now, this is a lot of code. However, as you can see, it&#8217;s all focused on
-composing the information and exposing an interface that makes sense for
-a report card. Using it is super easy:</p>
-
-<pre><code>report = ReportCard.new(options)
-puts report.student_name
-puts report.title
-puts report.course_reports
-</code></pre>
-
-<p>Bam! It&#8217;s incredibly obvious. This code is much more clear than before.
-We&#8217;ll see if I&#8217;m still as hot on this pattern as I am now in a few
-months, but I feel the extra object adds a significant amount of
-clarity.</p>
-
-<p>If the model is too hard to create, or if additional clarity is needed,
-documentation in the form of comments can also help to improve the
-understanding of the &#8216;other&#8217; audience. Comments can be a difficult form
-of prose to write, because they need to be written at the correct level
-of abstraction. If they simply repeat what the code does, they&#8217;re
-useless, and if they&#8217;re too high-level, certain details and semantics
-may not be made clear.</p>
-
-<p>Individual bits of code can also be made more clear by developing a
-narrative within any particular method that&#8217;s being written. Telling a
-story with code may not be something you&#8217;ve considered before, but it&#8217;s
-really about maintaining a proper flow in the actions your code is
-taking. For example, if there&#8217;s a bunch of error handling strewn about
-inside of a method, it&#8217;s less clear than bunching all of the error
-handling near the end. Most code should be an act in three parts: input,
-processing, and output. If these three parts are mixed together, it can
-appear much more complicated.</p>
-
-<h3>The forgotten audience: end-users</h3>
-
-<blockquote><p>If I asked my customers what they wanted, they&#8217;d have told me, &#8220;A
-faster horse.&#8221;</p>
-
-<ul>
-<li>Henry Ford</li>
-</ul>
-</blockquote>
-
-<p>In the end, all software is used by someone. Use-value is the driving
-force of virtually all code. Code that doesn&#8217;t do anything may be making
-some kind of important philosophical statement, but isn&#8217;t really the
-sort that I&#8217;m talking about.</p>
-
-<p>The introduction of a user imposes significant restrictions upon the way
-that code is composed. End-users do not need to understand the code
-itself, but they do need to be able to understand its external
-interfaces. These needs place an imposition on the way that the code
-needs to be written, because it <em>must</em> address this issue of interface.
-Sometimes, interface requirements can create a burden on the internal
-implementation. Needing to support certain behaviors and forms can
-create complexity for an implementor.</p>
-
-<p>Documentation created for end users must be completely different than
-that which is created for those inspecting the code itself. Most
-end-users will not be literate in the arts of software development, and
-so approach the software object in an entirely different way than those
-who write code do. Yet, the same semantics must be passed on to them,
-but at a higher level. There&#8217;s a strong movement within the community to
-start designing software with this kind of end-user documentation in
-mind, called <a href="http://tom.preston-werner.com/2010/08/23/readme-driven-development.html">README driven development</a>.
-There are advantages to thinking on this level when beginning, but a
-nice effect of doing it first is that you can ensure it gets done. A
-surprising amount of software has poor documentation for its users,
-because it&#8217;s created after the software is finished, and at that time
-there&#8217;s intense pressure to ship it out the door. Writing down
-information for the end user first ensures that it&#8217;s done properly, that
-all development works in accordance with the documentation, and that all
-of the use-cases for an end-user have been thought of and are being
-addressed.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -2681,6 +3319,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/22/extracting-domain-models-a-practical-example.html">Extracting Domain Models: A Practical Example</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/09/better-ruby-presenters.html">Better Ruby Presenters</a>
       </li>
     
@@ -2694,10 +3336,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple To Contribute To Ruby&#8217;s Documentation</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz is Nice So We Are Nice</a>
       </li>
     
   </ul>
