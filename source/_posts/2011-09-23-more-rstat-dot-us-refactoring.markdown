@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "More rstat.us Refatoring"
+title: "More rstat.us Refactoring"
 date: 2011-09-23 17:03
 comments: true
 categories:

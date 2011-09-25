@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-25T10:17:20-07:00</updated>
+  <updated>2011-09-25T12:03:15-07:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -13,10 +13,10 @@
 
   
   <entry>
-    <title>More rstat.us Refatoring</title>
-    <link href="http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refatoring.html"/>
+    <title>More rstat.us Refactoring</title>
+    <link href="http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring.html"/>
     <updated>2011-09-23T17:03:00-07:00</updated>
-    <id>http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refatoring</id>
+    <id>http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring</id>
     <content type="html">&lt;p&gt;Hey everyone! I just wanted to share One More Thing with you about this rstat.us
 refactoring.&lt;/p&gt;
 
