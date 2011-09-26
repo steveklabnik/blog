@@ -4,13 +4,40 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-25T12:03:15-07:00</updated>
+  <updated>2011-09-26T08:57:45-07:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>I&#8217;m Deleting My Facebook Tonight.</title>
+    <link href="http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight.html"/>
+    <updated>2011-09-26T08:34:00-07:00</updated>
+    <id>http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight</id>
+    <content type="html">&lt;p&gt;Well, &lt;a href=&quot;http://adrianshort.co.uk/2011/09/25/its-the-end-of-the-web-as-we-know-it/&quot;&gt;it&amp;#8217;s the end of the web as we know it&lt;/a&gt;.
+I&amp;#8217;d already been thinking about this all weekend, and last night, I decided. I
+just can&amp;#8217;t deal with Facebook&amp;#8217;s crazy privacy stuff anymore. I mean, I already
+basically &lt;a href=&quot;http://rstat.us&quot;&gt;forked Twitter&lt;/a&gt; over their ToS, and Facebook has been
+a lot more evil for a lot longer. Frictionless sharing is pretty much the last
+straw.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#8217;ll be using this as an excuse to keep helping out with the federated web.
+There&amp;#8217;s a lot of cool stuff in this area, but it needs help. If you&amp;#8217;re a
+developer, consider helping out with the &lt;a href=&quot;https://github.com/LockerProject/Locker&quot;&gt;Locker Project&lt;/a&gt;
+or &lt;a href=&quot;https://github.com/homesteading&quot;&gt;the Homesteading Project&lt;/a&gt;. The only way
+that we can prevent people from becoming digial sharecroppers is by helping them
+to &amp;#8216;own their own land.&amp;#8217;&lt;/p&gt;
+
+&lt;p&gt;If we&amp;#8217;re Facebook friends, you can always find out how to reach me at
+&lt;a href=&quot;http://steveklabnik.com&quot;&gt;http://steveklabnik.com&lt;/a&gt;. Please be careful, and
+consider if Facebook&amp;#8217;s privacy settings are really worth it to you. They may be,
+and they may not. I&amp;#8217;m under no illusions that the vast majority of people will
+give up Facebook, but I figured I&amp;#8217;d warn you anyways.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>More rstat.us Refactoring</title>
@@ -4021,66 +4048,6 @@ there&amp;#8217;s a space both within and outside of the enclosure. A self and a
 
 &lt;p&gt;&amp;#8230; so yeah. That&amp;#8217;s my summary. I&amp;#8217;m still digesting a lot of this stuff, and
 so I may have more to say about it later.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Goals for 2011</title>
-    <link href="http://blog.steveklabnik.com/2011/01/02/goals-for-2011.html"/>
-    <updated>2011-01-02T00:00:00-08:00</updated>
-    <id>http://blog.steveklabnik.com/2011/01/02/goals-for-2011</id>
-    <content type="html">&lt;p&gt;This year I&amp;#8217;m happy to report that I have much more upbeat plans than last
-year&amp;#8217;s kind of sad post. With that said, here&amp;#8217;s my 2011 goals:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;I want to work for other people 2 days per week on average for the year.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I want to write something every day&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I want to keep building on the initial success that Hackety Hack&amp;#8217;s 1.0 launch
-has brought. I&amp;#8217;d like to get a new release out every month or so, with a 2.0 for
-Christmas 2011.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I want to start exercising again. My current lifestyle is still too sedentary
-for my liking.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I want to eat better.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I want to start logging my activities every day.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Most of these are kinda standard. I used to go to the gym all the time, but
-I&amp;#8217;ve never eaten healthily. Both of these things are going to become more
-important as I age, however, and so I&amp;#8217;m starting to actually give them serious
-consideration.&lt;/p&gt;
-
-&lt;p&gt;Hackety Hack had an impressive 1.0 launch, but I have lots of work to do.
-Please check out the &lt;a href=&quot;http://blog.hackety-hack.com/&quot;&gt;Hackety Hack blog&lt;/a&gt; tomorrow for a report on that.
-Basically, I now have a sizable userbase to attend to, and they&amp;#8217;ve found a
-bunch of bugs that I need to iron out before starting to build more stuff.&lt;/p&gt;
-
-&lt;p&gt;The logging is an idea that I got from &lt;a href=&quot;http://www.sebastianmarshall.com/&quot;&gt;Sebastian Marshall&lt;/a&gt;. We&amp;#8217;ve had some
-good conversation recently, and we talked briefly about the importance of
-measuring things. You can only improve things if you know what&amp;#8217;s actually
-wrong&amp;#8230; I&amp;#8217;m going to be tracking the time that I do various activities, and
-seeing if I can improve. If I feel this is working, I&amp;#8217;ll write about it in a
-month or so.&lt;/p&gt;
-
-&lt;p&gt;I&amp;#8217;ve already made some progress on all of these, actually. Obviously, most of
-them can only truly be realized in a year&amp;#8217;s time, but here&amp;#8217;s what I&amp;#8217;ve got
-going:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;I&amp;#8217;ve got my logging set up going. I&amp;#8217;m trying to figure out how to make it as
-unobtrusive as possible, but I think I have a good first run at it.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I&amp;#8217;ve got a set up for the work situation, and if all goes well, that should
-be accomplished. I originally thought I&amp;#8217;d have to front-load a bit, but it
-seems like I&amp;#8217;ll be doing this most of the year.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Working that little will enable me to really accomplish my Hackety goals.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Now that Maria is graduated, she&amp;#8217;s got some time to cook things, and she&amp;#8217;s
-also interested in eating better, and her habits are better than mine already.
-Hopefully this will lead to success.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Logging should help keep my eyes on the prize for my exercise and writing goals.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;So, that&amp;#8217;s it! Good luck with your goals in the new year!&lt;/p&gt;
 </content>
   </entry>
   
