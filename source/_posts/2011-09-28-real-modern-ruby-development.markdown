@@ -24,6 +24,13 @@ the code, though, because I committed my account credentials into the git repo
 to simplify things, so I'll just be describing it to you. Check my other posts
 for code stuff. ;)
 
+Oh, and one more thing: lots of this stuff is about getting 'iteration zero' out
+of the way: it's setup work that you have to do to set the tone for everything
+else. In its own way, it's also a tooling overview, I've just focused on the
+tools that help the process rather than the language stuff. I've already written
+a more 'dev proccess' style post over at [Timeless](http://timelessrepo.com/bdd-with-rspec-and-steak),
+about BDD.
+
 ## rvm --rvmrc --create 1.9.2@hello\_text
 
 First up: decide what Ruby you're using. I talked breifly about MRI, Rubinius,

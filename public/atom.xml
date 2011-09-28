@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-28T06:58:14-07:00</updated>
+  <updated>2011-09-28T07:12:25-07:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -34,6 +34,13 @@ back. I thought I&amp;#8217;d share that process with you, too. I ended up throw
 the code, though, because I committed my account credentials into the git repo
 to simplify things, so I&amp;#8217;ll just be describing it to you. Check my other posts
 for code stuff. ;)&lt;/p&gt;
+
+&lt;p&gt;Oh, and one more thing: lots of this stuff is about getting &amp;#8216;iteration zero&amp;#8217; out
+of the way: it&amp;#8217;s setup work that you have to do to set the tone for everything
+else. In its own way, it&amp;#8217;s also a tooling overview, I&amp;#8217;ve just focused on the
+tools that help the process rather than the language stuff. I&amp;#8217;ve already written
+a more &amp;#8216;dev proccess&amp;#8217; style post over at &lt;a href=&quot;http://timelessrepo.com/bdd-with-rspec-and-steak&quot;&gt;Timeless&lt;/a&gt;,
+about BDD.&lt;/p&gt;
 
 &lt;h2&gt;rvm &amp;#8211;rvmrc &amp;#8211;create 1.9.2@hello_text&lt;/h2&gt;
 
