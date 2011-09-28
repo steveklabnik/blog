@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>A word about why, whyday, and Hackety Hack - Literate Programming</title>
+  <title>(Real) Modern Ruby Development - Literate Programming</title>
   <meta name="author" content="Steve Klabnik">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html"/>
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html"/>
   <link href="/favicon.png" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -61,7 +61,7 @@
   
   <header>
     
-      <h1 class="entry-title">A Word About Why, Whyday, and Hackety Hack</h1>
+      <h1 class="entry-title">(Real) Modern Ruby Development</h1>
     
     
       <p class="meta">
@@ -74,51 +74,110 @@
 
 
 
-<time datetime="2010-08-19T00:00:00-07:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2010</time></p>
+<time datetime="2011-09-28T06:31:00-07:00" pubdate  data-updated="true" >Sep 28<span>th</span>, 2011</time></p>
     
   </header>
 
 
-<div class="entry-content"><p>Today is Whyday. A programmer&#8217;s holiday. Today is the day that we
-don&#8217;t forget that programming isn&#8217;t all Agile and driven by behavior
-and Serious Business. Inside each cubicle, the hacker spirit is trying
-to burst free. Today, it will.</p>
+<div class="entry-content"><p>I came across a blog post the other day titled <a href="http://ascarter.net/2011/09/25/modern-ruby-development.html">Modern Ruby Development</a>.
+While it&#8217;s a perfectly fine blog post (other than the digs at rvm&#8230;) it really
+should have been titled something more along the lines of &#8220;My default tooling
+to build a Rails application.&#8221; I thought of this yesterday, as I was invited
+to show up at <a href="http://www.vertigo.com/">Vertigo</a> and show them how we do things
+in the Open Source world. Vertigo builds lots of cool things, but they tend to
+be very .NET centric, and it was neat for both of us to see how the other half
+lives.</p>
 
-<p>Today, I&#8217;m also releasing a prerelease version of Hackety Hack 1.0.
-It&#8217;s been a long time coming. The announcement of Whyday got me
-thinking about the past year of a world without _why, and the &#8216;your
-domain is about to expire&#8217; notices got me thinking about how I&#8217;ve now
-been the head of the Hackety Hack project for almost 12 months, too. I
-don&#8217;t like thinking about this, because I almost let _why down.</p>
+<p>Shortly before my &#8216;presentation,&#8217; we decided that I&#8217;d basicaly just build a
+little web app in front of them. Live coding to the max! We decided for maximum
+awesome, and since I was in town for the Twilio conference, that I&#8217;d make a
+Twilio app that they could text and it&#8217;d text you &#8216;hello world: you said #{msg}&#8221;
+back. I thought I&#8217;d share that process with you, too. I ended up throwing away
+the code, though, because I committed my account credentials into the git repo
+to simplify things, so I&#8217;ll just be describing it to you. Check my other posts
+for code stuff. ;)</p>
 
-<p>I never met _why. I can&#8217;t really claim to know him, or know what his
-intentions were, but I think about him a lot. &#8216;_why&#8217; the persona,
-really embodies everything that I love about software. The world owes
-_why a great debt, and I&#8217;d like to think that I&#8217;m doing what I can to
-repay him.</p>
+<h2>rvm &#8211;rvmrc &#8211;create 1.9.2@hello_text</h2>
 
-<p>At least, I am now. I don&#8217;t like to think about roughly 6 or 8 months
-of the last year of Hackety Hack; I did an exceptionally poor job of
-being a steward. Being alone, having no help, and having a bit of an
-identity crisis is an excuse; you can decide if it&#8217;s a good or poor
-one. But things have been looking up, and we&#8217;ve got some momentum, I
-owe a great debt to Fela for helping make this summer happen.</p>
+<p>First up: decide what Ruby you&#8217;re using. I talked breifly about MRI, Rubinius,
+and JRuby, and some pros and cons for each. I still tend to use MRI for my
+production code at the moment, but soon, rbx will become my default.</p>
 
-<p>I really do feel that the Little Coder still has a predicament, and
-I&#8217;m almost to the point where they can find some solace. I still feel
-that Hackety Hack could become an absolutely invauable project, I&#8217;ve
-just got to keep going. I can, I will, and I am. But I wouldn&#8217;t be
-able to if so many people didn&#8217;t care, say a nice world, or lend a
-hand.</p>
+<p>I use rvm because it does exactly what I want.</p>
 
-<p>So thanks. And as ashbb would say, &#8220;Let&#8217;s all have fun with Hackety Hack!&#8221;</p>
+<h2>mvim README.md</h2>
 
-<p>Happy Whyday.</p>
+<p>I really enjoy <a href="http://tom.preston-werner.com/2010/08/23/readme-driven-development.html">README driven development</a>.
+I didn&#8217;t actually demo this due to time constraints, but I generally write at
+least a minimal README.md before doing anything else. During Windy City Rails,
+Tom shared something that he likes doing: <code>mv README.md SPEC.md</code>. That way,
+you can keep your actual README in sync with what the code does right now, but
+have the final one that you want to work towards too.</p>
 
-<p>EDIT: The release is now out. See the announcement <a href="http://hackety-hack.com/posts/happy_whyday">here</a>, and get it
-<a href="http://hackety-hack.com/">here</a>.</p>
+<h2>git push origin</h2>
 
-<p>Thanks!</p>
+<p>Now that we have a file, we can push it up to GitHub. A few clicks on the web,
+a <code>git add remote</code> and <code>git push -u origin master</code> and we&#8217;re off to the races.</p>
+
+<h2>mvim Gemfile &amp;&amp; bundle</h2>
+
+<p>Next up we talked about Bundler, Gemfiles, and managing gems. I talked about
+the ability to run your own private gem server for internal gems, and how
+easy it is to build and publish a gem.</p>
+
+<h2>mkdir spec</h2>
+
+<p>I then generally type this. I would be lying to you if I told you that I do TDD
+100% of the time. Sometimes, I get lazy. But I try to. And since testing is such
+a huge part of Ruby culture, and we have world-class testing tools, this is
+where I started.</p>
+
+<p>I wrote specs for a model class called SmsGateway. This class would handle
+sending a message to a phone via Twilio. I was able to show off rspec, talk
+about DSLs, mocking, and TDD.</p>
+
+<h2>mvim something.rb</h2>
+
+<p>In this case it&#8217;s sms_gateway.rb, but you know what I mean. Write some code,
+<code>rspec spec/sms_gateway_spec.rb</code>, repeat. Red, Green, Refactor. Wheee!</p>
+
+<h2>mvim .travis.yml</h2>
+
+<p>I wanted to show Travis off, so in my demo I did this before implementing the
+gateway class, but normally I&#8217;d do this after the first spec passes.
+Continuous Integration and even Continuous Deployment are awesome. Travis
+makes it super easy.</p>
+
+<h2>Sign up for external services</h2>
+
+<p>I went over to Twilio&#8217;s site, registered a new account, and got my credentials.
+I used their docs to figure out where to put them, and how to get it all going
+inside my gateway class (I just mocked it out before), and talked about how
+needing to Google for docs is a weakness of Ruby.</p>
+
+<h2>heroku create &amp;&amp; git push heroku master</h2>
+
+<p>Then I showed them how to get going with Heroku, and how easy it was to start
+giving them hundreds of dollars per month when you need to scale. .NET people
+are used to paying for everything. ;)</p>
+
+<p>I also showed off one of my latest projects, which is an IRC bot that lets me
+deploy rstat.us into production. I have some serious Hubot envy. :D</p>
+
+<h2>&#8230; repeat!</h2>
+
+<p>I&#8217;d be lying if I said it worked the first time, I accidentally made a loop
+where the app texted itself. Whoops! But that was cool, and showing off my
+debugging process (I&#8217;m a <code>puts/throw params</code> debugger) was fun, as well. After
+realizing what I did wrong, we had the app working.</p>
+
+<h2>It&#8217;s not quite perfect</h2>
+
+<p>This dev process isn&#8217;t perfect yet. Nothing ever is. I&#8217;m always trying to
+improve upon it, but I&#8217;m pretty happy with how quickly I&#8217;m able to turn out
+new projects with a reasonable amount of quality. What&#8217;s your workflow? How
+does mine suck? <a href="mailto:steve@steveklabnik.com">Email me</a>, I&#8217;d love to hear
+about it.</p>
 </div>
 
 
@@ -139,7 +198,7 @@ hand.</p>
 
 
 
-<time datetime="2010-08-19T00:00:00-07:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2010</time>
+<time datetime="2011-09-28T06:31:00-07:00" pubdate  data-updated="true" >Sep 28<span>th</span>, 2011</time>
       
 
 
@@ -147,7 +206,7 @@ hand.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2010/08/19/a-word-about-why-whyday-and-hackety-hack.html" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>

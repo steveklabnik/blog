@@ -4,13 +4,120 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-26T08:57:45-07:00</updated>
+  <updated>2011-09-28T06:58:14-07:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>(Real) Modern Ruby Development</title>
+    <link href="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html"/>
+    <updated>2011-09-28T06:31:00-07:00</updated>
+    <id>http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development</id>
+    <content type="html">&lt;p&gt;I came across a blog post the other day titled &lt;a href=&quot;http://ascarter.net/2011/09/25/modern-ruby-development.html&quot;&gt;Modern Ruby Development&lt;/a&gt;.
+While it&amp;#8217;s a perfectly fine blog post (other than the digs at rvm&amp;#8230;) it really
+should have been titled something more along the lines of &amp;#8220;My default tooling
+to build a Rails application.&amp;#8221; I thought of this yesterday, as I was invited
+to show up at &lt;a href=&quot;http://www.vertigo.com/&quot;&gt;Vertigo&lt;/a&gt; and show them how we do things
+in the Open Source world. Vertigo builds lots of cool things, but they tend to
+be very .NET centric, and it was neat for both of us to see how the other half
+lives.&lt;/p&gt;
+
+&lt;p&gt;Shortly before my &amp;#8216;presentation,&amp;#8217; we decided that I&amp;#8217;d basicaly just build a
+little web app in front of them. Live coding to the max! We decided for maximum
+awesome, and since I was in town for the Twilio conference, that I&amp;#8217;d make a
+Twilio app that they could text and it&amp;#8217;d text you &amp;#8216;hello world: you said #{msg}&amp;#8221;
+back. I thought I&amp;#8217;d share that process with you, too. I ended up throwing away
+the code, though, because I committed my account credentials into the git repo
+to simplify things, so I&amp;#8217;ll just be describing it to you. Check my other posts
+for code stuff. ;)&lt;/p&gt;
+
+&lt;h2&gt;rvm &amp;#8211;rvmrc &amp;#8211;create 1.9.2@hello_text&lt;/h2&gt;
+
+&lt;p&gt;First up: decide what Ruby you&amp;#8217;re using. I talked breifly about MRI, Rubinius,
+and JRuby, and some pros and cons for each. I still tend to use MRI for my
+production code at the moment, but soon, rbx will become my default.&lt;/p&gt;
+
+&lt;p&gt;I use rvm because it does exactly what I want.&lt;/p&gt;
+
+&lt;h2&gt;mvim README.md&lt;/h2&gt;
+
+&lt;p&gt;I really enjoy &lt;a href=&quot;http://tom.preston-werner.com/2010/08/23/readme-driven-development.html&quot;&gt;README driven development&lt;/a&gt;.
+I didn&amp;#8217;t actually demo this due to time constraints, but I generally write at
+least a minimal README.md before doing anything else. During Windy City Rails,
+Tom shared something that he likes doing: &lt;code&gt;mv README.md SPEC.md&lt;/code&gt;. That way,
+you can keep your actual README in sync with what the code does right now, but
+have the final one that you want to work towards too.&lt;/p&gt;
+
+&lt;h2&gt;git push origin&lt;/h2&gt;
+
+&lt;p&gt;Now that we have a file, we can push it up to GitHub. A few clicks on the web,
+a &lt;code&gt;git add remote&lt;/code&gt; and &lt;code&gt;git push -u origin master&lt;/code&gt; and we&amp;#8217;re off to the races.&lt;/p&gt;
+
+&lt;h2&gt;mvim Gemfile &amp;amp;&amp;amp; bundle&lt;/h2&gt;
+
+&lt;p&gt;Next up we talked about Bundler, Gemfiles, and managing gems. I talked about
+the ability to run your own private gem server for internal gems, and how
+easy it is to build and publish a gem.&lt;/p&gt;
+
+&lt;h2&gt;mkdir spec&lt;/h2&gt;
+
+&lt;p&gt;I then generally type this. I would be lying to you if I told you that I do TDD
+100% of the time. Sometimes, I get lazy. But I try to. And since testing is such
+a huge part of Ruby culture, and we have world-class testing tools, this is
+where I started.&lt;/p&gt;
+
+&lt;p&gt;I wrote specs for a model class called SmsGateway. This class would handle
+sending a message to a phone via Twilio. I was able to show off rspec, talk
+about DSLs, mocking, and TDD.&lt;/p&gt;
+
+&lt;h2&gt;mvim something.rb&lt;/h2&gt;
+
+&lt;p&gt;In this case it&amp;#8217;s sms_gateway.rb, but you know what I mean. Write some code,
+&lt;code&gt;rspec spec/sms_gateway_spec.rb&lt;/code&gt;, repeat. Red, Green, Refactor. Wheee!&lt;/p&gt;
+
+&lt;h2&gt;mvim .travis.yml&lt;/h2&gt;
+
+&lt;p&gt;I wanted to show Travis off, so in my demo I did this before implementing the
+gateway class, but normally I&amp;#8217;d do this after the first spec passes.
+Continuous Integration and even Continuous Deployment are awesome. Travis
+makes it super easy.&lt;/p&gt;
+
+&lt;h2&gt;Sign up for external services&lt;/h2&gt;
+
+&lt;p&gt;I went over to Twilio&amp;#8217;s site, registered a new account, and got my credentials.
+I used their docs to figure out where to put them, and how to get it all going
+inside my gateway class (I just mocked it out before), and talked about how
+needing to Google for docs is a weakness of Ruby.&lt;/p&gt;
+
+&lt;h2&gt;heroku create &amp;amp;&amp;amp; git push heroku master&lt;/h2&gt;
+
+&lt;p&gt;Then I showed them how to get going with Heroku, and how easy it was to start
+giving them hundreds of dollars per month when you need to scale. .NET people
+are used to paying for everything. ;)&lt;/p&gt;
+
+&lt;p&gt;I also showed off one of my latest projects, which is an IRC bot that lets me
+deploy rstat.us into production. I have some serious Hubot envy. :D&lt;/p&gt;
+
+&lt;h2&gt;&amp;#8230; repeat!&lt;/h2&gt;
+
+&lt;p&gt;I&amp;#8217;d be lying if I said it worked the first time, I accidentally made a loop
+where the app texted itself. Whoops! But that was cool, and showing off my
+debugging process (I&amp;#8217;m a &lt;code&gt;puts/throw params&lt;/code&gt; debugger) was fun, as well. After
+realizing what I did wrong, we had the app working.&lt;/p&gt;
+
+&lt;h2&gt;It&amp;#8217;s not quite perfect&lt;/h2&gt;
+
+&lt;p&gt;This dev process isn&amp;#8217;t perfect yet. Nothing ever is. I&amp;#8217;m always trying to
+improve upon it, but I&amp;#8217;m pretty happy with how quickly I&amp;#8217;m able to turn out
+new projects with a reasonable amount of quality. What&amp;#8217;s your workflow? How
+does mine suck? &lt;a href=&quot;mailto:steve@steveklabnik.com&quot;&gt;Email me&lt;/a&gt;, I&amp;#8217;d love to hear
+about it.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>I&#8217;m Deleting My Facebook Tonight.</title>
@@ -3899,155 +4006,6 @@ now.&lt;/p&gt;
 
 &lt;p&gt;With that said, I&amp;#8217;ve been spending a &lt;em&gt;lot&lt;/em&gt; of time on Shoes. I&amp;#8217;ll just leave
 this here: &lt;a href=&quot;https://github.com/shoes/shoes/tree/feature/gemify&quot;&gt;https://github.com/shoes/shoes/tree/feature/gemify&lt;/a&gt;&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>A few Notes on Foucault</title>
-    <link href="http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault.html"/>
-    <updated>2011-01-22T00:00:00-08:00</updated>
-    <id>http://blog.steveklabnik.com/2011/01/22/a-few-notes-on-foucault</id>
-    <content type="html">&lt;p&gt;I&amp;#8217;ve almost always been in a habit of reading. When I was younger, I spent a
-lot of time in the library. I&amp;#8217;d just grab an entire series of novels, and read
-them all, right in a row. Sometimes I&amp;#8217;d end up reading non-fiction too. I
-ended up with a lot of books on software.&lt;/p&gt;
-
-&lt;p&gt;Then my local library got Internet access. Slowly, I started to spend less
-time in the stacks and more in front of a terminal. This wasn&amp;#8217;t a bad thing; I
-still kept reading. What&amp;#8217;s more, what was previously a one way street turned
-into two: I didn&amp;#8217;t just read the Internet, I wrote it. I spent hours and hours
-discussing the things I&amp;#8217;d read with others.&lt;/p&gt;
-
-&lt;p&gt;In any case, as the years flew by, the things that I&amp;#8217;ve been reading have
-become less and less substantial. Current events are fine and all, and
-pictures of cute cats are nice, but I feel like the volume of what I&amp;#8217;ve been
-reading has gone up, but the quality has gone down. It happens. I can&amp;#8217;t really
-be snide about not owning a TV while being subscribed to
-&lt;a href=&quot;http://www.reddit.com/r/fffffffuuuuuuuuuuuu&quot;&gt;/r/fffffffuuuuuuuuuuuu&lt;/a&gt;. Reddit somehow has morphed into a place where you
-can feel superior, but it&amp;#8217;s really just the same exact thing in different
-clothing. Combine this general unease with my aspirations for grad school in
-the fall, as well as my renewed interest in political philosophy, and my need
-to hit the books has become readily apparent.&lt;/p&gt;
-
-&lt;p&gt;Luckily, I have an ally in this quest, and Jamie has given me a reading list.
-Since reading and writing are two sides of a single coin, I&amp;#8217;ll be writing
-about the things that I read here. Like many other things I&amp;#8217;ve written about
-in the past, I&amp;#8217;m sure that putting my thoughts down on paper (?) will help to
-gel my understanding and thoughts. First up: Michel Foucault&amp;#8217;s &amp;#8220;Discipline and
-Punish.&amp;#8221;&lt;/p&gt;
-
-&lt;p&gt;I&amp;#8217;ll get right to it: I really enjoyed reading this book. It&amp;#8217;s partially
-because it took a lot of random things that I kind of knew and tied them to
-some experiences that I&amp;#8217;ve had in a meaningful way. It&amp;#8217;s also partially
-because I have a substantial infatuation with the conspiratorial; I re-read
-&amp;#8220;1984&amp;#8221; every year, and I often think about its all-knowing, all-seeing
-telescreen imagery when discussing anything vaguely political. &amp;#8220;Discipline and
-Punish&amp;#8221; gave me the same sort of images, but they were fewer, and more firmly
-rooted in history and reality. The book opens with a section named &amp;#8220;Torture,&amp;#8221;
-and the scene of Robert-François Damiens&amp;#8217; punishments for attempted regicide.
-I&amp;#8217;m sure that before the release of &amp;#8220;Saw,&amp;#8221; these images were even more
-shocking:&lt;/p&gt;
-
-&lt;p&gt;  &amp;#8230; he was to be &amp;#8216;taken and conveyed in a cart, wearing nothing but a shirt, holding a torch of burningwax weighing two pounds&amp;#8217;; then, &amp;#8216;in the said cart, to the Place de Greve, where, on a scaffold that will be erected there, the flesh will be torn from his breasts, arms, thighs, and calves with red-hot pincers, his right hand, holding the knife with which he committed the said parricide, burnt with sulphur, and, on those places where the flesh will be torn away, poured molten lead, boiling oil, burning resin, wax, and sulphur melted together and then his body drawn and quartered by four horses and his limbs and body consumed by fire, reduced to ashes, and his ashes thrown to the winds.&lt;/p&gt;
-
-&lt;p&gt;Let it never be said that the people of 1757 were not thorough. Regardless, by
-January of 1840, we&amp;#8217;d transitioned to a prison system that looks pretty much
-the same as it does now. The book&amp;#8217;s primary theme is discussing how we got
-from point A to point B, and then examining the &amp;#8216;why&amp;#8217; to explain how modern
-society has a new sovereign institution: the &amp;#8216;carceral system.&amp;#8217;&lt;/p&gt;
-
-&lt;p&gt;Before we can examine that question, though, we need to ask why we used
-torture as a form of punishment in the first place. The reasoning is actually
-straightforward: during the period of monarchy, everything revolves around the
-monarch. He is sovereign in a more absolute way than we even initially think
-of; the pop-culture image of a king has more to do with something of a
-popularity contest or that he&amp;#8217;s simply the guy on the top of the pyramid, but
-the nature of a monarch&amp;#8217;s power runs more deeply than that. It was called
-&amp;#8216;divine right&amp;#8217; for a reason, the physical body of the sovereign was the
-representation of God himself, and since the entire world belongs to God, thus
-it belongs to and is a part of the monarch. It reminds me of the kind of
-doublethink necessary to grasp the Catholic conception of the Holy Trinity, in
-this case God the Father, the king his son, and the world rather than a Holy
-Ghost. All one, yet three at the same time. In any case, if the land itself is
-the literal body of the king, then any transgression is an act of defiance not
-only of the rule of the monarch, but is making war upon God himself. And since
-damage has been done to the body of God, so must an equivalent exchange be
-made with the body of the aggressor. Torture also has an element of the
-theatrical to it, and therefore demonstrates to all of those watching that
-they must also comply with the rule of law or face the consequences.&lt;/p&gt;
-
-&lt;p&gt;However, eventually, torture became socially inconvenient. Basically, it was a
-case of the Streisand Effect: when you place that much attention on someone,
-you create a forum for sympathizers to create romantic images of their fallen
-hero. There&amp;#8217;s a great historical example of this in the Christian mythos:
-consider the polarizing effect that Christ&amp;#8217;s torture on the cross maintains to
-this day. History is littered with the songs of fallen heros, and a call to
-follow in their stead. Eventually, whenever a new convict was to be strung up
-at a gallows, there&amp;#8217;d be a state of disarray. Foucault describes several
-images of rioters throwing stones and even in some cases killing the
-executioner.&lt;/p&gt;
-
-&lt;p&gt;As a result of this, the nature of punishment slowly changed. Reformists
-argued that punishment was metered out unevenly, and inconsistently. Thus in
-the same way that monarchy gave way to democracy, the absolute right of the
-king to punish became distributed as well. However, centralized and
-distributed systems are quite different, and require different constructs to
-operate properly. Therefore, a distributed form of the right to punish would
-need some mechanism by which to operate. This mechanism is termed &amp;#8220;discipline&amp;#8221;
-by Foucault. Discipline creates a certain order all by itself, and he uses a
-great example of monks and monasteries to illustrate the concept of
-discipline. Think about all of these things that we consider virtuous:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Studying is a disciplined form of reading&lt;/li&gt;
-&lt;li&gt;Dieting is discipline applied to eating&lt;/li&gt;
-&lt;li&gt;The image of a soldier is almost entirely one of discipline&lt;/li&gt;
-&lt;li&gt;Morality is discipline applied to all of life&lt;/li&gt;
-&lt;li&gt;Exercise is disciplined form of the body&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;But discipline has even greater roots in our society. Think about Taylor&amp;#8217;s
-Scientific Management, for example: it&amp;#8217;s a means of imposing discipline on
-workers to maximize their production. Schooling is a way of giving children a
-&amp;#8216;structured environment&amp;#8217; (structure seems to be synonymous with discipline in
-many cases) to develop in. Churches are places for the soul to become
-disciplined.&lt;/p&gt;
-
-&lt;p&gt;Submitting to discipline has deeper psychological effects as well. It creates
-the idea of a division: there&amp;#8217;s those who follow the rules, and those that
-disregard them. And since we&amp;#8217;ve established that those who follow the rules
-are virtuous, those who don&amp;#8217;t must not be. Since those that don&amp;#8217;t follow the
-rules are doing bad things, they should be subject to punishment, so that they
-can remain disciplined. And thus the system of rules can be used as the
-distributed form of this right to punish, replacing the absolute right of the
-monarch. Submitting to this mentality makes people into &amp;#8216;docile bodies&amp;#8217; that
-perfectly fit into this worldview.&lt;/p&gt;
-
-&lt;p&gt;As an example of how far this disciplinary approach has gone, Foucault
-presents the Panopticon, which was a prison shaped like a pie, with a tower in
-the middle. Prisoners would be able to observe others directly across from
-themselves, and the guard who may or may not be in the tower would be able to
-watch all of the prisoners at once. Since you couldn&amp;#8217;t tell if the guard was
-in the tower or not, discipline would become internalized, since you always
-had to assume that Big Brother is watching you&amp;#8230; This way of thinking about
-society ends up creating an all-encompassing &amp;#8216;carceral system&amp;#8217; that we now
-live in.&lt;/p&gt;
-
-&lt;p&gt;It&amp;#8217;s also important to note that this carceral system is total and absolutely
-permeating every aspect of society, yet they aren&amp;#8217;t presented as such.
-Foucault specifically mentions that it&amp;#8217;s important to consider that the
-delinquent are still a part of the system, and not outside of it. Yet we&amp;#8217;re
-constantly presented with images that serve to present the idea that there&amp;#8217;s a
-&amp;#8216;criminal underworld,&amp;#8217; that those who lead a life of crime are part of a
-shadowy alternate universe. Foucault refers to this idea as &amp;#8216;enclosure&amp;#8217;:
-&amp;#8220;Discipline sometimes requires enclosure, the specification of a place
-heterogeneous to all others and closed in upon itself. It is the protected
-space of disciplinary monotony.&amp;#8221; The enclosure embodies this separation, since
-there&amp;#8217;s a space both within and outside of the enclosure. A self and an Other.&lt;/p&gt;
-
-&lt;p&gt;&amp;#8230; so yeah. That&amp;#8217;s my summary. I&amp;#8217;m still digesting a lot of this stuff, and
-so I may have more to say about it later.&lt;/p&gt;
 </content>
   </entry>
   
