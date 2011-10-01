@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-09-28T07:12:25-07:00</updated>
+  <updated>2011-10-01T13:36:08-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -13,9 +13,145 @@
 
   
   <entry>
+    <title>GitHub Is Anarchy for Programmers</title>
+    <link href="http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers.html"/>
+    <updated>2011-10-01T13:01:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers</id>
+    <content type="html">&lt;p&gt;I finally got to see Zach Holman give his talk, &lt;a href=&quot;http://speakerdeck.com/u/holman/p/how-github-uses-github-to-build-github&quot;&gt;How GitHub Uses GitHub to Build GitHub&lt;/a&gt;.
+It was awesome. Zach is a great speaker, and the slides don&amp;#8217;t do it justice. I
+highly reccomend catching it on video or in person sometime.&lt;/p&gt;
+
+&lt;p&gt;Anyway, there&amp;#8217;s something that I found really interesting about GitHub&amp;#8217;s
+&amp;#8216;process&amp;#8217;: it&amp;#8217;s basically anarchism, applied to software development.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;#8217;re not familliar with anarchism, check out &lt;a href=&quot;http://truth-reason-liberty.blogspot.com/p/what-i-believe-in.html&quot;&gt;&amp;#8220;What I believe in&amp;#8221;&lt;/a&gt;.
+It&amp;#8217;s a pretty decent introduction to a complicated topic. Ultimately, anarchism
+is fairly simple, but it requires dismantling a &lt;em&gt;lot&lt;/em&gt; of beliefs that Americans
+in particular hold about society, power, and control. We&amp;#8217;re quite happy in this
+country to be slaves to the rich, but that&amp;#8217;s another blog post. ;)&lt;/p&gt;
+
+&lt;p&gt;Another excellent post on that blog is &lt;a href=&quot;http://truth-reason-liberty.blogspot.com/2010/11/digression-on-what-it-means-to-be.html&quot;&gt;&amp;#8220;A Digression On What It Means to Be An Anarchist&lt;/a&gt;.
+I&amp;#8217;m going to use it as a framework to point out my comparison to GitHub. The
+first sentence is stolen from TFA, but the second sentence is my GitHub
+comparison.&lt;/p&gt;
+
+&lt;h2&gt;What anarchists oppose&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Hierarchy – anarchists oppose domination of one person or group of people by
+another as detrimental to human society. GitHub has built a very flat process,
+where &amp;#8220;some days the CEO ships more code than I do.&amp;#8221;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Authority – all forms of authority must bear a heavy burden of proof in order
+to demonstrate their legitimacy and necessity. GitHub has hired people that have
+built awesome things, and have shown themselves to be a trusted authority in
+whatever kind of software that they build. Nobody needs to question if anyone
+is in the position to deploy or review some code.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The state – centralised rule of a set geographical area (country) or people
+(nation) by a government of elites is inherently illegitimate. Okay, this has
+nothing to do with GitHub all together. All abstractions are leaky here. :)
+The same goes for Capitalism and State Socialism too.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Nationalism and fascism – these are but the worst forms of the state, gaining
+the loyalty of the people with strong, often brutal discipline and by developing
+an almost religious, fevered love of the state and the rulers in the form of
+patriotism. GitHub actively uses multiple programming languages in production,
+and while it came out of the Ruby world, they don&amp;#8217;t really run around pitching
+&amp;#8220;Ruby is awesome and the only thing you should ever use.&amp;#8221;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Discrimination – nobody should be excluded or discriminated against based on
+nothing more than their gender, ethnicity, sexuality, background, or beliefs. I
+don&amp;#8217;t know everyone at GitHub, but it&amp;#8217;s a pretty diverse crew overall. This is
+hard for any tech company, but they&amp;#8217;re doing pretty well on the race/sex thing.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;What anarchists stand for&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Liberty – all people should be free to live their life as they see fit,
+without rules and laws passed from above that serve no purpose other than
+control and domination, as long as they are not infringing the right of anybody
+else to the same. See Homan&amp;#8217;s talk. That&amp;#8217;s pretty much how they work.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Equality – as stated above, nobody should face discrimination because of their
+gender, ethnicity, sexuality, background, or beliefs. See above comment about
+GitHub&amp;#8217;s varied devs.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Community – human civilisation evolved, from its primitive roots, through the
+priciple of Mutual Aid. GitHub has a lot of elements of mutal aid in their
+process, where they mention some people in some pull requests, work together
+on features, and generally high five until the code is running in production.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Solidarity – humanity is divided only between the rulers and the ruled. Other
+divisions, those which bring about sexism, racism, heterosexism, and other
+bigotries, are promoted by the ruling class in order to divide their subjects
+and keep them under control. GitHub holds tons of events, buys everyone lots of
+beer, and just generally encourages lots of friendly interactions between
+everyone. CodeConf was a great group of diverse people hanging out and having
+a good time.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;How anarchy would work&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Self-management – groups, such as workforces or local communities, would be
+free to operate and govern themselves free of any higher authority. GitHub has
+no deadlines, no prioritization meetings, and 100% &amp;#8220;do what you want&amp;#8221; time.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Free association – all individuals would be free to live where they wanted and
+associate with who they chose. Zach mentioned in his talk that different people
+work on different parts of the site, and it&amp;#8217;s really based on what people are
+interested in and what they&amp;#8217;ve done in the past.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Voluntary federation – instead of the state, where indivudal communities and
+groups of people are bound together by the coercive force of a central
+authority, local communities and workers collectives can choose for themselves
+which other communities or collectives to associate with. Sort of like the free
+association comment, people get together and work on what they want to, and
+these groups are organic.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Direct democracy – unlike in parliamentary democracy, these spokespeople would
+be just that, elected not to a position of authority but to voice decisions that
+remain in the hands of the people, as in trade union and workers council
+structures. Anybody can comment on a pull request, add some commits, put in
+their two cents, and be heard.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Mutual Aid – in participatory communities and workers collectives, Mutual Aid
+is a central principle. Easily summed up with the phrase “from each according to
+his ability, to each according to his need,” this boils down to voluntary
+cooperation, fair distribution of resources, and help and support to those who
+need it within a local community. As mentioned before, everybody helps each
+other out at GitHub to get things done.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Free, fair trade – for the sharing of resources between different communities
+and individuals who opt out of Mutual Aid, anarchy would see the emergence of a
+truly free market. This doesn&amp;#8217;t really fit with software, I think. Same with
+&amp;#8216;individual liberty.&amp;#8217;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Collective defence – this is not to say that anarchist society will contain
+“perfect people,” and there will certainly be acts of aggression, oppression,
+and violence – albeit on a lesser scale than is commonplace in today’s world.
+I&amp;#8217;d liken this to things like &amp;#8220;the site is down.&amp;#8221; Everyone at GitHub cares about
+GitHub being up, and so they don&amp;#8217;t need someone who&amp;#8217;s responsible for &amp;#8216;defense,&amp;#8217;
+as if shit hits the fan, everyone chips in and takes care of it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Justice, not vengeance – courts would be elected for each individual case,
+rather than appointed and given unnecessary authority, with the aim to establish
+guilt or innocence, negotiate reparations, and organise rehabilitation rather
+than to support the oppressive prison systems which only make matters worse by
+serving as little more than universities of crime. I&amp;#8217;m not sure this fits well
+here.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;All abstractions are leaky&lt;/h2&gt;
+
+&lt;p&gt;Just like when &amp;#8216;lean&amp;#8217; was a concept that applied manufacturing techniques to
+software development, I don&amp;#8217;t think that &amp;#8216;anarchism&amp;#8217; is a 100% fit with GitHub&amp;#8217;s
+process. I do think that it&amp;#8217;s close enough to hold a lot of value, however,
+even to the point that Zach had to write a blog post about &lt;a href=&quot;http://zachholman.com/posts/scaling-github-employees/&quot;&gt;scaling&lt;/a&gt;,
+which is something that &lt;em&gt;always&lt;/em&gt; gets leveled at people talking about anarchism.
+I see GitHub in the same way that I see &lt;a href=&quot;http://en.wikipedia.org/wiki/Anarchism_in_Spain&quot;&gt;anarchist Catalonia&lt;/a&gt; or the &lt;a href=&quot;http://en.wikipedia.org/wiki/Free_Territory&quot;&gt;Free Territory&lt;/a&gt; in the Ukraine.
+It&amp;#8217;s a place where ideals are actually working in practice. Let&amp;#8217;s just hope that
+the &lt;a href=&quot;http://en.wikipedia.org/wiki/Anarchist_Catalonia#Clashes_with_the_Communists&quot;&gt;communists don&amp;#8217;t betray them when the fascists show up&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Damn leaky abstractions.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
     <title>(Real) Modern Ruby Development</title>
     <link href="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html"/>
-    <updated>2011-09-28T06:31:00-07:00</updated>
+    <updated>2011-09-28T06:31:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development</id>
     <content type="html">&lt;p&gt;I came across a blog post the other day titled &lt;a href=&quot;http://ascarter.net/2011/09/25/modern-ruby-development.html&quot;&gt;Modern Ruby Development&lt;/a&gt;.
 While it&amp;#8217;s a perfectly fine blog post (other than the digs at rvm&amp;#8230;) it really
@@ -129,7 +265,7 @@ about it.&lt;/p&gt;
   <entry>
     <title>I&#8217;m Deleting My Facebook Tonight.</title>
     <link href="http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight.html"/>
-    <updated>2011-09-26T08:34:00-07:00</updated>
+    <updated>2011-09-26T08:34:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight</id>
     <content type="html">&lt;p&gt;Well, &lt;a href=&quot;http://adrianshort.co.uk/2011/09/25/its-the-end-of-the-web-as-we-know-it/&quot;&gt;it&amp;#8217;s the end of the web as we know it&lt;/a&gt;.
 I&amp;#8217;d already been thinking about this all weekend, and last night, I decided. I
@@ -156,7 +292,7 @@ give up Facebook, but I figured I&amp;#8217;d warn you anyways.&lt;/p&gt;
   <entry>
     <title>More rstat.us Refactoring</title>
     <link href="http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring.html"/>
-    <updated>2011-09-23T17:03:00-07:00</updated>
+    <updated>2011-09-23T17:03:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring</id>
     <content type="html">&lt;p&gt;Hey everyone! I just wanted to share One More Thing with you about this rstat.us
 refactoring.&lt;/p&gt;
@@ -258,7 +394,7 @@ maybe an extraction of another class is worthwhile.&lt;/p&gt;
   <entry>
     <title>Extracting Domain Models: A Practical Example</title>
     <link href="http://blog.steveklabnik.com/2011/09/22/extracting-domain-models-a-practical-example.html"/>
-    <updated>2011-09-22T10:25:00-07:00</updated>
+    <updated>2011-09-22T10:25:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/22/extracting-domain-models-a-practical-example</id>
     <content type="html">&lt;p&gt;Hey everyone! We&amp;#8217;ve been doing a lot of refactoring on rstat.us lately, and I
 wanted to share with you a refactoring that I did. It&amp;#8217;s a real-world example
@@ -1278,7 +1414,7 @@ Those who ship, win. Make things a little better, &lt;code&gt;git commit &amp;am
   <entry>
     <title>Better Ruby Presenters</title>
     <link href="http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters.html"/>
-    <updated>2011-09-09T12:00:00-07:00</updated>
+    <updated>2011-09-09T12:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters</id>
     <content type="html">&lt;p&gt;My &lt;a href=&quot;http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html&quot;&gt;last blog post&lt;/a&gt; caused a bit
 of a stir in some circles. I got a bunch of emails. Apparently, I need to expand
@@ -1702,7 +1838,7 @@ you do stuff like this:&lt;/p&gt;
   <entry>
     <title>The Secret to Rails OO Design</title>
     <link href="http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html"/>
-    <updated>2011-09-06T00:00:00-07:00</updated>
+    <updated>2011-09-06T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design</id>
     <content type="html">&lt;p&gt;UPDATE: I also have a follow-up &lt;a href=&quot;http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -2306,7 +2442,7 @@ for length here. Until next time!&lt;/p&gt;
   <entry>
     <title>The Self-Improvement Pomodoro</title>
     <link href="http://blog.steveklabnik.com/2011/09/04/the-self-improvement-pomodoro.html"/>
-    <updated>2011-09-04T00:00:00-07:00</updated>
+    <updated>2011-09-04T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/04/the-self-improvement-pomodoro</id>
     <content type="html">&lt;p&gt;By now, the &lt;a href=&quot;http://www.pomodorotechnique.com/&quot;&gt;pomodoro technique&lt;/a&gt; is pretty
 well-known amongst programmers. I forget where I heard of it first, but
@@ -2359,7 +2495,7 @@ find time to invest in you, too.&lt;/p&gt;
   <entry>
     <title>I&#8217;m Making It Dead Simple To Contribute To Ruby&#8217;s Documentation</title>
     <link href="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html"/>
-    <updated>2011-08-22T00:00:00-07:00</updated>
+    <updated>2011-08-22T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation</id>
     <content type="html">&lt;p&gt;Okay! So, if you&amp;#8217;d read &lt;a href=&quot;http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html&quot;&gt;my previous article on
 this&lt;/a&gt;, you&amp;#8217;d know how
@@ -2439,7 +2575,7 @@ up. I&amp;#8217;m serious. I&amp;#8217;ll do it. Send them to me.&lt;/p&gt;
   <entry>
     <title>Matz is Nice So We Are Nice</title>
     <link href="http://blog.steveklabnik.com/2011/08/19/matz-is-nice-so-we-are-nice.html"/>
-    <updated>2011-08-19T00:00:00-07:00</updated>
+    <updated>2011-08-19T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/19/matz-is-nice-so-we-are-nice</id>
     <content type="html">&lt;p&gt;Rubyists have a saying, or at least, we used to. &amp;#8220;Matz is nice so we are
 nice.&amp;#8221; This has sort of been lost over the years&amp;#8230; some people who have
@@ -2486,7 +2622,7 @@ better.&amp;#8221;&lt;/p&gt;
   <entry>
     <title>We Forget That Open Source is Made of People</title>
     <link href="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html"/>
-    <updated>2011-08-12T00:00:00-07:00</updated>
+    <updated>2011-08-12T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people</id>
     <content type="html">&lt;p&gt;Programmers like to think that software is the purest form of
 meritocracy. We like to consider ourselves scientists; what we do is
@@ -2622,7 +2758,7 @@ in even the smallest of ways.&lt;/p&gt;
   <entry>
     <title>Some People Understand REST and HTTP</title>
     <link href="http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html"/>
-    <updated>2011-08-07T00:00:00-07:00</updated>
+    <updated>2011-08-07T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http</id>
     <content type="html">&lt;p&gt;This is a follow-up post to my post &lt;a href=&quot;http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html&quot;&gt;here&lt;/a&gt;. You probably want to
 read that first.&lt;/p&gt;
@@ -2877,7 +3013,7 @@ the same content at &lt;a href=&quot;http://rstat.us/users/getsomerestbook&quot;
   <entry>
     <title>Twitter is too important to be owned by Twitter</title>
     <link href="http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter.html"/>
-    <updated>2011-07-24T00:00:00-07:00</updated>
+    <updated>2011-07-24T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter</id>
     <content type="html">&lt;p&gt;When I spoke on a panel at &lt;a href=&quot;http://therealtimereport.com/&quot;&gt;RTLM NY &amp;#8216;11&lt;/a&gt;, I got a little rise out of
 the crowd when I said &amp;#8220;Twitter is too important to be owned by Twitter.&amp;#8221;
@@ -2968,7 +3104,7 @@ they&amp;#8217;ll change the rules, and it&amp;#8217;ll be time to move on.&lt;/
   <entry>
     <title>Nobody Understands REST or HTTP</title>
     <link href="http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html"/>
-    <updated>2011-07-03T00:00:00-07:00</updated>
+    <updated>2011-07-03T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http</id>
     <content type="html">&lt;p&gt;Update: Part II of this post is &lt;a href=&quot;http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html&quot;&gt;here&lt;/a&gt;. Check it out, and there&amp;#8217;s an announcement at the end!&lt;/p&gt;
 
@@ -3270,7 +3406,7 @@ your own.&lt;/p&gt;
   <entry>
     <title>Single text, many masters</title>
     <link href="http://blog.steveklabnik.com/2011/05/21/single-text-many-masters.html"/>
-    <updated>2011-05-21T00:00:00-07:00</updated>
+    <updated>2011-05-21T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/21/single-text-many-masters</id>
     <content type="html">&lt;p&gt;Hey everyone. Here&amp;#8217;s a draft of an essay I&amp;#8217;ve been working on. I&amp;#8217;d love
 to hear your feedback.&lt;/p&gt;
@@ -3652,7 +3788,7 @@ addressed.&lt;/p&gt;
   <entry>
     <title>The next iteration of my blog</title>
     <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
-    <updated>2011-05-12T00:00:00-07:00</updated>
+    <updated>2011-05-12T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
     <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I&amp;#8217;ve moved everything over to Jekyll, if
@@ -3687,7 +3823,7 @@ I&amp;#8217;m maturing or something&amp;#8230;&lt;/p&gt;
   <entry>
     <title>Contributing to Ruby&#8217;s Documentation</title>
     <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
-    <updated>2011-05-10T00:00:00-07:00</updated>
+    <updated>2011-05-10T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
     <content type="html">&lt;h3&gt;Update!&lt;/h3&gt;
 
@@ -3793,7 +3929,7 @@ improve. ;)&lt;/p&gt;
   <entry>
     <title>The first week of rstat.us: Users, Press, Scaling, oh my!</title>
     <link href="http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html"/>
-    <updated>2011-03-30T00:00:00-07:00</updated>
+    <updated>2011-03-30T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my</id>
     <content type="html">&lt;p&gt;Hey everyone. A lot of people have been asking me about &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; lately,
 so I figured I&amp;#8217;d tell a little bit of the story as it&amp;#8217;s gone down so far.&lt;/p&gt;
@@ -3923,7 +4059,7 @@ us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&g
   <entry>
     <title>Announcing rstat.us</title>
     <link href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html"/>
-    <updated>2011-03-23T00:00:00-07:00</updated>
+    <updated>2011-03-23T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us</id>
     <content type="html">&lt;p&gt;Whew.&lt;/p&gt;
 
@@ -3959,7 +4095,7 @@ stuff we&amp;#8217;d like to do.&lt;/p&gt;
   <entry>
     <title>Did you hear? I&#8217;m Ruby Mendicant University&#8217;s first Visiting Teacher</title>
     <link href="http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher.html"/>
-    <updated>2011-03-18T00:00:00-07:00</updated>
+    <updated>2011-03-18T00:00:00-05:00</updated>
     <id>http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher</id>
     <content type="html">&lt;p&gt;I&amp;#8217;ve heard &lt;a href=&quot;http://university.rubymendicant.com/&quot;&gt;Ruby Mendicant University&lt;/a&gt; (also known as RMU, not to confuse
 you Robert Morris alums!) described as &amp;#8220;the best kept secret of the Ruby
@@ -3979,40 +4115,6 @@ of resources at their disposal.&lt;/p&gt;
 
 &lt;p&gt;If you&amp;#8217;re feeling like you&amp;#8217;ve got the hang of Ruby, but want to take it to the
 next level, &lt;a href=&quot;http://university.rubymendicant.com/admissions&quot;&gt;applications are open&lt;/a&gt;! Hopefully I&amp;#8217;ll see you there.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>I&#8217;m quitting Hacker News</title>
-    <link href="http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news.html"/>
-    <updated>2011-03-03T00:00:00-08:00</updated>
-    <id>http://blog.steveklabnik.com/2011/03/03/i-m-quitting-hacker-news</id>
-    <content type="html">&lt;p&gt;I&amp;#8217;ve been thinking about this post for a while.&lt;/p&gt;
-
-&lt;p&gt;I freaking love Hacker News. It&amp;#8217;s my favorite place on the Internet. It&amp;#8217;s
-incredibly valuable. I have learned so much from my time there.  With that
-said, I feel like it&amp;#8217;s taken up too much of my time.&lt;/p&gt;
-
-&lt;p&gt;I&amp;#8217;m trying to accomplish things. I got accepted to grad school. I&amp;#8217;m trying to
-rebuild Shoes. I&amp;#8217;m working on improving Hackety. I&amp;#8217;m finding that I don&amp;#8217;t have
-enough hours in the day to accomplish the things I want to accomplish. And
-arguing for the hundredth time about how artists will survive in a post-IP
-world, or how to get your first couple of users, or whatever it is that Google
-or Apple did this week hasn&amp;#8217;t gotten boring yet, and that&amp;#8217;s a problem.&lt;/p&gt;
-
-&lt;p&gt;The only respectable solution is to go cold-turkey for a while.&lt;/p&gt;
-
-&lt;p&gt;I&amp;#8217;ve been doing good on some of my new years&amp;#8217; resolutions, and bad on others.
-I haven&amp;#8217;t spent a lot of time writing lately, and I have only been doing okay
-at my writing. Hacker News is cutting into that. I feel like I&amp;#8217;m using it in
-the same way some use TV. Yeah, it&amp;#8217;s significantly deeper, but I really should
-be reading more books and less HN. At least, that&amp;#8217;s what&amp;#8217;s right for me right
-now.&lt;/p&gt;
-
-&lt;p&gt;I won&amp;#8217;t be gone forever. I just need to spend more time elsewhere.&lt;/p&gt;
-
-&lt;p&gt;With that said, I&amp;#8217;ve been spending a &lt;em&gt;lot&lt;/em&gt; of time on Shoes. I&amp;#8217;ll just leave
-this here: &lt;a href=&quot;https://github.com/shoes/shoes/tree/feature/gemify&quot;&gt;https://github.com/shoes/shoes/tree/feature/gemify&lt;/a&gt;&lt;/p&gt;
 </content>
   </entry>
   
