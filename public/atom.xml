@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-10-01T13:36:08-05:00</updated>
+  <updated>2011-10-01T14:49:45-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -19,7 +19,7 @@
     <id>http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers</id>
     <content type="html">&lt;p&gt;I finally got to see Zach Holman give his talk, &lt;a href=&quot;http://speakerdeck.com/u/holman/p/how-github-uses-github-to-build-github&quot;&gt;How GitHub Uses GitHub to Build GitHub&lt;/a&gt;.
 It was awesome. Zach is a great speaker, and the slides don&amp;#8217;t do it justice. I
-highly reccomend catching it on video or in person sometime.&lt;/p&gt;
+highly recommend catching it on video or in person sometime.&lt;/p&gt;
 
 &lt;p&gt;Anyway, there&amp;#8217;s something that I found really interesting about GitHub&amp;#8217;s
 &amp;#8216;process&amp;#8217;: it&amp;#8217;s basically anarchism, applied to software development.&lt;/p&gt;
