@@ -8,7 +8,7 @@ categories:
 
 I finally got to see Zach Holman give his talk, [How GitHub Uses GitHub to Build GitHub](http://speakerdeck.com/u/holman/p/how-github-uses-github-to-build-github).
 It was awesome. Zach is a great speaker, and the slides don't do it justice. I
-highly reccomend catching it on video or in person sometime.
+highly recommend catching it on video or in person sometime.
 
 Anyway, there's something that I found really interesting about GitHub's
 'process': it's basically anarchism, applied to software development.
