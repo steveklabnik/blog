@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-10-01T14:49:45-05:00</updated>
+  <updated>2011-10-04T13:24:55-04:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -13,9 +13,331 @@
 
   
   <entry>
+    <title>Rubinius Is Awesome</title>
+    <link href="http://blog.steveklabnik.com/2011/10/04/rubinius-is-awesome.html"/>
+    <updated>2011-10-04T08:40:00-04:00</updated>
+    <id>http://blog.steveklabnik.com/2011/10/04/rubinius-is-awesome</id>
+    <content type="html">&lt;p&gt;You walk into work tomorrow morning, and your boss says this:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Boss: Hey, we&amp;#8217;re gonna need to go ahead and have you implement
+require_relative in rubinius. We have some new servers coming in, and we&amp;#8217;ll
+be running it in production, but we use some 1.9.2 features of MRI that
+haven&amp;#8217;t been implemented yet. So if you could just go ahead and get to
+implementing that, that would be terrific, OK?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Wat do?&lt;/p&gt;
+
+&lt;p&gt;(Disregard that your boss would never say this. I kinda wish some of mine
+would&amp;#8230;)&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;You: Excuse me, I believe you have my stapler&amp;#8230;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Err, sorry.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;You: No problem, boss. Rubinius is mostly just Ruby, and it has a really
+helpful core team. I&amp;#8217;m sure it won&amp;#8217;t be a big deal.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Would you say this? Well, you should. I&amp;#8217;m not gonna lie and say that &lt;em&gt;every&lt;/em&gt;
+feature is super simple to implement, or rbx-2.0 would be out already, but for
+a language interpreter, Rubinius is one of the easiest I&amp;#8217;ve ever tried to get
+into. I actually did implement require_relative last night, and it took me about
+an hour and a half.&lt;/p&gt;
+
+&lt;p&gt;This is my story.&lt;/p&gt;
+
+&lt;p&gt;(note: dramatazation. Actual wording made unneccesarily silly to protect the
+innocent. please do try this at home)&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;lol.txt&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;text&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;$ ssh stevessecretserver
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;$ tmux attach
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&amp;lt;brings up irssi, I&amp;#39;m already in #rubinius on Freenode&amp;gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: steveklabnik: hey, I need require\_relative to run my app. How hard
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;would you think that is to implement?
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: evan: Naw, man, it&amp;#39;d take like fifteen minutes. Go check out
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;http://rubygems.org/gems/rbx-require-relative, it&amp;#39;s alredy basically got what
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;you want
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: steveklabnik: sweet.
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: brixen: just grep for &amp;#39;def require&amp;#39;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: brixen: and run bin/mspec -tx19 core/kernel/require\_relative to
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;run the RubySpecs for it.
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Armed with this knowledge, I found where require is defined in rbx:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/kernel.rb &lt;/span&gt;&lt;a href=&#8217;https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/kernel.rb#L737&#8217;&gt;link&lt;/a&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;CodeLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;kp&quot;&gt;module_function&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:require&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Of course, I had to look at CodeLoader:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/codeloader.rb &lt;/span&gt;&lt;a href=&#8217;https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader.rb#L30&#8217;&gt;link&lt;/a&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;16&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;17&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;18&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;19&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;20&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;21&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# Searches for and loads Ruby source files and shared library extension&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# files. See CodeLoader.require for the rest of Kernel#require&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# functionality.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;synchronize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resolve_require_path&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CodeLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loading?&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@load_path&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ruby&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;no&quot;&gt;CodeLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loading&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@load_path&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ruby&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;load_file&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;load_library&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@type&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Hmm, see &lt;code&gt;CodeLoader.require&lt;/code&gt;. There are codeloader18 and codeloader19
+files&amp;#8230;&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/codeloader19.rb &lt;/span&gt;&lt;a href=&#8217;https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader19.rb&#8217;&gt;link&lt;/a&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;16&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;17&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;18&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;19&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Rubinius&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CodeLoader&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;c1&quot;&gt;# Searches $LOAD_PATH for a file named +name+. Does not append any file&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;c1&quot;&gt;# extension to +name+ while searching. Used by #load to resolve the name&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;c1&quot;&gt;# to a full path to load. Also used by #require when the file extension is&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;c1&quot;&gt;# provided.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;search_load_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loading&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;vg&quot;&gt;$LOAD_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;        &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadable?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loading&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadable?&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;./&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Okay. So we define specific stuff into the 19 file. There&amp;#8217;s also a
+kernel19. So I worked this up:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/kernel19.rb&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# Attempt to load the given file, returning true if successful. Works just&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# like Kernel#require, except that it searches relative to the current&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# directory.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;CodeLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;kp&quot;&gt;module_function&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:require_relative&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/codeloader19.rb&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# requires files relative to the current directory. We do one interesting&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# check to make sure it&amp;#39;s not called inside of an eval.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;StaticScope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;of_sender&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_script&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LoadError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Something is wrong in trying to get relative path&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;But then&amp;#8230; running the specs gives me bunches of errors. What gives?&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;lol.txt&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;text&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&amp;lt;back in irc&amp;gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: steveklabnik: yo, my specs are failing, and I&amp;#39;m a n00b. Halp
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;pl0x?
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: brixen: oh, yeah, well, the StaticScope is the current scope,
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;and you&amp;#39;re down another method, so that&amp;#39;s _totally_ gonna screw up
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;your paths. Just get it above and pass it down. Oh, and File.join is
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;dumb, File.expand_path that shit!
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;#rubinius: steveklabnik: words.
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;So then I made this one little change:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/kernel19.rb&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# Attempt to load the given file, returning true if successful. Works just&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# like Kernel#require, except that it searches relative to the current&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# directory.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;StaticScope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;of_sender&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;no&quot;&gt;Rubinius&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;CodeLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;kp&quot;&gt;module_function&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:require_relative&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;kernel/common/codeloader19.rb&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# requires files relative to the current directory. We do one interesting&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# check to make sure it&amp;#39;s not called inside of an eval.&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require_relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_script&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LoadError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Something is wrong in trying to get relative path&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;bash&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bin/mspec -tx19 core/kernel/require_relative
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;rubinius 2.0.0dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.9.2 cade3517 yyyy-mm-dd JI&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-apple-darwin10.8.0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&#8230;&#8230;&#8230;&#8230;&#8230;&#8230;&#8230;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;Finished in 0.191995 seconds
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;1 file, 20 examples, 47 expectations, 0 failures, 0 errors
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://blog.steveklabnik.com/images/awwwyeah.jpg&quot; alt=&quot;awwww yeah&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One more pull request, and I&amp;#8217;ve got a patch in on rbx. I had one a few
+months ago, but this one was way cooler.&lt;/p&gt;
+
+&lt;h2&gt;In conclusion&lt;/h2&gt;
+
+&lt;p&gt;Even if I didn&amp;#8217;t have some code to look at, because Rubinius is just Ruby, it
+was really easy to dive in and check out the code, because it&amp;#8217;s all Ruby.
+Seriously. Rubinius is just Ruby. Just Ruby. Ruby.&lt;/p&gt;
+
+&lt;p&gt;So dive in and add some features today! If having an awesome alternate Ruby
+implementation isn&amp;#8217;t enough for you, the rbx team will bribe you with
+special stickers for committers, and sweet black-on-black tshirts for
+people with 10 commits or more!&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
     <title>GitHub Is Anarchy for Programmers</title>
     <link href="http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers.html"/>
-    <updated>2011-10-01T13:01:00-05:00</updated>
+    <updated>2011-10-01T13:01:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers</id>
     <content type="html">&lt;p&gt;I finally got to see Zach Holman give his talk, &lt;a href=&quot;http://speakerdeck.com/u/holman/p/how-github-uses-github-to-build-github&quot;&gt;How GitHub Uses GitHub to Build GitHub&lt;/a&gt;.
 It was awesome. Zach is a great speaker, and the slides don&amp;#8217;t do it justice. I
@@ -151,7 +473,7 @@ the &lt;a href=&quot;http://en.wikipedia.org/wiki/Anarchist_Catalonia#Clashes_wi
   <entry>
     <title>(Real) Modern Ruby Development</title>
     <link href="http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development.html"/>
-    <updated>2011-09-28T06:31:00-05:00</updated>
+    <updated>2011-09-28T06:31:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/28/real-modern-ruby-development</id>
     <content type="html">&lt;p&gt;I came across a blog post the other day titled &lt;a href=&quot;http://ascarter.net/2011/09/25/modern-ruby-development.html&quot;&gt;Modern Ruby Development&lt;/a&gt;.
 While it&amp;#8217;s a perfectly fine blog post (other than the digs at rvm&amp;#8230;) it really
@@ -265,7 +587,7 @@ about it.&lt;/p&gt;
   <entry>
     <title>I&#8217;m Deleting My Facebook Tonight.</title>
     <link href="http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight.html"/>
-    <updated>2011-09-26T08:34:00-05:00</updated>
+    <updated>2011-09-26T08:34:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/26/im-deleting-my-facebook-tonight</id>
     <content type="html">&lt;p&gt;Well, &lt;a href=&quot;http://adrianshort.co.uk/2011/09/25/its-the-end-of-the-web-as-we-know-it/&quot;&gt;it&amp;#8217;s the end of the web as we know it&lt;/a&gt;.
 I&amp;#8217;d already been thinking about this all weekend, and last night, I decided. I
@@ -292,7 +614,7 @@ give up Facebook, but I figured I&amp;#8217;d warn you anyways.&lt;/p&gt;
   <entry>
     <title>More rstat.us Refactoring</title>
     <link href="http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring.html"/>
-    <updated>2011-09-23T17:03:00-05:00</updated>
+    <updated>2011-09-23T17:03:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/23/more-rstat-dot-us-refactoring</id>
     <content type="html">&lt;p&gt;Hey everyone! I just wanted to share One More Thing with you about this rstat.us
 refactoring.&lt;/p&gt;
@@ -394,7 +716,7 @@ maybe an extraction of another class is worthwhile.&lt;/p&gt;
   <entry>
     <title>Extracting Domain Models: A Practical Example</title>
     <link href="http://blog.steveklabnik.com/2011/09/22/extracting-domain-models-a-practical-example.html"/>
-    <updated>2011-09-22T10:25:00-05:00</updated>
+    <updated>2011-09-22T10:25:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/22/extracting-domain-models-a-practical-example</id>
     <content type="html">&lt;p&gt;Hey everyone! We&amp;#8217;ve been doing a lot of refactoring on rstat.us lately, and I
 wanted to share with you a refactoring that I did. It&amp;#8217;s a real-world example
@@ -1414,7 +1736,7 @@ Those who ship, win. Make things a little better, &lt;code&gt;git commit &amp;am
   <entry>
     <title>Better Ruby Presenters</title>
     <link href="http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters.html"/>
-    <updated>2011-09-09T12:00:00-05:00</updated>
+    <updated>2011-09-09T12:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters</id>
     <content type="html">&lt;p&gt;My &lt;a href=&quot;http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html&quot;&gt;last blog post&lt;/a&gt; caused a bit
 of a stir in some circles. I got a bunch of emails. Apparently, I need to expand
@@ -1838,7 +2160,7 @@ you do stuff like this:&lt;/p&gt;
   <entry>
     <title>The Secret to Rails OO Design</title>
     <link href="http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design.html"/>
-    <updated>2011-09-06T00:00:00-05:00</updated>
+    <updated>2011-09-06T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/06/the-secret-to-rails-oo-design</id>
     <content type="html">&lt;p&gt;UPDATE: I also have a follow-up &lt;a href=&quot;http://blog.steveklabnik.com/2011/09/09/better-ruby-presenters.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -2442,7 +2764,7 @@ for length here. Until next time!&lt;/p&gt;
   <entry>
     <title>The Self-Improvement Pomodoro</title>
     <link href="http://blog.steveklabnik.com/2011/09/04/the-self-improvement-pomodoro.html"/>
-    <updated>2011-09-04T00:00:00-05:00</updated>
+    <updated>2011-09-04T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/09/04/the-self-improvement-pomodoro</id>
     <content type="html">&lt;p&gt;By now, the &lt;a href=&quot;http://www.pomodorotechnique.com/&quot;&gt;pomodoro technique&lt;/a&gt; is pretty
 well-known amongst programmers. I forget where I heard of it first, but
@@ -2495,7 +2817,7 @@ find time to invest in you, too.&lt;/p&gt;
   <entry>
     <title>I&#8217;m Making It Dead Simple To Contribute To Ruby&#8217;s Documentation</title>
     <link href="http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html"/>
-    <updated>2011-08-22T00:00:00-05:00</updated>
+    <updated>2011-08-22T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation</id>
     <content type="html">&lt;p&gt;Okay! So, if you&amp;#8217;d read &lt;a href=&quot;http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html&quot;&gt;my previous article on
 this&lt;/a&gt;, you&amp;#8217;d know how
@@ -2575,7 +2897,7 @@ up. I&amp;#8217;m serious. I&amp;#8217;ll do it. Send them to me.&lt;/p&gt;
   <entry>
     <title>Matz is Nice So We Are Nice</title>
     <link href="http://blog.steveklabnik.com/2011/08/19/matz-is-nice-so-we-are-nice.html"/>
-    <updated>2011-08-19T00:00:00-05:00</updated>
+    <updated>2011-08-19T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/19/matz-is-nice-so-we-are-nice</id>
     <content type="html">&lt;p&gt;Rubyists have a saying, or at least, we used to. &amp;#8220;Matz is nice so we are
 nice.&amp;#8221; This has sort of been lost over the years&amp;#8230; some people who have
@@ -2622,7 +2944,7 @@ better.&amp;#8221;&lt;/p&gt;
   <entry>
     <title>We Forget That Open Source is Made of People</title>
     <link href="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html"/>
-    <updated>2011-08-12T00:00:00-05:00</updated>
+    <updated>2011-08-12T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people</id>
     <content type="html">&lt;p&gt;Programmers like to think that software is the purest form of
 meritocracy. We like to consider ourselves scientists; what we do is
@@ -2758,7 +3080,7 @@ in even the smallest of ways.&lt;/p&gt;
   <entry>
     <title>Some People Understand REST and HTTP</title>
     <link href="http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html"/>
-    <updated>2011-08-07T00:00:00-05:00</updated>
+    <updated>2011-08-07T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http</id>
     <content type="html">&lt;p&gt;This is a follow-up post to my post &lt;a href=&quot;http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html&quot;&gt;here&lt;/a&gt;. You probably want to
 read that first.&lt;/p&gt;
@@ -3013,7 +3335,7 @@ the same content at &lt;a href=&quot;http://rstat.us/users/getsomerestbook&quot;
   <entry>
     <title>Twitter is too important to be owned by Twitter</title>
     <link href="http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter.html"/>
-    <updated>2011-07-24T00:00:00-05:00</updated>
+    <updated>2011-07-24T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter</id>
     <content type="html">&lt;p&gt;When I spoke on a panel at &lt;a href=&quot;http://therealtimereport.com/&quot;&gt;RTLM NY &amp;#8216;11&lt;/a&gt;, I got a little rise out of
 the crowd when I said &amp;#8220;Twitter is too important to be owned by Twitter.&amp;#8221;
@@ -3104,7 +3426,7 @@ they&amp;#8217;ll change the rules, and it&amp;#8217;ll be time to move on.&lt;/
   <entry>
     <title>Nobody Understands REST or HTTP</title>
     <link href="http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html"/>
-    <updated>2011-07-03T00:00:00-05:00</updated>
+    <updated>2011-07-03T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http</id>
     <content type="html">&lt;p&gt;Update: Part II of this post is &lt;a href=&quot;http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html&quot;&gt;here&lt;/a&gt;. Check it out, and there&amp;#8217;s an announcement at the end!&lt;/p&gt;
 
@@ -3406,7 +3728,7 @@ your own.&lt;/p&gt;
   <entry>
     <title>Single text, many masters</title>
     <link href="http://blog.steveklabnik.com/2011/05/21/single-text-many-masters.html"/>
-    <updated>2011-05-21T00:00:00-05:00</updated>
+    <updated>2011-05-21T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/21/single-text-many-masters</id>
     <content type="html">&lt;p&gt;Hey everyone. Here&amp;#8217;s a draft of an essay I&amp;#8217;ve been working on. I&amp;#8217;d love
 to hear your feedback.&lt;/p&gt;
@@ -3788,7 +4110,7 @@ addressed.&lt;/p&gt;
   <entry>
     <title>The next iteration of my blog</title>
     <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
-    <updated>2011-05-12T00:00:00-05:00</updated>
+    <updated>2011-05-12T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
     <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
 blog, and here we are again. I&amp;#8217;ve moved everything over to Jekyll, if
@@ -3823,7 +4145,7 @@ I&amp;#8217;m maturing or something&amp;#8230;&lt;/p&gt;
   <entry>
     <title>Contributing to Ruby&#8217;s Documentation</title>
     <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
-    <updated>2011-05-10T00:00:00-05:00</updated>
+    <updated>2011-05-10T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
     <content type="html">&lt;h3&gt;Update!&lt;/h3&gt;
 
@@ -3929,7 +4251,7 @@ improve. ;)&lt;/p&gt;
   <entry>
     <title>The first week of rstat.us: Users, Press, Scaling, oh my!</title>
     <link href="http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html"/>
-    <updated>2011-03-30T00:00:00-05:00</updated>
+    <updated>2011-03-30T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my</id>
     <content type="html">&lt;p&gt;Hey everyone. A lot of people have been asking me about &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; lately,
 so I figured I&amp;#8217;d tell a little bit of the story as it&amp;#8217;s gone down so far.&lt;/p&gt;
@@ -4059,7 +4381,7 @@ us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&g
   <entry>
     <title>Announcing rstat.us</title>
     <link href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html"/>
-    <updated>2011-03-23T00:00:00-05:00</updated>
+    <updated>2011-03-23T00:00:00-04:00</updated>
     <id>http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us</id>
     <content type="html">&lt;p&gt;Whew.&lt;/p&gt;
 
@@ -4089,32 +4411,6 @@ you&amp;#8217;re the coding type, please check out the &lt;a href=&quot;http://g
 stuff we&amp;#8217;d like to do.&lt;/p&gt;
 
 &lt;p&gt;Oh, and of course, you should &lt;a href=&quot;http://rstat.us/users/steveklabnik&quot;&gt;follow me on rstat.us&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Did you hear? I&#8217;m Ruby Mendicant University&#8217;s first Visiting Teacher</title>
-    <link href="http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher.html"/>
-    <updated>2011-03-18T00:00:00-05:00</updated>
-    <id>http://blog.steveklabnik.com/2011/03/18/did-you-hear-i-m-ruby-mendicant-university-s-first-visiting-teacher</id>
-    <content type="html">&lt;p&gt;I&amp;#8217;ve heard &lt;a href=&quot;http://university.rubymendicant.com/&quot;&gt;Ruby Mendicant University&lt;/a&gt; (also known as RMU, not to confuse
-you Robert Morris alums!) described as &amp;#8220;the best kept secret of the Ruby
-community.&amp;#8221; High praise, indeed. If you haven&amp;#8217;t heard about RMU before, check
-out this presentation by Andrew Cox: &lt;/p&gt;
-
-&lt;p&gt;TL;DR: RMU is a free, online &amp;#8216;unversity&amp;#8217; from Gregory Brown, author of &amp;#8216;Ruby
-Best Practices.&amp;#8217; You enter an intermediate Rubyist, and you exit an expert. &lt;/p&gt;
-
-&lt;p&gt;Anyway, RMU recently announced that &lt;a href=&quot;http://university.rubymendicant.com/changelog/visiting-teacher-2011-t2-steve-klabnik&quot;&gt;I&amp;#8217;ll be their first visiting teacher&lt;/a&gt;.
-Basically, I&amp;#8217;ll be hanging out, giving advice, and just generally being even
-more accessible to RMU students than I already am. Greg and I have talked a
-lot about education, Ruby, and a lot of other things&amp;#8230; between Hackety&amp;#8217;s
-&amp;#8216;nothing to intermediate&amp;#8217; and RMU&amp;#8217;s &amp;#8216;intermediate to expert&amp;#8217; approaches to
-learning, anyone wanting to get up to speed with Ruby should have no shortage
-of resources at their disposal.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;#8217;re feeling like you&amp;#8217;ve got the hang of Ruby, but want to take it to the
-next level, &lt;a href=&quot;http://university.rubymendicant.com/admissions&quot;&gt;applications are open&lt;/a&gt;! Hopefully I&amp;#8217;ll see you there.&lt;/p&gt;
 </content>
   </entry>
   

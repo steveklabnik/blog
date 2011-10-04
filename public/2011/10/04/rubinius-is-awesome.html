@@ -1,0 +1,574 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rubinius Is Awesome - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/10/04/rubinius-is-awesome.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Rubinius Is Awesome</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-04T08:40:00-04:00" pubdate  data-updated="true" >Oct 4<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>You walk into work tomorrow morning, and your boss says this:</p>
+
+<blockquote><p>Boss: Hey, we&#8217;re gonna need to go ahead and have you implement
+require_relative in rubinius. We have some new servers coming in, and we&#8217;ll
+be running it in production, but we use some 1.9.2 features of MRI that
+haven&#8217;t been implemented yet. So if you could just go ahead and get to
+implementing that, that would be terrific, OK?</p></blockquote>
+
+<p>Wat do?</p>
+
+<p>(Disregard that your boss would never say this. I kinda wish some of mine
+would&#8230;)</p>
+
+<blockquote><p>You: Excuse me, I believe you have my stapler&#8230;</p></blockquote>
+
+<p>Err, sorry.</p>
+
+<blockquote><p>You: No problem, boss. Rubinius is mostly just Ruby, and it has a really
+helpful core team. I&#8217;m sure it won&#8217;t be a big deal.</p></blockquote>
+
+<p>Would you say this? Well, you should. I&#8217;m not gonna lie and say that <em>every</em>
+feature is super simple to implement, or rbx-2.0 would be out already, but for
+a language interpreter, Rubinius is one of the easiest I&#8217;ve ever tried to get
+into. I actually did implement require_relative last night, and it took me about
+an hour and a half.</p>
+
+<p>This is my story.</p>
+
+<p>(note: dramatazation. Actual wording made unneccesarily silly to protect the
+innocent. please do try this at home)</p>
+
+<figure role=code><figcaption><span>lol.txt</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+</pre></td><td class='code' width='100%'><pre><code class='text'><div class='line'>$ ssh stevessecretserver
+</div><div class='line'>$ tmux attach
+</div><div class='line'>&lt;brings up irssi, I&#39;m already in #rubinius on Freenode&gt;
+</div><div class='line'>#rubinius: steveklabnik: hey, I need require\_relative to run my app. How hard
+</div><div class='line'>would you think that is to implement?
+</div><div class='line'>#rubinius: evan: Naw, man, it&#39;d take like fifteen minutes. Go check out
+</div><div class='line'>http://rubygems.org/gems/rbx-require-relative, it&#39;s alredy basically got what
+</div><div class='line'>you want
+</div><div class='line'>#rubinius: steveklabnik: sweet.
+</div><div class='line'>#rubinius: brixen: just grep for &#39;def require&#39;
+</div><div class='line'>#rubinius: brixen: and run bin/mspec -tx19 core/kernel/require\_relative to
+</div><div class='line'>run the RubySpecs for it.
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Armed with this knowledge, I found where require is defined in rbx:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/kernel.rb#L737'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">require</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require</span> <span class="nb">name</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, I had to look at CodeLoader:</p>
+
+<figure role=code><figcaption><span>kernel/common/codeloader.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader.rb#L30'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Searches for and loads Ruby source files and shared library extension</span>
+</div><div class='line'><span class="c1"># files. See CodeLoader.require for the rest of Kernel#require</span>
+</div><div class='line'><span class="c1"># functionality.</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">.</span><span class="n">synchronize</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="k">do</span>
+</div><div class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">unless</span> <span class="n">resolve_require_path</span>
+</div><div class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="no">CodeLoader</span><span class="o">.</span><span class="n">loading?</span> <span class="vi">@load_path</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@type</span> <span class="o">==</span> <span class="ss">:ruby</span>
+</div><div class='line'>      <span class="no">CodeLoader</span><span class="o">.</span><span class="n">loading</span> <span class="vi">@load_path</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">if</span> <span class="vi">@type</span> <span class="o">==</span> <span class="ss">:ruby</span>
+</div><div class='line'>    <span class="n">load_file</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="n">load_library</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">return</span> <span class="vi">@type</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmm, see <code>CodeLoader.require</code>. There are codeloader18 and codeloader19
+files&#8230;</p>
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader19.rb'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">Rubinius</span>
+</div><div class='line'>  <span class="k">class</span> <span class="nc">CodeLoader</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Searches $LOAD_PATH for a file named +name+. Does not append any file</span>
+</div><div class='line'>    <span class="c1"># extension to +name+ while searching. Used by #load to resolve the name</span>
+</div><div class='line'>    <span class="c1"># to a full path to load. Also used by #require when the file extension is</span>
+</div><div class='line'>    <span class="c1"># provided.</span>
+</div><div class='line'>    <span class="k">def</span> <span class="nf">search_load_path</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">loading</span><span class="p">)</span>
+</div><div class='line'>      <span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">dir</span><span class="o">|</span>
+</div><div class='line'>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>        <span class="k">return</span> <span class="n">path</span> <span class="k">if</span> <span class="n">loadable?</span> <span class="n">path</span>
+</div><div class='line'>      <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>      <span class="k">return</span> <span class="nb">name</span> <span class="k">if</span> <span class="n">loading</span> <span class="ow">and</span> <span class="n">loadable?</span> <span class="s2">&quot;./</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>
+</div><div class='line'>      <span class="k">return</span> <span class="kp">nil</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay. So we define specific stuff into the 19 file. There&#8217;s also a
+kernel19. So I worked this up:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Attempt to load the given file, returning true if successful. Works just</span>
+</div><div class='line'><span class="c1"># like Kernel#require, except that it searches relative to the current</span>
+</div><div class='line'><span class="c1"># directory.</span>
+</div><div class='line'><span class="c1">#</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require_relative</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># requires files relative to the current directory. We do one interesting</span>
+</div><div class='line'><span class="c1"># check to make sure it&#39;s not called inside of an eval.</span>
+</div><div class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">scope</span> <span class="o">=</span> <span class="no">Rubinius</span><span class="o">::</span><span class="no">StaticScope</span><span class="o">.</span><span class="n">of_sender</span>
+</div><div class='line'>  <span class="n">script</span> <span class="o">=</span> <span class="n">scope</span><span class="o">.</span><span class="n">current_script</span>
+</div><div class='line'>  <span class="k">if</span> <span class="n">script</span>
+</div><div class='line'>    <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script</span><span class="o">.</span><span class="n">data_path</span><span class="p">),</span> <span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="k">raise</span> <span class="no">LoadError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Something is wrong in trying to get relative path&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>But then&#8230; running the specs gives me bunches of errors. What gives?</p>
+
+<figure role=code><figcaption><span>lol.txt</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='text'><div class='line'>&lt;back in irc&gt;
+</div><div class='line'>#rubinius: steveklabnik: yo, my specs are failing, and I&#39;m a n00b. Halp
+</div><div class='line'>pl0x?
+</div><div class='line'>#rubinius: brixen: oh, yeah, well, the StaticScope is the current scope,
+</div><div class='line'>and you&#39;re down another method, so that&#39;s _totally_ gonna screw up
+</div><div class='line'>your paths. Just get it above and pass it down. Oh, and File.join is
+</div><div class='line'>dumb, File.expand_path that shit!
+</div><div class='line'>#rubinius: steveklabnik: words.
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>So then I made this one little change:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Attempt to load the given file, returning true if successful. Works just</span>
+</div><div class='line'><span class="c1"># like Kernel#require, except that it searches relative to the current</span>
+</div><div class='line'><span class="c1"># directory.</span>
+</div><div class='line'><span class="c1">#</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">scope</span> <span class="o">=</span> <span class="no">Rubinius</span><span class="o">::</span><span class="no">StaticScope</span><span class="o">.</span><span class="n">of_sender</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require_relative</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># requires files relative to the current directory. We do one interesting</span>
+</div><div class='line'><span class="c1"># check to make sure it&#39;s not called inside of an eval.</span>
+</div><div class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">script</span> <span class="o">=</span> <span class="n">scope</span><span class="o">.</span><span class="n">current_script</span>
+</div><div class='line'>  <span class="k">if</span> <span class="n">script</span>
+</div><div class='line'>    <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script</span><span class="o">.</span><span class="n">data_path</span><span class="p">))</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="k">raise</span> <span class="no">LoadError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Something is wrong in trying to get relative path&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+</pre></td><td class='code' width='100%'><pre><code class='bash'><div class='line'><span class="nv">$ </span>bin/mspec -tx19 core/kernel/require_relative
+</div><div class='line'>rubinius 2.0.0dev <span class="o">(</span>1.9.2 cade3517 yyyy-mm-dd JI<span class="o">)</span> <span class="o">[</span>x86_64-apple-darwin10.8.0<span class="o">]</span>
+</div><div class='line'>.....................
+</div><div class='line'>
+</div><div class='line'>Finished in 0.191995 seconds
+</div><div class='line'>
+</div><div class='line'>1 file, 20 examples, 47 expectations, 0 failures, 0 errors
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/awwwyeah.jpg" alt="awwww yeah" /></p>
+
+<p>One more pull request, and I&#8217;ve got a patch in on rbx. I had one a few
+months ago, but this one was way cooler.</p>
+
+<h2>In conclusion</h2>
+
+<p>Even if I didn&#8217;t have some code to look at, because Rubinius is just Ruby, it
+was really easy to dive in and check out the code, because it&#8217;s all Ruby.
+Seriously. Rubinius is just Ruby. Just Ruby. Ruby.</p>
+
+<p>So dive in and add some features today! If having an awesome alternate Ruby
+implementation isn&#8217;t enough for you, the rbx team will bribe you with
+special stickers for committers, and sweet black-on-black tshirts for
+people with 10 commits or more!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-04T08:40:00-04:00" pubdate  data-updated="true" >Oct 4<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/10/04/rubinius-is-awesome.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/10/04/rubinius-is-awesome.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/28/real-modern-ruby-development.html">(Real) Modern Ruby Development</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/26/im-deleting-my-facebook-tonight.html">I'm Deleting My Facebook Tonight.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

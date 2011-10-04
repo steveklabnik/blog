@@ -64,6 +64,350 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-04T08:40:00-04:00" pubdate  data-updated="true" >Oct 4<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>You walk into work tomorrow morning, and your boss says this:</p>
+
+<blockquote><p>Boss: Hey, we&#8217;re gonna need to go ahead and have you implement
+require_relative in rubinius. We have some new servers coming in, and we&#8217;ll
+be running it in production, but we use some 1.9.2 features of MRI that
+haven&#8217;t been implemented yet. So if you could just go ahead and get to
+implementing that, that would be terrific, OK?</p></blockquote>
+
+<p>Wat do?</p>
+
+<p>(Disregard that your boss would never say this. I kinda wish some of mine
+would&#8230;)</p>
+
+<blockquote><p>You: Excuse me, I believe you have my stapler&#8230;</p></blockquote>
+
+<p>Err, sorry.</p>
+
+<blockquote><p>You: No problem, boss. Rubinius is mostly just Ruby, and it has a really
+helpful core team. I&#8217;m sure it won&#8217;t be a big deal.</p></blockquote>
+
+<p>Would you say this? Well, you should. I&#8217;m not gonna lie and say that <em>every</em>
+feature is super simple to implement, or rbx-2.0 would be out already, but for
+a language interpreter, Rubinius is one of the easiest I&#8217;ve ever tried to get
+into. I actually did implement require_relative last night, and it took me about
+an hour and a half.</p>
+
+<p>This is my story.</p>
+
+<p>(note: dramatazation. Actual wording made unneccesarily silly to protect the
+innocent. please do try this at home)</p>
+
+<figure role=code><figcaption><span>lol.txt</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+</pre></td><td class='code' width='100%'><pre><code class='text'><div class='line'>$ ssh stevessecretserver
+</div><div class='line'>$ tmux attach
+</div><div class='line'>&lt;brings up irssi, I&#39;m already in #rubinius on Freenode&gt;
+</div><div class='line'>#rubinius: steveklabnik: hey, I need require\_relative to run my app. How hard
+</div><div class='line'>would you think that is to implement?
+</div><div class='line'>#rubinius: evan: Naw, man, it&#39;d take like fifteen minutes. Go check out
+</div><div class='line'>http://rubygems.org/gems/rbx-require-relative, it&#39;s alredy basically got what
+</div><div class='line'>you want
+</div><div class='line'>#rubinius: steveklabnik: sweet.
+</div><div class='line'>#rubinius: brixen: just grep for &#39;def require&#39;
+</div><div class='line'>#rubinius: brixen: and run bin/mspec -tx19 core/kernel/require\_relative to
+</div><div class='line'>run the RubySpecs for it.
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Armed with this knowledge, I found where require is defined in rbx:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/kernel.rb#L737'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">require</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require</span> <span class="nb">name</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, I had to look at CodeLoader:</p>
+
+<figure role=code><figcaption><span>kernel/common/codeloader.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader.rb#L30'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Searches for and loads Ruby source files and shared library extension</span>
+</div><div class='line'><span class="c1"># files. See CodeLoader.require for the rest of Kernel#require</span>
+</div><div class='line'><span class="c1"># functionality.</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">.</span><span class="n">synchronize</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="k">do</span>
+</div><div class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">unless</span> <span class="n">resolve_require_path</span>
+</div><div class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="no">CodeLoader</span><span class="o">.</span><span class="n">loading?</span> <span class="vi">@load_path</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@type</span> <span class="o">==</span> <span class="ss">:ruby</span>
+</div><div class='line'>      <span class="no">CodeLoader</span><span class="o">.</span><span class="n">loading</span> <span class="vi">@load_path</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">if</span> <span class="vi">@type</span> <span class="o">==</span> <span class="ss">:ruby</span>
+</div><div class='line'>    <span class="n">load_file</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="n">load_library</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">return</span> <span class="vi">@type</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmm, see <code>CodeLoader.require</code>. There are codeloader18 and codeloader19
+files&#8230;</p>
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb </span><a href='https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader19.rb'>link</a></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">module</span> <span class="nn">Rubinius</span>
+</div><div class='line'>  <span class="k">class</span> <span class="nc">CodeLoader</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="c1"># Searches $LOAD_PATH for a file named +name+. Does not append any file</span>
+</div><div class='line'>    <span class="c1"># extension to +name+ while searching. Used by #load to resolve the name</span>
+</div><div class='line'>    <span class="c1"># to a full path to load. Also used by #require when the file extension is</span>
+</div><div class='line'>    <span class="c1"># provided.</span>
+</div><div class='line'>    <span class="k">def</span> <span class="nf">search_load_path</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">loading</span><span class="p">)</span>
+</div><div class='line'>      <span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">dir</span><span class="o">|</span>
+</div><div class='line'>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>        <span class="k">return</span> <span class="n">path</span> <span class="k">if</span> <span class="n">loadable?</span> <span class="n">path</span>
+</div><div class='line'>      <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>      <span class="k">return</span> <span class="nb">name</span> <span class="k">if</span> <span class="n">loading</span> <span class="ow">and</span> <span class="n">loadable?</span> <span class="s2">&quot;./</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>
+</div><div class='line'>      <span class="k">return</span> <span class="kp">nil</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay. So we define specific stuff into the 19 file. There&#8217;s also a
+kernel19. So I worked this up:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Attempt to load the given file, returning true if successful. Works just</span>
+</div><div class='line'><span class="c1"># like Kernel#require, except that it searches relative to the current</span>
+</div><div class='line'><span class="c1"># directory.</span>
+</div><div class='line'><span class="c1">#</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require_relative</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># requires files relative to the current directory. We do one interesting</span>
+</div><div class='line'><span class="c1"># check to make sure it&#39;s not called inside of an eval.</span>
+</div><div class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">scope</span> <span class="o">=</span> <span class="no">Rubinius</span><span class="o">::</span><span class="no">StaticScope</span><span class="o">.</span><span class="n">of_sender</span>
+</div><div class='line'>  <span class="n">script</span> <span class="o">=</span> <span class="n">scope</span><span class="o">.</span><span class="n">current_script</span>
+</div><div class='line'>  <span class="k">if</span> <span class="n">script</span>
+</div><div class='line'>    <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script</span><span class="o">.</span><span class="n">data_path</span><span class="p">),</span> <span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="k">raise</span> <span class="no">LoadError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Something is wrong in trying to get relative path&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>But then&#8230; running the specs gives me bunches of errors. What gives?</p>
+
+<figure role=code><figcaption><span>lol.txt</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='text'><div class='line'>&lt;back in irc&gt;
+</div><div class='line'>#rubinius: steveklabnik: yo, my specs are failing, and I&#39;m a n00b. Halp
+</div><div class='line'>pl0x?
+</div><div class='line'>#rubinius: brixen: oh, yeah, well, the StaticScope is the current scope,
+</div><div class='line'>and you&#39;re down another method, so that&#39;s _totally_ gonna screw up
+</div><div class='line'>your paths. Just get it above and pass it down. Oh, and File.join is
+</div><div class='line'>dumb, File.expand_path that shit!
+</div><div class='line'>#rubinius: steveklabnik: words.
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>So then I made this one little change:</p>
+
+<figure role=code><figcaption><span>kernel/common/kernel19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># Attempt to load the given file, returning true if successful. Works just</span>
+</div><div class='line'><span class="c1"># like Kernel#require, except that it searches relative to the current</span>
+</div><div class='line'><span class="c1"># directory.</span>
+</div><div class='line'><span class="c1">#</span>
+</div><div class='line'><span class="k">def</span> <span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">scope</span> <span class="o">=</span> <span class="no">Rubinius</span><span class="o">::</span><span class="no">StaticScope</span><span class="o">.</span><span class="n">of_sender</span>
+</div><div class='line'>  <span class="no">Rubinius</span><span class="o">::</span><span class="no">CodeLoader</span><span class="o">.</span><span class="n">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="kp">module_function</span> <span class="ss">:require_relative</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span>kernel/common/codeloader19.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># requires files relative to the current directory. We do one interesting</span>
+</div><div class='line'><span class="c1"># check to make sure it&#39;s not called inside of an eval.</span>
+</div><div class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">require_relative</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">script</span> <span class="o">=</span> <span class="n">scope</span><span class="o">.</span><span class="n">current_script</span>
+</div><div class='line'>  <span class="k">if</span> <span class="n">script</span>
+</div><div class='line'>    <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script</span><span class="o">.</span><span class="n">data_path</span><span class="p">))</span>
+</div><div class='line'>  <span class="k">else</span>
+</div><div class='line'>    <span class="k">raise</span> <span class="no">LoadError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Something is wrong in trying to get relative path&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+</pre></td><td class='code' width='100%'><pre><code class='bash'><div class='line'><span class="nv">$ </span>bin/mspec -tx19 core/kernel/require_relative
+</div><div class='line'>rubinius 2.0.0dev <span class="o">(</span>1.9.2 cade3517 yyyy-mm-dd JI<span class="o">)</span> <span class="o">[</span>x86_64-apple-darwin10.8.0<span class="o">]</span>
+</div><div class='line'>.....................
+</div><div class='line'>
+</div><div class='line'>Finished in 0.191995 seconds
+</div><div class='line'>
+</div><div class='line'>1 file, 20 examples, 47 expectations, 0 failures, 0 errors
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/awwwyeah.jpg" alt="awwww yeah" /></p>
+
+<p>One more pull request, and I&#8217;ve got a patch in on rbx. I had one a few
+months ago, but this one was way cooler.</p>
+
+<h2>In conclusion</h2>
+
+<p>Even if I didn&#8217;t have some code to look at, because Rubinius is just Ruby, it
+was really easy to dive in and check out the code, because it&#8217;s all Ruby.
+Seriously. Rubinius is just Ruby. Just Ruby. Ruby.</p>
+
+<p>So dive in and add some features today! If having an awesome alternate Ruby
+implementation isn&#8217;t enough for you, the rbx team will bribe you with
+special stickers for committers, and sweet black-on-black tshirts for
+people with 10 commits or more!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a></h1>
     
     
@@ -77,7 +421,7 @@
 
 
 
-<time datetime="2011-10-01T13:01:00-05:00" pubdate  data-updated="true" >Oct 1<span>st</span>, 2011</time></p>
+<time datetime="2011-10-01T13:01:00-04:00" pubdate  data-updated="true" >Oct 1<span>st</span>, 2011</time></p>
     
   </header>
 
@@ -235,7 +579,7 @@ the <a href="http://en.wikipedia.org/wiki/Anarchist_Catalonia#Clashes_with_the_C
 
 
 
-<time datetime="2011-09-28T06:31:00-05:00" pubdate  data-updated="true" >Sep 28<span>th</span>, 2011</time></p>
+<time datetime="2011-09-28T06:31:00-04:00" pubdate  data-updated="true" >Sep 28<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -371,7 +715,7 @@ about it.</p>
 
 
 
-<time datetime="2011-09-26T08:34:00-05:00" pubdate  data-updated="true" >Sep 26<span>th</span>, 2011</time></p>
+<time datetime="2011-09-26T08:34:00-04:00" pubdate  data-updated="true" >Sep 26<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -420,7 +764,7 @@ give up Facebook, but I figured I&#8217;d warn you anyways.</p>
 
 
 
-<time datetime="2011-09-23T17:03:00-05:00" pubdate  data-updated="true" >Sep 23<span>rd</span>, 2011</time></p>
+<time datetime="2011-09-23T17:03:00-04:00" pubdate  data-updated="true" >Sep 23<span>rd</span>, 2011</time></p>
     
   </header>
 
@@ -544,7 +888,7 @@ maybe an extraction of another class is worthwhile.</p>
 
 
 
-<time datetime="2011-09-22T10:25:00-05:00" pubdate  data-updated="true" >Sep 22<span>nd</span>, 2011</time></p>
+<time datetime="2011-09-22T10:25:00-04:00" pubdate  data-updated="true" >Sep 22<span>nd</span>, 2011</time></p>
     
   </header>
 
@@ -1586,7 +1930,7 @@ Those who ship, win. Make things a little better, <code>git commit &amp;&amp; gi
 
 
 
-<time datetime="2011-09-09T12:00:00-05:00" pubdate  data-updated="true" >Sep 9<span>th</span>, 2011</time></p>
+<time datetime="2011-09-09T12:00:00-04:00" pubdate  data-updated="true" >Sep 9<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -2032,7 +2376,7 @@ you do stuff like this:</p>
 
 
 
-<time datetime="2011-09-06T00:00:00-05:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
+<time datetime="2011-09-06T00:00:00-04:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -2658,7 +3002,7 @@ for length here. Until next time!</p>
 
 
 
-<time datetime="2011-09-04T00:00:00-05:00" pubdate  data-updated="true" >Sep 4<span>th</span>, 2011</time></p>
+<time datetime="2011-09-04T00:00:00-04:00" pubdate  data-updated="true" >Sep 4<span>th</span>, 2011</time></p>
     
   </header>
 
@@ -2733,7 +3077,7 @@ find time to invest in you, too.</p>
 
 
 
-<time datetime="2011-08-22T00:00:00-05:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
     
   </header>
 
@@ -2817,75 +3161,6 @@ up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz Is Nice So We Are Nice</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-08-19T00:00:00-05:00" pubdate  data-updated="true" >Aug 19<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Rubyists have a saying, or at least, we used to. &#8220;Matz is nice so we are
-nice.&#8221; This has sort of been lost over the years&#8230; some people who have
-been around Ruby for a long time still say this, but it&#8217;s something
-that&#8217;s gone in and out of popularity.</p>
-
-<h2>Nice should be the default</h2>
-
-<p>Most of being nice, in a software context, is about being considerate.
-Not unnecessarily trash talking other people&#8217;s stuff. Not going out of
-your way to be a jerk. Try to be helpful. Treat others how you want to
-be treated.</p>
-
-<h2>Sometimes, the truth hurts</h2>
-
-<p>Being considerate of others, however, can only go so far. While a lot of
-what we do is subjective, a lot of is objective, too. If you&#8217;re building
-a new project, not saying &#8220;this is why we&#8217;re awesome&#8221; is silly. Old code
-is often bad. Other people&#8217;s code is often bad. The key in &#8220;not
-unnecessarily trash talking&#8217; is the <em>neccesary</em> part. There&#8217;s a
-difference between &#8220;My library is better&#8221; and &#8220;My library is better and
-their library sucks.&#8221;</p>
-
-<h2>The last thing I&#8217;ll say about RVM Drama</h2>
-
-<p>After talking to a few people, I guess I committed a bit of the sin I
-was trying to rail against: I got some feedback that it was thought that
-I was villainizing Sam, and a little easy on Wayne. This is natural,
-because I&#8217;m friends with Wayne and I don&#8217;t really know Sam, but in the
-interest of being nice myself, I just want to say this: I think that all
-that drama last week was largely a perfect storm of a few different
-factors, and I don&#8217;t think that Sam set out to hurt anyone specifically.
-If and when I ever have an issue with RVM, I&#8217;m totally going to try out
-rbenv. I like having options. I like there being multiple options.
-TMTOWTDI. And Sam builds a ton of other software that I really enjoy,
-like Sprockets, and pow. There&#8217;s a big difference between &#8220;that guy is
-an asshole&#8221; and &#8220;I think that that situation could have been handled
-better.&#8221;</p>
-
-<p>Let&#8217;s all build lots of cool software together.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -2914,6 +3189,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a>
       </li>
     
@@ -2927,10 +3206,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/22/extracting-domain-models-a-practical-example.html">Extracting Domain Models: A Practical Example</a>
       </li>
     
   </ul>
