@@ -64,6 +64,134 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2010/03/05/writing-a-su-feature-with-authlogic.html">Writing a &#8220;Su&#8221; Feature With Authlogic</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-03-05T00:00:00-05:00" pubdate  data-updated="true" >Mar 5<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sometimes, when responding to a support request, it&#8217;s nice to see what your
+users see. At the same time, you don&#8217;t want to ask your users for their
+passwords, out of respect for their privacy. So what do you do?</p>
+
+<p>Well, *NIX systems have a program called su.  Here&#8217;s what man su has to say:</p>
+
+<blockquote><p>NAME
+       su - run a shell with substitute user and group IDs</p>
+
+<p>SYNOPSIS
+       su [OPTION]&#8230; [-] [USER [ARG]&#8230;]</p>
+
+<p>DESCRIPTION
+       Change the effective user id and group id to that of USER.</p></blockquote>
+
+<p>su can be thought of as &#8220;substitute user&#8221; or &#8220;switch user.&#8221; It&#8217;s a command
+system administrators use to assume the identity of one of their users, or a
+way for someone with the root password on the system to switch to the root
+account itself. So how can we incorporate this into a web application?</p>
+
+<p>Well, we want to first log ourselves out, and then log in as the user we&#8217;re
+su-ing to. That&#8217;s it. The tricky part, however, comes in when we&#8217;re logging
+in: as we said before, we don&#8217;t want to ask for their password. Luckily,
+Authlogic provides a way to create our UserSession object directly from a User
+object by just passing it to create.</p>
+
+<p>This lets us write a controller method to do this pretty easily:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+  current_user_session.destroy
+  UserSession.create!(@user)
+  flash[:notice] = "You've been su-d to that user."
+  redirect_to dashboard_path
+end
+</code></pre>
+
+<p>Add in a route:</p>
+
+<pre><code>map.admin_su "/admin/su/:id", :controller =&gt; "admin", :action =&gt; "su"
+</code></pre>
+
+<p>And to a view somewhere in your administrative tools:</p>
+
+<pre><code>&lt;%= link_to "log in as this user", admin_su_path(@user) %&gt;
+</code></pre>
+
+<p>And we&#8217;re good to go!</p>
+
+<p>One last thing about this, though: You don&#8217;t want to let anyone who&#8217;s not an
+administrator do this, for obvious reasons. My administrative controllers
+always include a block like this:</p>
+
+<pre><code>access_control do
+  allow :admin
+end
+</code></pre>
+
+<p>acl9 makes this really easy, but it&#8217;s really important.</p>
+
+<p>So there you have it. Easy as pie.</p>
+
+<p>EDIT: This post made the Rails subreddit, and <a href="http://www.reddit.com/r/rails/comments/cb0da/writing_a_su_feature_with_authlogic/c0rf26w">brettbender posted his code</a>
+to get you back to admin. Here it is:</p>
+
+<blockquote><p>I used this article to help build a su feature for a rails app I&#8217;m working
+on. thought I would share the code to let you su / exit-su back to the
+original user you were logged in as. You just need to add a link somewhere
+persistent if your session contains an entry for :su_user that links to the
+unsu action.</p>
+
+<p>Inside your admin controller, make sure you limit access to these actions:</p>
+
+<pre><code>def su
+  @user = User.find params[:id]
+
+  # change these 3 lines to apply to your session representation
+  session[:su_user] = self.current_user.id
+  self.current_user = @user
+
+  flash[:notice] = "You've been logged in as #{@user.login}."
+  redirect_to "/"
+end
+
+def unsu
+  redirect_url = "/"
+  if(session.has_key?(:su_user))
+    self.current_user = User.find session[:su_user]
+    session.delete :su_user
+    flash[:notice] = "You have exited your switch user session. You are
+    redirect_url = "/admin/users/"
+  else
+    flash[:error] = "Sorry, we couldn't find your original user."
+  end
+
+  redirect_to redirect_url
+end
+</code></pre></blockquote>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2010/03/03/why-bother-creating.html">Why Bother Creating?</a></h1>
     
     
@@ -709,6 +837,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I&#8217;m Killing My Cell Phone</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a>
       </li>
     
@@ -722,10 +854,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/09/26/im-deleting-my-facebook-tonight.html">I&#8217;m Deleting My Facebook Tonight.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a>
       </li>
     
   </ul>

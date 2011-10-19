@@ -64,6 +64,108 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple to Contribute to Ruby&#8217;s Documentation</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Okay! So, if you&#8217;d read <a href="/2011/05/10/contributing-to-ruby-s-documentation.html">my previous article on
+this</a>, you&#8217;d know how
+easy it is to contribute to Ruby&#8217;s Documentaiton.</p>
+
+<blockquote><p>But Steve, I&#8217;m <em>still</em> kinda scared.</p></blockquote>
+
+<p>Okay, so here we go: I&#8217;m making it even easier on you.</p>
+
+<p>Send me what you want changed, and how, and I&#8217;ll make a patch and submit
+it on your behalf.</p>
+
+<p>No, seriously, I will. I already did once. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873">This guy</a> posted something about how it was too hard, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875">so
+I made a patch for him</a>. And now Ruby is better because of it.</p>
+
+<h2>Patches don&#8217;t have to be patches</h2>
+
+<p>Seriously, I don&#8217;t even mean diff outputs. I just got this email:</p>
+
+<blockquote><p>I&#8217;m eager to contribute docs but I don&#8217;t know where to start: I don&#8217;t
+mean pulling down the repo and all that, I mean, I see this link
+here:http://segment7.net/projects/ruby/documentation_coverage.txt but
+all I see is a ton of &#8220;# is documented&#8221; comments. Where does a
+relative n00b begin? Poking around in the source code is, well,
+intimidating. I&#8217;m completely new to this but I take direction well.
+Just point me in the right direction. Just give me something to
+document, please!</p></blockquote>
+
+<p>I sent this back:</p>
+
+<blockquote><p>No code diving needed! That&#8217;s part of it. Let&#8217;s do this: Find the documentation for one of your favorite methods. Here, I&#8217;ll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:</p>
+
+<blockquote><p>Removes nil elements from the array. Returns nil if no changes were made, otherwise returns </i>ary</i>.</p></blockquote>
+
+<p>Why&#8217;s that </i> there? Total screw-up.  For example. So, send me this email:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There&#8217;s an extra </i> that&#8217;s screwing things up.</p>
+
+<p>-Jonathan&#8221;</p>
+
+<p>Done! I&#8217;ll go from there. How about this one:</p>
+
+<p>&#8220;Hey Steve-</p>
+
+<p>I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394</p>
+
+<p>These docs kind of suck. What if I don&#8217;t know what Marshal is? There should at <em>least</em> be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like &#8220;You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393</p>
+
+<ul>
+<li>Jonathan&#8221;</li>
+</ul>
+
+
+<p>I&#8217;m sure you can find something that&#8217;s formatted wrong, or worded incorrectly, or anything else.</p>
+
+<p>-Steve</p></blockquote>
+
+<p>Now, the <em>closer</em> it is to an actual patch, the faster I&#8217;ll be able to
+do it. A vague &#8220;this documentation is confusing, but I&#8217;m not sure why&#8221;
+is helpful, but will take longer. I&#8217;d rather get that email than not. If
+you&#8217;re not sure, hit send.</p>
+
+<h2>Just Do It</h2>
+
+<p>And so I&#8217;ll do it again. Scared to deal with doc patches? I&#8217;ll make them
+up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
+
+<p>That&#8217;s all.</p>
+
+<p>Send me patches.
+<a href="mailto:steve@steveklabnik.com">steve@steveklabnik.com</a>. Do it.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/08/19/matz-is-nice-so-we-are-nice.html">Matz Is Nice So We Are Nice</a></h1>
     
     
@@ -1741,64 +1843,6 @@ us on the IRC (#rstatus on freenode), and help file bugs and patch them!</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/03/23/announcing-rstat-us.html">Announcing rstat.us</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-03-23T00:00:00-04:00" pubdate  data-updated="true" >Mar 23<span>rd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Whew.</p>
-
-<p>If you&#8217;ve been <a href="http://twitter.com/steveklabnik">following me on Twitter</a> at all lately, you&#8217;ll know that
-I&#8217;ve been working hard on a new project lately. Tonight, even though it&#8217;s
-late, I&#8217;m finally getting it out there. Please welcome <a href="http://rstat.us/">http://rstat.us/</a>
-to the world! (as soon as the DNS updates. ;) )</p>
-
-<p><a href="http://rstat.us">rstat.us</a> is a micro-blogging service, just like Twitter. There&#8217;s one big
-difference, though: it is distributed. Oh, and it&#8217;s 100% open source. So two
-things. It&#8217;s also integrated with Facebook and Twitter, so you can just log in
-with either of those accounts, and it&#8217;ll syndicate your posts. Well, just to
-Twitter right now, but we&#8217;re getting there.</p>
-
-<p>Here&#8217;s the other cool thing: Want to own your data? You can actually <a href="http://github.com/hotsh/rstat.us">get the
-code</a> and run a copy yourself! But you won&#8217;t get left out: you can follow
-anyone else that uses the <a href="http://ostatus.org/">ostatus</a> protocol, like <a href="http://identi.ca/">http://identi.ca/</a>,
-and it&#8217;ll Just Work. You just have to grab the URL to their feed, put it in,
-and it&#8217;s all good! But you probably shouldn&#8217;t do that yet. We&#8217;re still working
-on some features.</p>
-
-<p><a href="http://rstat.us">rstat.us</a> is still very much alpha quality. 7 or 8 of my best friends and
-I have been fighting off sleep, food, and tests for the last two weeks to put
-this together. Please <a href="http://rstat.us/">give it a try</a> and let me know what you think, tell
-me if you can break it, or anything else that&#8217;s particularly interesting. If
-you&#8217;re the coding type, please check out the <a href="http://github.com/hotsh/rstat.us/wiki">wiki</a> for a big old list of
-stuff we&#8217;d like to do.</p>
-
-<p>Oh, and of course, you should <a href="http://rstat.us/users/steveklabnik">follow me on rstat.us</a>.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -1829,6 +1873,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I&#8217;m Killing My Cell Phone</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a>
       </li>
     
@@ -1842,10 +1890,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/09/26/im-deleting-my-facebook-tonight.html">I&#8217;m Deleting My Facebook Tonight.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a>
       </li>
     
   </ul>

@@ -4,13 +4,44 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-10-04T13:24:55-04:00</updated>
+  <updated>2011-10-19T10:56:08-04:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>For Science: I&#8217;m Killing My Cell Phone</title>
+    <link href="http://blog.steveklabnik.com/2011/10/19/for-science-im-killing-my-cell-phone.html"/>
+    <updated>2011-10-19T10:44:00-04:00</updated>
+    <id>http://blog.steveklabnik.com/2011/10/19/for-science-im-killing-my-cell-phone</id>
+    <content type="html">&lt;p&gt;Yep. Doin&amp;#8217; it. This morning I swung by the Sprint store and picked up a 4G
+hotspot. Gonna transfer my number to Google Voice this evening.&lt;/p&gt;
+
+&lt;h2&gt;lolwhut?&lt;/h2&gt;
+
+&lt;p&gt;Yep. I&amp;#8217;m terribly addicted to my phone right now. This is fine, but I&amp;#8217;m
+always interested in improving myself. I have a few friends who&amp;#8217;ve done
+similar things, and really enjoyed it. So I&amp;#8217;m giving it a solid 6 months.
+Sometimes, experiments work, and sometimes they don&amp;#8217;t. I&amp;#8217;m doing this
+for fun more than anything, and so it might not work out. Google Maps is
+damn handy.&lt;/p&gt;
+
+&lt;h2&gt;So I can&amp;#8217;t call you?&lt;/h2&gt;
+
+&lt;p&gt;Naw, it just means there might be a tad more latency. I&amp;#8217;m on my computer all
+the effing time anyway, so I doubt that you&amp;#8217;ll really notice. If someone
+calls when I&amp;#8217;m not at my computer, Google will just take a recording and
+email me the transcript. No biggie.&lt;/p&gt;
+
+&lt;h2&gt;Yeah, well, have fun with that!&lt;/h2&gt;
+
+&lt;p&gt;I will. And I&amp;#8217;ll keep you all posted on how it goes. I plan to do a
+retrospective monthly.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Rubinius Is Awesome</title>
@@ -2002,7 +2033,7 @@ blocks.&lt;/p&gt;
 
 
 &lt;p&gt;While this is shorter, and a bit more Rubyish, it also means that we lose the
-&lt;a href=&quot;http://en.wikipedia.org/wiki/Reification_(computer_science&quot;&gt;reification&lt;/a&gt;) of
+&lt;a href=&quot;http://en.wikipedia.org/wiki/Reification_(computer_science)&quot;&gt;reification&lt;/a&gt; of
 our concept of a policy. While this is &lt;em&gt;shorter&lt;/em&gt;, I find it more
 confusing. Why am I giving this one line block to the presenter? It&amp;#8217;s not really
 clear to me. And I can&amp;#8217;t give a better name to item&amp;#8230; and if I want to change
@@ -4375,42 +4406,6 @@ is huge for me, as I&amp;#8217;m really missing notifications.&lt;/p&gt;
 
 &lt;p&gt;Other than that, just keep using it! Tell your friends! If you code, come join
 us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Announcing rstat.us</title>
-    <link href="http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html"/>
-    <updated>2011-03-23T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us</id>
-    <content type="html">&lt;p&gt;Whew.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;#8217;ve been &lt;a href=&quot;http://twitter.com/steveklabnik&quot;&gt;following me on Twitter&lt;/a&gt; at all lately, you&amp;#8217;ll know that
-I&amp;#8217;ve been working hard on a new project lately. Tonight, even though it&amp;#8217;s
-late, I&amp;#8217;m finally getting it out there. Please welcome &lt;a href=&quot;http://rstat.us/&quot;&gt;http://rstat.us/&lt;/a&gt;
-to the world! (as soon as the DNS updates. ;) )&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; is a micro-blogging service, just like Twitter. There&amp;#8217;s one big
-difference, though: it is distributed. Oh, and it&amp;#8217;s 100% open source. So two
-things. It&amp;#8217;s also integrated with Facebook and Twitter, so you can just log in
-with either of those accounts, and it&amp;#8217;ll syndicate your posts. Well, just to
-Twitter right now, but we&amp;#8217;re getting there.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#8217;s the other cool thing: Want to own your data? You can actually &lt;a href=&quot;http://github.com/hotsh/rstat.us&quot;&gt;get the
-code&lt;/a&gt; and run a copy yourself! But you won&amp;#8217;t get left out: you can follow
-anyone else that uses the &lt;a href=&quot;http://ostatus.org/&quot;&gt;ostatus&lt;/a&gt; protocol, like &lt;a href=&quot;http://identi.ca/&quot;&gt;http://identi.ca/&lt;/a&gt;,
-and it&amp;#8217;ll Just Work. You just have to grab the URL to their feed, put it in,
-and it&amp;#8217;s all good! But you probably shouldn&amp;#8217;t do that yet. We&amp;#8217;re still working
-on some features.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; is still very much alpha quality. 7 or 8 of my best friends and
-I have been fighting off sleep, food, and tests for the last two weeks to put
-this together. Please &lt;a href=&quot;http://rstat.us/&quot;&gt;give it a try&lt;/a&gt; and let me know what you think, tell
-me if you can break it, or anything else that&amp;#8217;s particularly interesting. If
-you&amp;#8217;re the coding type, please check out the &lt;a href=&quot;http://github.com/hotsh/rstat.us/wiki&quot;&gt;wiki&lt;/a&gt; for a big old list of
-stuff we&amp;#8217;d like to do.&lt;/p&gt;
-
-&lt;p&gt;Oh, and of course, you should &lt;a href=&quot;http://rstat.us/users/steveklabnik&quot;&gt;follow me on rstat.us&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   

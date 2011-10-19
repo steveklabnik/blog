@@ -64,6 +64,59 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I&#8217;m Killing My Cell Phone</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-19T10:44:00-04:00" pubdate  data-updated="true" >Oct 19<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Yep. Doin&#8217; it. This morning I swung by the Sprint store and picked up a 4G
+hotspot. Gonna transfer my number to Google Voice this evening.</p>
+
+<h2>lolwhut?</h2>
+
+<p>Yep. I&#8217;m terribly addicted to my phone right now. This is fine, but I&#8217;m
+always interested in improving myself. I have a few friends who&#8217;ve done
+similar things, and really enjoyed it. So I&#8217;m giving it a solid 6 months.
+Sometimes, experiments work, and sometimes they don&#8217;t. I&#8217;m doing this
+for fun more than anything, and so it might not work out. Google Maps is
+damn handy.</p>
+
+<h2>So I can&#8217;t call you?</h2>
+
+<p>Naw, it just means there might be a tad more latency. I&#8217;m on my computer all
+the effing time anyway, so I doubt that you&#8217;ll really notice. If someone
+calls when I&#8217;m not at my computer, Google will just take a recording and
+email me the transcript. No biggie.</p>
+
+<h2>Yeah, well, have fun with that!</h2>
+
+<p>I will. And I&#8217;ll keep you all posted on how it goes. I plan to do a
+retrospective monthly.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a></h1>
     
     
@@ -2199,7 +2252,7 @@ blocks.</p>
 
 
 <p>While this is shorter, and a bit more Rubyish, it also means that we lose the
-<a href="http://en.wikipedia.org/wiki/Reification_(computer_science">reification</a>) of
+<a href="http://en.wikipedia.org/wiki/Reification_(computer_science)">reification</a> of
 our concept of a policy. While this is <em>shorter</em>, I find it more
 confusing. Why am I giving this one line block to the presenter? It&#8217;s not really
 clear to me. And I can&#8217;t give a better name to item&#8230; and if I want to change
@@ -3059,108 +3112,6 @@ find time to invest in you, too.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">I&#8217;m Making It Dead Simple to Contribute to Ruby&#8217;s Documentation</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-08-22T00:00:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Okay! So, if you&#8217;d read <a href="/2011/05/10/contributing-to-ruby-s-documentation.html">my previous article on
-this</a>, you&#8217;d know how
-easy it is to contribute to Ruby&#8217;s Documentaiton.</p>
-
-<blockquote><p>But Steve, I&#8217;m <em>still</em> kinda scared.</p></blockquote>
-
-<p>Okay, so here we go: I&#8217;m making it even easier on you.</p>
-
-<p>Send me what you want changed, and how, and I&#8217;ll make a patch and submit
-it on your behalf.</p>
-
-<p>No, seriously, I will. I already did once. <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38873">This guy</a> posted something about how it was too hard, <a href="http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/38875">so
-I made a patch for him</a>. And now Ruby is better because of it.</p>
-
-<h2>Patches don&#8217;t have to be patches</h2>
-
-<p>Seriously, I don&#8217;t even mean diff outputs. I just got this email:</p>
-
-<blockquote><p>I&#8217;m eager to contribute docs but I don&#8217;t know where to start: I don&#8217;t
-mean pulling down the repo and all that, I mean, I see this link
-here:http://segment7.net/projects/ruby/documentation_coverage.txt but
-all I see is a ton of &#8220;# is documented&#8221; comments. Where does a
-relative n00b begin? Poking around in the source code is, well,
-intimidating. I&#8217;m completely new to this but I take direction well.
-Just point me in the right direction. Just give me something to
-document, please!</p></blockquote>
-
-<p>I sent this back:</p>
-
-<blockquote><p>No code diving needed! That&#8217;s part of it. Let&#8217;s do this: Find the documentation for one of your favorite methods. Here, I&#8217;ll pick one: http://ruby-doc.org/core/classes/Array.html#M000278 okay, that looks okay, but look at compact!:</p>
-
-<blockquote><p>Removes nil elements from the array. Returns nil if no changes were made, otherwise returns </i>ary</i>.</p></blockquote>
-
-<p>Why&#8217;s that </i> there? Total screw-up.  For example. So, send me this email:</p>
-
-<p>&#8220;Hey Steve-</p>
-
-<p>Check out the docs for Array#compact!, here: http://ruby-doc.org/core/classes/Array.html#M000279 . There&#8217;s an extra </i> that&#8217;s screwing things up.</p>
-
-<p>-Jonathan&#8221;</p>
-
-<p>Done! I&#8217;ll go from there. How about this one:</p>
-
-<p>&#8220;Hey Steve-</p>
-
-<p>I checked out the docs for Time._load, here: http://www.ruby-doc.org/core/classes/Time.html#M000394</p>
-
-<p>These docs kind of suck. What if I don&#8217;t know what Marshal is? There should at <em>least</em> be a link to Marshall, here: http://ruby-doc.org/core/classes/Marshal.html And it should probably say something like &#8220;You can get a dumped Time object by using _dump: http://www.ruby-doc.org/core/classes/Time.html#M000393</p>
-
-<ul>
-<li>Jonathan&#8221;</li>
-</ul>
-
-
-<p>I&#8217;m sure you can find something that&#8217;s formatted wrong, or worded incorrectly, or anything else.</p>
-
-<p>-Steve</p></blockquote>
-
-<p>Now, the <em>closer</em> it is to an actual patch, the faster I&#8217;ll be able to
-do it. A vague &#8220;this documentation is confusing, but I&#8217;m not sure why&#8221;
-is helpful, but will take longer. I&#8217;d rather get that email than not. If
-you&#8217;re not sure, hit send.</p>
-
-<h2>Just Do It</h2>
-
-<p>And so I&#8217;ll do it again. Scared to deal with doc patches? I&#8217;ll make them
-up. I&#8217;m serious. I&#8217;ll do it. Send them to me.</p>
-
-<p>That&#8217;s all.</p>
-
-<p>Send me patches.
-<a href="mailto:steve@steveklabnik.com">steve@steveklabnik.com</a>. Do it.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -3189,6 +3140,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I&#8217;m Killing My Cell Phone</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/04/rubinius-is-awesome.html">Rubinius Is Awesome</a>
       </li>
     
@@ -3202,10 +3157,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/09/26/im-deleting-my-facebook-tonight.html">I&#8217;m Deleting My Facebook Tonight.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a>
       </li>
     
   </ul>
