@@ -29,3 +29,6 @@ email me the transcript. No biggie.
 
 I will. And I'll keep you all posted on how it goes. I plan to do a
 retrospective monthly.
+
+EDIT: I had to change my number because Google Voice wouldn't transfer my old
+one. So get a hold of me some other way, and I'll give you the new one.
