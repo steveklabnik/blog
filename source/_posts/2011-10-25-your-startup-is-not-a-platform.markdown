@@ -25,5 +25,5 @@ not a platform. White labeling being an exception.
 
 I'd make this rant longer, but I really need a good platform that addresses my
 market segment. Ideally, it'll enable some win-win synergies with other
-channel partner and grow the pie for both of us. Until then, I really won't find
+channel partners and grow the pie for both of us. Until then, I really won't find
 a good solution for this real pain I feel as a content producer.
