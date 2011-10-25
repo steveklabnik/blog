@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "New-post"
+title: "Your Startup is NOT a Platform"
 date: 2011-10-25 13:36
 comments: true
 categories:
