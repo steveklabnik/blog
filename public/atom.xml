@@ -4,13 +4,42 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-10-19T20:47:15-04:00</updated>
+  <updated>2011-10-25T13:48:52-04:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>New-post</title>
+    <link href="http://blog.steveklabnik.com/2011/10/25/your-startup-is-not-a-platform.html"/>
+    <updated>2011-10-25T13:36:00-04:00</updated>
+    <id>http://blog.steveklabnik.com/2011/10/25/your-startup-is-not-a-platform</id>
+    <content type="html">&lt;p&gt;No, seriously. This is a public service announcment to all MBAs who want to do
+startups: &amp;#8216;platform&amp;#8217; does not mean &amp;#8216;web site.&amp;#8217;&lt;/p&gt;
+
+&lt;p&gt;I know that &amp;#8216;platform&amp;#8217; is a hot thing right now. But seriously, the term has
+become basically useless. It&amp;#8217;s almost to the point that I just pretend you
+don&amp;#8217;t even say it.&lt;/p&gt;
+
+&lt;p&gt;A platform is primarily a B2B play. It can be B2C too, maybe, but largely, to
+have a platform, you need to enable other people to build something.
+Usually, that&amp;#8217;s another business. But if your website does not enable
+others to build something, or you&amp;#8217;re not white labeling it in some way,
+you&amp;#8217;re not a platform.&lt;/p&gt;
+
+&lt;p&gt;A platform basically needs an API. APIs are the primary way that two pieces of
+software connect to one another. If your web service doesn&amp;#8217;t have an API, it&amp;#8217;s
+not a platform. White labeling being an exception.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#8217;d make this rant longer, but I really need a good platform that addresses my
+market segment. Ideally, it&amp;#8217;ll enable some win-win synergies with other
+channel partner and grow the pie for both of us. Until then, I really won&amp;#8217;t find
+a good solution for this real pain I feel as a content producer.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>For Science: I&#8217;m Killing My Cell Phone</title>
@@ -4279,136 +4308,6 @@ BAM! You&amp;#8217;re done!&lt;/p&gt;
 &lt;p&gt;Let&amp;#8217;s all pitch in and make this the best documented Ruby release ever! In
 writing documentation, you might even find some things that you&amp;#8217;d like to help
 improve. ;)&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>The first week of rstat.us: Users, Press, Scaling, oh my!</title>
-    <link href="http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html"/>
-    <updated>2011-03-30T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my</id>
-    <content type="html">&lt;p&gt;Hey everyone. A lot of people have been asking me about &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt; lately,
-so I figured I&amp;#8217;d tell a little bit of the story as it&amp;#8217;s gone down so far.&lt;/p&gt;
-
-&lt;h2&gt;Stats&lt;/h2&gt;
-
-&lt;p&gt;First, here&amp;#8217;s some numbers:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Users: 4553&lt;/li&gt;
-&lt;li&gt;Uniques: 25,000&lt;/li&gt;
-&lt;li&gt;Pageviews: 119,385&lt;/li&gt;
-&lt;li&gt;Pages/visit: 4.77&lt;/li&gt;
-&lt;li&gt;Statuses posted: 9387&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Here&amp;#8217;s some fun info: stats on statuses by language:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;german 118&lt;/li&gt;
-&lt;li&gt;russian 1355&lt;/li&gt;
-&lt;li&gt;none 97 &amp;lt;- ha!&lt;/li&gt;
-&lt;li&gt;english 4836&lt;/li&gt;
-&lt;li&gt;spanish 1412&lt;/li&gt;
-&lt;li&gt;dutch 98&lt;/li&gt;
-&lt;li&gt;french 1155&lt;/li&gt;
-&lt;li&gt;portuguese 272&lt;/li&gt;
-&lt;li&gt;farsi 66&lt;/li&gt;
-&lt;li&gt;pinyin 1&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;Code&lt;/h2&gt;
-
-&lt;p&gt;Lines, by committer:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;28 AndrewVos&lt;/li&gt;
-&lt;li&gt;124 BRIMIL01&lt;/li&gt;
-&lt;li&gt;6 Blaine Cook&lt;/li&gt;
-&lt;li&gt;107 Brendan Taylor&lt;/li&gt;
-&lt;li&gt;924 Brian Miller&lt;/li&gt;
-&lt;li&gt;45 Caley Woods&lt;/li&gt;
-&lt;li&gt;162 Carol Nichols&lt;/li&gt;
-&lt;li&gt;20 Claudio Perez Gamayo&lt;/li&gt;
-&lt;li&gt;1347 Dominic Dagradi&lt;/li&gt;
-&lt;li&gt;4 James Larkby-Lahet&lt;/li&gt;
-&lt;li&gt;99 Jorge H. Cuadrado&lt;/li&gt;
-&lt;li&gt;258 Kat Hagan&lt;/li&gt;
-&lt;li&gt;10 Lauren Voswinkel&lt;/li&gt;
-&lt;li&gt;143 LindseyB&lt;/li&gt;
-&lt;li&gt;16 MenTaLguY&lt;/li&gt;
-&lt;li&gt;3 Michael Stevens&lt;/li&gt;
-&lt;li&gt;3 Murilo Santana&lt;/li&gt;
-&lt;li&gt;10 Nate Good&lt;/li&gt;
-&lt;li&gt;1 Peter Aronoff&lt;/li&gt;
-&lt;li&gt;24 Shebanian&lt;/li&gt;
-&lt;li&gt;44 Stephen Paul Weber&lt;/li&gt;
-&lt;li&gt;1409 Steve Klabnik&lt;/li&gt;
-&lt;li&gt;8 Tony Arcieri&lt;/li&gt;
-&lt;li&gt;478 Zachary Scott&lt;/li&gt;
-&lt;li&gt;104 burningTyger&lt;/li&gt;
-&lt;li&gt;28 james cook&lt;/li&gt;
-&lt;li&gt;56 kat&lt;/li&gt;
-&lt;li&gt;200 wilkie&lt;/li&gt;
-&lt;li&gt;10 wolfwood&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Also, wilkie has a lot more code in the 3 gems that we build off of, for our
-ostatus implementation.&lt;/p&gt;
-
-&lt;p&gt;That makes for 29 unique committers. These stats were generated by git-blame.&lt;/p&gt;
-
-&lt;p&gt;Just over 200 pull requests&lt;/p&gt;
-
-&lt;p&gt;872 commits&lt;/p&gt;
-
-&lt;h2&gt;The deal with Heroku&lt;/h2&gt;
-
-&lt;p&gt;Crazy! Such good stuff. I&amp;#8217;m really excited as to how it&amp;#8217;s going, but there
-were a few rocky points along the way as well. Some people saw me tweeting in
-frustration with Heroku, so here&amp;#8217;s the skinny:&lt;/p&gt;
-
-&lt;p&gt;On Sunday, for some reason, our 3 line app.js file, as well as our
-favicon.ico, started to take 60 seconds to respond. This meant that a dyno was
-getting tied up, and since Heroku changed the way their mesh works, they kept
-routing requests to these screwed up dynos. This caused a rash of 500 errors,
-and I frantically filed a support ticket. This was the first time I&amp;#8217;d had a
-paid app on Heroku, and they&amp;#8217;ve always been fantastic. The Hackety Hack site
-was on the free account, and performed beautifully, with similar traffic.&lt;/p&gt;
-
-&lt;p&gt;What it boils down to is this, though: Heroku took about 22 hours to respond
-to my support ticket, in any way. Not like &amp;#8220;we&amp;#8217;re looking at it, but it&amp;#8217;s
-Sunday, so it&amp;#8217;ll take a while.&amp;#8221; Crickets. Meanwhile, the errors kept
-happening. Eventually, I heard something from them, where they pretty much
-said &amp;#8216;I see other errors, try fixing those.&amp;#8217; with no response on the actual
-root cause. I got an email from a Level2 person who promised to investigate
-and escalate, but by now, I still haven&amp;#8217;t heard.&lt;/p&gt;
-
-&lt;p&gt;I also had a smaller issue with MongoHQ. To their credit, I heard back Sunday
-night, and the issue with them was an annoyance, not a showstopper. I ended up
-hearing from the CEO, who ended up following up with me multiple times, and in
-a pretty timely fashion.&lt;/p&gt;
-
-&lt;p&gt;So, we moved our hosting away from Heroku and onto Duostack. Now, full
-disclosure: I&amp;#8217;m friends with the guys from DuoStack. That said, they took care
-of me. I found a small bug in their platform when deploying the app, but
-everything&amp;#8217;s gone really well. Bunches of users have commented on how fast the
-site is now, and I&amp;#8217;ve been really happy with it so far. We&amp;#8217;ll see how it goes.&lt;/p&gt;
-
-&lt;h2&gt;The Future&lt;/h2&gt;
-
-&lt;p&gt;Anyway, here&amp;#8217;s what&amp;#8217;s next for &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt;: The biggest thing is getting to
-100% ostatus compliance. We spent lots of time this week getting screwed over
-by a bug in Google&amp;#8217;s hub implementation, but now that it&amp;#8217;s all taken care of
-now. While we work on that, we&amp;#8217;re also getting ready to deploy a statusnet
-compliant API, so people can use statusnet clients on mobile and desktop. This
-is huge for me, as I&amp;#8217;m really missing notifications.&lt;/p&gt;
-
-&lt;p&gt;Other than that, just keep using it! Tell your friends! If you code, come join
-us on the IRC (#rstatus on freenode), and help file bugs and patch them!&lt;/p&gt;
 </content>
   </entry>
   
