@@ -4,13 +4,48 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-10-25T13:51:38-04:00</updated>
+  <updated>2011-11-17T10:13:31-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Burnout</title>
+    <link href="http://blog.steveklabnik.com/2011/11/17/burnout.html"/>
+    <updated>2011-11-17T09:57:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/11/17/burnout</id>
+    <content type="html">&lt;p&gt;I have a confession to make: Other than one little stint at RubyC, I
+haven&amp;#8217;t really written code in almost a month. And I haven&amp;#8217;t really written a
+&amp;#8216;real&amp;#8217; blog post in almost six weeks.&lt;/p&gt;
+
+&lt;p&gt;It happens. I was hitting it really hard there for a while, and the
+combination of stresses from travel, speaking, writing, conference parties, and
+everything else was really getting to me. I don&amp;#8217;t think that I was burned out
+&lt;em&gt;yet&lt;/em&gt;, but I decided to explicitly take the last two weeks off from doing
+almost anything to prevent myself from getting to that point.&lt;/p&gt;
+
+&lt;p&gt;This doesn&amp;#8217;t mean that I&amp;#8217;m going to &lt;em&gt;stop&lt;/em&gt; doing any of these things. I&amp;#8217;d be
+lying if I tried to say that I&amp;#8217;d be reintroducing long-term balance into my
+life. That balance never really existed. I&amp;#8217;ve always been one to throw
+myself at things 100%. Balance is something I don&amp;#8217;t do particularly well.&lt;/p&gt;
+
+&lt;p&gt;One thing I am going to be working on, though, is this: Hackety and Shoes
+stress me out. Like a lot. This causes me to avoid working on them, which
+makes them not improve so quickly, which makes me stress about it worse. I&amp;#8217;m
+not really sure how to fix that one&amp;#8230; but at some point, I&amp;#8217;m going to have to
+confront that.&lt;/p&gt;
+
+&lt;p&gt;Anyway, hopefully I&amp;#8217;ll be back at it soon. Those of you waiting on some of my
+projects, my bad. Things will still be slow for a bit. I&amp;#8217;m going to D.C. this
+weekend to teach kids with Hackety and Lego Mindstorms, so maybe that&amp;#8217;ll get
+me out of this funk. Or maybe it&amp;#8217;ll delay it another couple of days.&lt;/p&gt;
+
+&lt;p&gt;But I&amp;#8217;ll be around again soon.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Your Startup is NOT a Platform</title>
@@ -36,7 +71,7 @@ not a platform. White labeling being an exception.&lt;/p&gt;
 
 &lt;p&gt;I&amp;#8217;d make this rant longer, but I really need a good platform that addresses my
 market segment. Ideally, it&amp;#8217;ll enable some win-win synergies with other
-channel partner and grow the pie for both of us. Until then, I really won&amp;#8217;t find
+channel partners and grow the pie for both of us. Until then, I really won&amp;#8217;t find
 a good solution for this real pain I feel as a content producer.&lt;/p&gt;
 </content>
   </entry>
@@ -4202,112 +4237,6 @@ humanities angle that my life has taken as of late. Hence, I&amp;#8217;ve change
 the title of my blog. And you can expect more posts along those lines.
 More about books, more about art and code, less whining. One may think
 I&amp;#8217;m maturing or something&amp;#8230;&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Contributing to Ruby&#8217;s Documentation</title>
-    <link href="http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation.html"/>
-    <updated>2011-05-10T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/05/10/contributing-to-ruby-s-documentation</id>
-    <content type="html">&lt;h3&gt;Update!&lt;/h3&gt;
-
-&lt;p&gt;I&amp;#8217;m now making it even easier than this: &lt;a href=&quot;http://blog.steveklabnik.com/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html&quot;&gt;Read my new post about how
-I&amp;#8217;ll do this for you&lt;/a&gt;. That said, if you want to do it yourself, the following will tell you how.&lt;/p&gt;
-
-&lt;h3&gt;Original Article&lt;/h3&gt;
-
-&lt;p&gt;Ruby 1.9.3 is coming out soon! &lt;a href=&quot;http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge&quot;&gt;drbrain has challenged the Ruby community to
-improve its documentation&lt;/a&gt;, but some people were asking about how to do so.
-So I made a video!&lt;/p&gt;
-
-&lt;p&gt;Some small errata: drbrain has informed me that he should edit the Changelog,
-not me. So don&amp;#8217;t do that. :)&lt;/p&gt;
-
-&lt;iframe src=&quot;http://player.vimeo.com/video/23522731?title=0&amp;amp;byline=0&amp;amp;portrait=0&quot; width=&quot;400&quot; height=&quot;300&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;
-
-
-&lt;p&gt;&lt;a href=&quot;http://vimeo.com/23522731&quot;&gt;How to contribute to Ruby&amp;#8217;s documentation.&lt;/a&gt; from &lt;a href=&quot;http://vimeo.com/steveklabnik&quot;&gt;Steve Klabnik&lt;/a&gt; on &lt;a href=&quot;http://vimeo.com&quot;&gt;Vimeo&lt;/a&gt;.&lt;/p&gt;
-
-
-&lt;p&gt;If you don&amp;#8217;t want to watch me talk about it, here&amp;#8217;s the same info, in text:&lt;/p&gt;
-
-&lt;p&gt;Getting the Ruby source is pretty easy. You can find it on GitHub, here:
-&lt;a href=&quot;http://github.com/ruby/ruby&quot;&gt;http://github.com/ruby/ruby&lt;/a&gt; . Click the &amp;#8220;fork&amp;#8221; button and clone down your
-own fork:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:YOURUSERNAME/ruby.git
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;After that&amp;#8217;s done, type &lt;code&gt;cd ruby&lt;/code&gt; and add the main project as an upstream. This will
-let you keep up-to-date with the latest changes:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git remote add upstream https://github.com/ruby/ruby.git
-
-$ git fetch upstream
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Okay! Now that you&amp;#8217;re all set up, poke around and find something that needs
-documented. I like to just look through the source, but you can also look
-&lt;a href=&quot;http://segment7.net/projects/ruby/documentation_coverage.txt&quot;&gt;here&lt;/a&gt; for a list of things that have no docs. Documentation is written in
-rdoc, and I&amp;#8217;d check the recent commits that drbrain has been making to guide
-you in style. &lt;a href=&quot;https://github.com/ruby/ruby/commit/071a678a156dde974d8e470b659c89cb02b07b3b&quot;&gt;This commit&lt;/a&gt;, for example, is a pretty good template. You
-can also check out the formatting guides &lt;a href=&quot;http://rdoc.rubyforge.org/RDoc/Markup.html&quot;&gt;here&lt;/a&gt;. There&amp;#8217;s also &lt;a href=&quot;http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html&quot;&gt;this&lt;/a&gt;
-which explains some directives for .rb files and &lt;a href=&quot;http://rdoc.rubyforge.org/RDoc/Parser/C.html&quot;&gt;this&lt;/a&gt; which handles
-directives for .c files.&lt;/p&gt;
-
-&lt;p&gt;Now that you&amp;#8217;ve made a change to the documentation, you can regenerate the
-docs by using rdoc. First, grab the latest version from rubygems:&lt;/p&gt;
-
-&lt;p&gt;   $ gem install rdoc&lt;/p&gt;
-
-&lt;p&gt;Always best to have the latest tools. Now do this to generate the docs:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rdoc &#8211;o tmpdoc lib/rss*
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I&amp;#8217;m passing it in an output directory with op, since the doc directory is not
-an rdoc directory. rdoc will complain and refuse to overwrite those files,
-which is a good thing. I&amp;#8217;m also passing in a pattern of what to compile
-documentation for, compiling all of it takes a few minutes! In this case, I
-chose to document the rss library.&lt;/p&gt;
-
-&lt;p&gt;Now you have a website in rdocout. Open up its index.html, and poke around for
-what you&amp;#8217;ve changed. If it all looks good, you&amp;#8217;re ready to make a patch!&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -r rdocout
-
-$ git add .
-
-$ git commit -m &quot;adding documentation for $SOMETHING&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, you have two options here. One is to simply push the change up to GitHub,
-and make a pull request.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git push origin
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&amp;#8230; aaand pull request. The core Ruby development doesn&amp;#8217;t really happen on
-GitHub though, and so your patch may take a while to get included. If you
-really want to do it right, submit a patch to RedMine. We&amp;#8217;ll use git to make
-this patch:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git format-patch HEAD~1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This says &amp;#8220;make a patch out of the last commit.&amp;#8221; It&amp;#8217;ll tell you a file name,
-it should start with 000.&lt;/p&gt;
-
-&lt;p&gt;Now, sign up for the Ruby RedMine &lt;a href=&quot;http://redmine.ruby-lang.org/account/register&quot;&gt;here&lt;/a&gt;. Once you&amp;#8217;ve clicked the
-confirmation email, &lt;a href=&quot;http://redmine.ruby-lang.org/projects/ruby-19/issues/new&quot;&gt;open a new ticket&lt;/a&gt;, and assign it to Eric Hodel,
-category DOC, and give it your Ruby version, even though it&amp;#8217;s not a big deal
-here. Click &amp;#8216;choose file&amp;#8217; and pick your patch, then &amp;#8216;create and continue&amp;#8217; and
-BAM! You&amp;#8217;re done!&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#8217;s all pitch in and make this the best documented Ruby release ever! In
-writing documentation, you might even find some things that you&amp;#8217;d like to help
-improve. ;)&lt;/p&gt;
 </content>
   </entry>
   

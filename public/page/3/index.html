@@ -64,6 +64,134 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/05/10/contributing-to-ruby-s-documentation.html">Contributing to Ruby&#8217;s Documentation</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-10T00:00:00-04:00" pubdate  data-updated="true" >May 10<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Update!</h3>
+
+<p>I&#8217;m now making it even easier than this: <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">Read my new post about how
+I&#8217;ll do this for you</a>. That said, if you want to do it yourself, the following will tell you how.</p>
+
+<h3>Original Article</h3>
+
+<p>Ruby 1.9.3 is coming out soon! <a href="http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge">drbrain has challenged the Ruby community to
+improve its documentation</a>, but some people were asking about how to do so.
+So I made a video!</p>
+
+<p>Some small errata: drbrain has informed me that he should edit the Changelog,
+not me. So don&#8217;t do that. :)</p>
+
+<iframe src="http://player.vimeo.com/video/23522731?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe>
+
+
+<p><a href="http://vimeo.com/23522731">How to contribute to Ruby&#8217;s documentation.</a> from <a href="http://vimeo.com/steveklabnik">Steve Klabnik</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+
+<p>If you don&#8217;t want to watch me talk about it, here&#8217;s the same info, in text:</p>
+
+<p>Getting the Ruby source is pretty easy. You can find it on GitHub, here:
+<a href="http://github.com/ruby/ruby">http://github.com/ruby/ruby</a> . Click the &#8220;fork&#8221; button and clone down your
+own fork:</p>
+
+<pre><code>$ git clone git@github.com:YOURUSERNAME/ruby.git
+</code></pre>
+
+<p>After that&#8217;s done, type <code>cd ruby</code> and add the main project as an upstream. This will
+let you keep up-to-date with the latest changes:</p>
+
+<pre><code>$ git remote add upstream https://github.com/ruby/ruby.git
+
+$ git fetch upstream
+</code></pre>
+
+<p>Okay! Now that you&#8217;re all set up, poke around and find something that needs
+documented. I like to just look through the source, but you can also look
+<a href="http://segment7.net/projects/ruby/documentation_coverage.txt">here</a> for a list of things that have no docs. Documentation is written in
+rdoc, and I&#8217;d check the recent commits that drbrain has been making to guide
+you in style. <a href="https://github.com/ruby/ruby/commit/071a678a156dde974d8e470b659c89cb02b07b3b">This commit</a>, for example, is a pretty good template. You
+can also check out the formatting guides <a href="http://rdoc.rubyforge.org/RDoc/Markup.html">here</a>. There&#8217;s also <a href="http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html">this</a>
+which explains some directives for .rb files and <a href="http://rdoc.rubyforge.org/RDoc/Parser/C.html">this</a> which handles
+directives for .c files.</p>
+
+<p>Now that you&#8217;ve made a change to the documentation, you can regenerate the
+docs by using rdoc. First, grab the latest version from rubygems:</p>
+
+<p>   $ gem install rdoc</p>
+
+<p>Always best to have the latest tools. Now do this to generate the docs:</p>
+
+<pre><code>$ rdoc --o tmpdoc lib/rss*
+</code></pre>
+
+<p>I&#8217;m passing it in an output directory with op, since the doc directory is not
+an rdoc directory. rdoc will complain and refuse to overwrite those files,
+which is a good thing. I&#8217;m also passing in a pattern of what to compile
+documentation for, compiling all of it takes a few minutes! In this case, I
+chose to document the rss library.</p>
+
+<p>Now you have a website in rdocout. Open up its index.html, and poke around for
+what you&#8217;ve changed. If it all looks good, you&#8217;re ready to make a patch!</p>
+
+<pre><code>$ rm -r rdocout
+
+$ git add .
+
+$ git commit -m "adding documentation for $SOMETHING"
+</code></pre>
+
+<p>Now, you have two options here. One is to simply push the change up to GitHub,
+and make a pull request.</p>
+
+<pre><code>$ git push origin
+</code></pre>
+
+<p>&#8230; aaand pull request. The core Ruby development doesn&#8217;t really happen on
+GitHub though, and so your patch may take a while to get included. If you
+really want to do it right, submit a patch to RedMine. We&#8217;ll use git to make
+this patch:</p>
+
+<pre><code>$ git format-patch HEAD~1
+</code></pre>
+
+<p>This says &#8220;make a patch out of the last commit.&#8221; It&#8217;ll tell you a file name,
+it should start with 000.</p>
+
+<p>Now, sign up for the Ruby RedMine <a href="http://redmine.ruby-lang.org/account/register">here</a>. Once you&#8217;ve clicked the
+confirmation email, <a href="http://redmine.ruby-lang.org/projects/ruby-19/issues/new">open a new ticket</a>, and assign it to Eric Hodel,
+category DOC, and give it your Ruby version, even though it&#8217;s not a big deal
+here. Click &#8216;choose file&#8217; and pick your patch, then &#8216;create and continue&#8217; and
+BAM! You&#8217;re done!</p>
+
+<p>Let&#8217;s all pitch in and make this the best documented Ruby release ever! In
+writing documentation, you might even find some things that you&#8217;d like to help
+improve. ;)</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/03/30/the-first-week-of-rstat-us-users-press-scaling-oh-my.html">The First Week of rstat.us: Users, Press, Scaling, Oh My!</a></h1>
     
     
@@ -801,79 +929,6 @@ forward.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/09/21/80-of-success-is-showing-up.html">80% of Success Is Showing Up</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-09-21T00:00:00-04:00" pubdate  data-updated="true" >Sep 21<span>st</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It&#8217;s funny how true this quote is.</p>
-
-<p>There are three people that I really admire: <em>why, Zed Shaw, and Yehuda Katz.
-And to simplify my tenses a bit, I&#8217;ll speak of </em>why in the present tense. What
-do these three guys have in common? They all churn out badass software like
-nobody&#8217;s business. _why started so many projects that it just adds to his
-mythical qualities; Zed has been cranking out software and blogs left and
-right, and Yehuda&#8217;s &#8221;<a href="http://yehudakatz.com/2010/09/14/heres-to-the-next-3-years/">I&#8217;m quitting Engine Yard</a>&#8221; post basically said &#8220;I&#8217;m
-pretty much done rebuilding the server side of software in my own image, now
-it&#8217;s time for me to focus on the client side of the equation.&#8221; Not with that
-much hubris, of course, but it&#8217;s pretty much true.</p>
-
-<p>Now, I don&#8217;t mean to imply that they&#8217;ve &#8216;just shown up,&#8217; but it seems to me
-that productivity is directly related to just getting started on things. I&#8217;ve
-had people tell me that they think I&#8217;m superhumanly productive, which is funny
-to me: I&#8217;m almost constantly fretting about how much time I waste every day.
-And while I do have a ton of projects, unlike all those guys, I tend to not
-fully finish them. It&#8217;s something that I&#8217;ve been trying to work on lately,
-because I have so many things that I want to accomplish.</p>
-
-<p>For me, the biggest hold on cranking out even more stuff is just simply
-starting to work. Often, if i slack off for half an hour, I slack off all
-evening. Now that there&#8217;s a TV with Netflix in my house again, it&#8217;s difficult
-to not watch all of the amazing documentaries that are on there. But if I
-manage to start working on stuff, I find that I keep doing it. It&#8217;s like I get
-to pick one or the other: projects or slacking. I can&#8217;t quite seem to do both.
-And so I&#8217;ve been starting some minor experimentation to see if I can&#8217;t work on
-projects more often than not.</p>
-
-<p>One thing that I&#8217;ve sort of half-tried is the <a href="http://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro Technique</a>. It&#8217;s
-pretty sweet: basically, you set a timer for 25 minutes, and start working.
-You can take a break when it goes off. Surely you can wait to refresh Hacker
-News for 25 minutes, right? That&#8217;s something else I&#8217;ve done: on Friday, I put
-Reddit and HN in my /etc/hosts file. They&#8217;re totally blocked, for now. After
-<a href="http://blog.steveklabnik.com/trouble-with-diaspora">last week&#8217;s situation</a>, I spent waaaay too much freaking time on HN, even
-for me. I love it, and I&#8217;m learning a ton every day, but it&#8217;s becoming an
-issue for my productivity. So it&#8217;s gone for a bit. It&#8217;s been rough, but I&#8217;ve
-been getting lots done, and I think when I start reading it again, I&#8217;ll be
-able to keep it at reasonable levels.</p>
-
-<p>Anyway, so that&#8217;s what I&#8217;m doing to keep productive. Anyone else have any
-thoughts on this? How do you keep working on side projects? What works for
-you?</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -904,6 +959,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/17/burnout.html">Burnout</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
       </li>
     
@@ -917,10 +976,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/28/real-modern-ruby-development.html">(Real) Modern Ruby Development</a>
       </li>
     
   </ul>

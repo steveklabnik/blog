@@ -64,6 +64,632 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/06/the-secret-to-rails-oo-design.html">The Secret to Rails OO Design</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-06T00:00:00-04:00" pubdate  data-updated="true" >Sep 6<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>UPDATE: I also have a follow-up <a href="/2011/09/09/better-ruby-presenters.html">here</a>.</p>
+
+<p>I often tell people that I learned Ruby via Rails. This is pretty much the worst
+way to do it, but I&#8217;d learned so many programming languages by then that it
+didn&#8217;t hinder me too much. The one thing that it did do, however, was give me a
+slightly twisted sense of how to properly design the classes needed in a Rails
+app. Luckily, I obsessively read other people&#8217;s code, and I&#8217;ve noticed that
+there&#8217;s one big thing that is common in most of the code that&#8217;s written by
+people whose design chops I respect.</p>
+
+<p>This particular thing is also seemingly unique to those people. It&#8217;s not
+something that people who don&#8217;t write good code attempt, but do badly. It&#8217;s like
+a flag, or signal. Now, when I see someone employ this, I instantly think &#8220;they
+get it.&#8221; Maybe I&#8217;m giving it too much credit, but this advanced design technique
+offers a ton of interconnected benefits throughout your Rails app, is easy to
+imploy, and speeds up your tests by an order of magnitude or more.
+Unfortunately, to many beginning Rails devs, it&#8217;s non-obvious, but I want <em>you</em>
+to write better code, and so I&#8217;m here to &#8216;break the secret,&#8217; if you will, and
+share this awesome, powerful technique with you.</p>
+
+<p>It&#8217;s called the &#8216;Plain Old Ruby Domain Object.&#8217;</p>
+
+<p>Yep, that&#8217;s right. A Ruby class that inherets from nothing. It&#8217;s so simple that
+it hides in plain sight. Loved by those who&#8217;ve mastered Rails, Plain Old Ruby
+Objects, or &#8220;POROs&#8221; as some like to call them, are a hidden weapon against
+complexity. Here&#8217;s what I mean. Examine this &#8216;simple&#8217; model:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We want to display an index page of all our posts, and do it by first letter.
+So we build up a dictionary, and then put our posts in it. I&#8217;m assuming we&#8217;re
+not paginating this, so don&#8217;t get caught up in querying for all Posts. The
+important thing is the idea: we can now display our posts by title:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='haml'><div class='line'><span class="p">-</span> <span class="no">Post</span><span class="o">.</span><span class="n">as_dictionary</span> <span class="k">do</span> <span class="o">|</span><span class="n">letter</span><span class="p">,</span> <span class="n">list</span><span class="o">|</span>
+</div><div class='line'>  <span class="nt">%p</span><span class="p">=</span> <span class="n">letter</span>
+</div><div class='line'>  <span class="nt">%ul</span>
+</div><div class='line'>  <span class="p">-</span> <span class="n">list</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</div><div class='line'>    <span class="nt">%li</span><span class="p">=</span> <span class="n">link_to</span> <span class="n">post</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Sure. And in one way, this code isn&#8217;t <em>bad</em>. It&#8217;s also not good: We&#8217;ve mixed a
+presentational concern into our model, which is supposed to represent buisness
+logic. So let&#8217;s fix that, via a Presenter:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@collection</span> <span class="o">=</span> <span class="n">collection</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="vi">@collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="nb">p</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>We can use it via <code>DictionaryPresenter.new(Post.all).as_dictionary</code>. This has
+tons of benefits: we&#8217;ve moved presentation logic out of the model. We&#8217;ve
+<em>already</em> added a new feature: any collection can now be displayed as a
+dictionary. We can easily write isolated tests for this presenter, and they will
+be <em>fast</em>.</p>
+
+<p>This post isn&#8217;t about the Presenter pattern, though, as much as I love it. This
+sort of concept appears in other places, too, &#8220;this domain concept deserves its
+own class.&#8221; Before we move to a different example, let&#8217;s expand on this further:
+if we want to sort our Posts by title, this class will work, but if we want to
+display, say, a User, it won&#8217;t, because Users don&#8217;t have titles. Furthermore,
+we&#8217;ll end up with a lot of Posts under &#8220;A,&#8221; because the word &#8220;a&#8221; is pretty
+common at the beginning of Posts, so we really want to take the second word in
+that case. We can make two kinds of presenters, but now we lose that generality,
+and the concept of &#8216;display by dictionary&#8217; has two representations in our system
+again. You guessed it: POROs to the rescue!</p>
+
+<p>Let&#8217;s change our presenter slightly, to also accept an organizational policy
+object:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">DictionaryPresenter</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@policy</span> <span class="o">=</span> <span class="n">policy</span>
+</div><div class='line'>    <span class="vi">@collection</span> <span class="o">=</span> <span class="n">collection</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">as_dictionary</span>
+</div><div class='line'>    <span class="n">dictionary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">h</span><span class="p">,</span> <span class="n">l</span><span class="o">|</span> <span class="n">h</span><span class="o">[</span><span class="n">l</span><span class="o">]</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span> <span class="n">h</span><span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="vi">@collection</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">dictionary</span><span class="o">[</span><span class="vi">@policy</span><span class="o">.</span><span class="n">category_for</span><span class="p">(</span><span class="nb">p</span><span class="p">)</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">dictionary</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we can inject a policy, and have them be different:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">UserCategorizationPolicy</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">category_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">PostCategorizationPolicy</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">category_for</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">starts_with?</span><span class="p">(</span><span class="s2">&quot;A &quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="o">[</span><span class="mi">1</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">title</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Bam!</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">DictionaryPresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">PostCategorizationPolicy</span><span class="p">,</span> <span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="p">)</span><span class="o">.</span><span class="n">as_dictionary</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah, so that&#8217;s getting a bit long. It happens. :) You can see that now each
+concept has one representation in our system. The presenter doesn&#8217;t care how
+things are organized, and the policies only dictate how things are organized. In
+fact, my names sorta suck, maybe it should be &#8220;UsernamePolicy&#8221; and
+&#8220;TitlePolicy&#8221;, actually. We don&#8217;t even care what class they are!</p>
+
+<p>It goes further than that in other directions, too. Combining the flexibility of
+Ruby with one of my favorite patterns from &#8220;Working Effectively with Legacy
+Code,&#8221; we can take complex computations and turn them into objects. Look at this
+code:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="c1">#&lt;snip&gt;</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">purchased_at</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="n">purchased_at</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="n">turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">time</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="p">(</span><span class="n">turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Yikes! This method prints a turnaround time, but as you can see, it&#8217;s a complex
+calculation. We&#8217;d be able to understand this much more easily of we used Extract
+Method a few times to break it up, but then we risk polluting our Quote class
+with more stuff that&#8217;s only relevant to pretty turnaround calculation. Also,
+please ignore that this is also presentation on the model; we just care that
+it&#8217;s a complex bit of code for this example.</p>
+
+<p>Okay, so here&#8217;s the first step of this refactoring, which Feathers calls &#8220;Break
+Out Method Object.&#8221; You can open your copy of &#8220;Working Effectively With Legacy
+Code&#8221; and turn to page 330 to read more. If you don&#8217;t have a copy, get one.
+Anyway, I digress. Here&#8217;s the plan of attack:</p>
+
+<ol>
+<li>Create a new class for the computation</li>
+<li>Define a method on that class to do the new work.</li>
+<li>Copy the body of the old method over, and change variable references to instance variables.</li>
+<li>Give it an initialize method that takes arguments to set the instance variables used in step 3.</li>
+<li>Make the old method delegate to the new class and method.</li>
+</ol>
+
+
+<p>I&#8217;ve changed this slightly for Ruby, since we can&#8217;t Lean On The Compiler, and a
+few of Feathers&#8217; steps are about doing this. Anyway, let&#8217;s try this on that
+code. Step 1:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="c1">#snip</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Two:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Three:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="vi">@turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="n">purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">offset</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>      <span class="n">days_from_today</span> <span class="o">=</span> <span class="vi">@turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">time</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="p">(</span><span class="vi">@turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>I like to give it a generic name at first, and then give it a better one in step
+5, after we see what it really does. often our code will inform us of a good
+name.</p>
+
+<p>Four:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">purchased_at</span><span class="p">,</span> <span class="n">turnaround</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@purchased_at</span> <span class="o">=</span> <span class="n">purchased_at</span>
+</div><div class='line'>    <span class="vi">@turnaround</span> <span class="o">=</span> <span class="n">turnaround</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="c1">#snip</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Five:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Quote</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">pretty_turnaround</span>
+</div><div class='line'>    <span class="no">TurnaroundCalculator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">purchased_at</span><span class="p">,</span> <span class="n">turnaround</span><span class="p">)</span><span class="o">.</span><span class="n">calculate</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Done! We should be able to run our tests and see them pass. Even if &#8216;run our
+tests&#8217; consists of manually checking it out&#8230;</p>
+
+<p>So what&#8217;s the advantage here? Well, we now can start the refactoring process,
+but we&#8217;re in our own little clean room. We can extract methods into our
+TurnaroundCalcuator class without polluting Quote, we can write speedy tests
+for just the Calculator, and we&#8217;ve split out the idea of calculation into one
+place, where it can easily be changed later. Here&#8217;s our class, a few
+refactorings later:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+<span class='line'>41</span>
+<span class='line'>42</span>
+<span class='line'>43</span>
+<span class='line'>44</span>
+<span class='line'>45</span>
+<span class='line'>46</span>
+<span class='line'>47</span>
+<span class='line'>48</span>
+<span class='line'>49</span>
+<span class='line'>50</span>
+<span class='line'>51</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">TurnaroundCalculator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">calculate</span>
+</div><div class='line'>    <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="vi">@turnaround</span><span class="o">.</span><span class="n">nil?</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">arrival_date</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">days_from_today</span><span class="si">}</span><span class="s2"> business days from today)&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="kp">protected</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">arrival_date</span>
+</div><div class='line'>    <span class="n">real_turnaround_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%A %d %B&quot;</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">real_turnaround_time</span>
+</div><div class='line'>    <span class="n">adjust_time_for_weekends</span><span class="p">(</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">turnaround_in_seconds</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">adjust_time_for_weekends</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">saturday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">elsif</span> <span class="n">sunday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">time</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">time</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">saturday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sat&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">sunday?</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Sun&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">turnaround_in_seconds</span>
+</div><div class='line'>    <span class="vi">@turnaround</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">start_time</span>
+</div><div class='line'>    <span class="vi">@purchased_at</span> <span class="ow">or</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">days_from_today</span>
+</div><div class='line'>    <span class="k">if</span> <span class="vi">@purchased_at</span>
+</div><div class='line'>      <span class="p">((</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="vi">@purchased_at</span><span class="o">.</span><span class="n">to_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="vi">@turnaround</span> <span class="o">+</span> <span class="mi">1</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow. This code I wrote three years ago isn&#8217;t perfect, but it&#8217;s almost
+understandable now. And each of the bits makes sense. This is after two or three
+waves of refactoring, which maybe I&#8217;ll cover in a separate post, becuase this
+was more illustrative than I thought&#8230; anyway, you get the idea. This is what I
+mean when I say that I shoot for roughly five-line methods in Ruby; if your code
+is well-factored, you can often get there.</p>
+
+<p>This idea of extracting domain objects that are pure Ruby is even in Rails
+itself. Check out this route:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;dashboard#index&#39;</span><span class="p">,</span> <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="no">LoggedInConstraint</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Huh? LoggedInConstraint?</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">LoggedInConstraint</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">matches?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">current_user</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Whoah. Yep. A domain object that describes our routing policy. Awesome. Also,
+validations, blatantly stolen from <a href="http://omgbloglol.com/post/392895742/improved-validations-in-rails-3">omgbloglol</a>:</p>
+
+<figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">SomeClass</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</div><div class='line'>  <span class="n">validate</span> <span class="ss">:category_id</span><span class="p">,</span> <span class="ss">:proper_category</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">class</span> <span class="nc">ProperCategoryValidator</span> <span class="o">&lt;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div><div class='line'>    <span class="k">unless</span> <span class="n">record</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">category_ids</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</div><div class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span> <span class="n">attribute</span><span class="p">,</span> <span class="s1">&#39;has bad category.&#39;</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This isn&#8217;t a plain Ruby class, but you get the idea.</p>
+
+<p>Now, you might be thinking, &#8220;Steve: This isn&#8217;t just for Rails! You&#8217;ve lied!&#8221; Why
+yes, actually, you&#8217;ve caught me: this isn&#8217;t the secret to Rails OO, it&#8217;s more of
+a general OO design guideline. But there&#8217;s something special about Rails which
+seems to lure you into the trap of never breaking classes down. Maybe it&#8217;s that
+<code>lib/</code> feels like such a junk drawer. Maybe it&#8217;s that the fifteen minute
+examples only ever include ActiveRecord models. Maybe it&#8217;s that more Rails apps
+than not are (WARNING: UNSUBSTANTIATED CLAIM ALERT) closed source than open, so
+we don&#8217;t have as many good examples to draw upon. (I have this hunch since
+Rails is often used to build sites for companies. Gems? Sure? My web app? Not so
+much. I have no stats to back this up, though.)</p>
+
+<p>In summary: Extracting domain objects is good. They keep your tests fast, your
+code small, and make it easier to change things later. I have some more to say
+about this, specifically the &#8220;keeps test fast&#8221; part, but I&#8217;m already pushing it
+for length here. Until next time!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/04/the-self-improvement-pomodoro.html">The Self-Improvement Pomodoro</a></h1>
     
     
@@ -1638,134 +2264,6 @@ I&#8217;m maturing or something&#8230;</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/05/10/contributing-to-ruby-s-documentation.html">Contributing to Ruby&#8217;s Documentation</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-05-10T00:00:00-04:00" pubdate  data-updated="true" >May 10<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Update!</h3>
-
-<p>I&#8217;m now making it even easier than this: <a href="/2011/08/22/im-making-it-dead-simple-to-contribute-to-ruby-s-documentation.html">Read my new post about how
-I&#8217;ll do this for you</a>. That said, if you want to do it yourself, the following will tell you how.</p>
-
-<h3>Original Article</h3>
-
-<p>Ruby 1.9.3 is coming out soon! <a href="http://blog.segment7.net/2011/05/09/ruby-1-9-3-documentation-challenge">drbrain has challenged the Ruby community to
-improve its documentation</a>, but some people were asking about how to do so.
-So I made a video!</p>
-
-<p>Some small errata: drbrain has informed me that he should edit the Changelog,
-not me. So don&#8217;t do that. :)</p>
-
-<iframe src="http://player.vimeo.com/video/23522731?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe>
-
-
-<p><a href="http://vimeo.com/23522731">How to contribute to Ruby&#8217;s documentation.</a> from <a href="http://vimeo.com/steveklabnik">Steve Klabnik</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
-
-
-<p>If you don&#8217;t want to watch me talk about it, here&#8217;s the same info, in text:</p>
-
-<p>Getting the Ruby source is pretty easy. You can find it on GitHub, here:
-<a href="http://github.com/ruby/ruby">http://github.com/ruby/ruby</a> . Click the &#8220;fork&#8221; button and clone down your
-own fork:</p>
-
-<pre><code>$ git clone git@github.com:YOURUSERNAME/ruby.git
-</code></pre>
-
-<p>After that&#8217;s done, type <code>cd ruby</code> and add the main project as an upstream. This will
-let you keep up-to-date with the latest changes:</p>
-
-<pre><code>$ git remote add upstream https://github.com/ruby/ruby.git
-
-$ git fetch upstream
-</code></pre>
-
-<p>Okay! Now that you&#8217;re all set up, poke around and find something that needs
-documented. I like to just look through the source, but you can also look
-<a href="http://segment7.net/projects/ruby/documentation_coverage.txt">here</a> for a list of things that have no docs. Documentation is written in
-rdoc, and I&#8217;d check the recent commits that drbrain has been making to guide
-you in style. <a href="https://github.com/ruby/ruby/commit/071a678a156dde974d8e470b659c89cb02b07b3b">This commit</a>, for example, is a pretty good template. You
-can also check out the formatting guides <a href="http://rdoc.rubyforge.org/RDoc/Markup.html">here</a>. There&#8217;s also <a href="http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html">this</a>
-which explains some directives for .rb files and <a href="http://rdoc.rubyforge.org/RDoc/Parser/C.html">this</a> which handles
-directives for .c files.</p>
-
-<p>Now that you&#8217;ve made a change to the documentation, you can regenerate the
-docs by using rdoc. First, grab the latest version from rubygems:</p>
-
-<p>   $ gem install rdoc</p>
-
-<p>Always best to have the latest tools. Now do this to generate the docs:</p>
-
-<pre><code>$ rdoc --o tmpdoc lib/rss*
-</code></pre>
-
-<p>I&#8217;m passing it in an output directory with op, since the doc directory is not
-an rdoc directory. rdoc will complain and refuse to overwrite those files,
-which is a good thing. I&#8217;m also passing in a pattern of what to compile
-documentation for, compiling all of it takes a few minutes! In this case, I
-chose to document the rss library.</p>
-
-<p>Now you have a website in rdocout. Open up its index.html, and poke around for
-what you&#8217;ve changed. If it all looks good, you&#8217;re ready to make a patch!</p>
-
-<pre><code>$ rm -r rdocout
-
-$ git add .
-
-$ git commit -m "adding documentation for $SOMETHING"
-</code></pre>
-
-<p>Now, you have two options here. One is to simply push the change up to GitHub,
-and make a pull request.</p>
-
-<pre><code>$ git push origin
-</code></pre>
-
-<p>&#8230; aaand pull request. The core Ruby development doesn&#8217;t really happen on
-GitHub though, and so your patch may take a while to get included. If you
-really want to do it right, submit a patch to RedMine. We&#8217;ll use git to make
-this patch:</p>
-
-<pre><code>$ git format-patch HEAD~1
-</code></pre>
-
-<p>This says &#8220;make a patch out of the last commit.&#8221; It&#8217;ll tell you a file name,
-it should start with 000.</p>
-
-<p>Now, sign up for the Ruby RedMine <a href="http://redmine.ruby-lang.org/account/register">here</a>. Once you&#8217;ve clicked the
-confirmation email, <a href="http://redmine.ruby-lang.org/projects/ruby-19/issues/new">open a new ticket</a>, and assign it to Eric Hodel,
-category DOC, and give it your Ruby version, even though it&#8217;s not a big deal
-here. Click &#8216;choose file&#8217; and pick your patch, then &#8216;create and continue&#8217; and
-BAM! You&#8217;re done!</p>
-
-<p>Let&#8217;s all pitch in and make this the best documented Ruby release ever! In
-writing documentation, you might even find some things that you&#8217;d like to help
-improve. ;)</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -1796,6 +2294,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/17/burnout.html">Burnout</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
       </li>
     
@@ -1809,10 +2311,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/28/real-modern-ruby-development.html">(Real) Modern Ruby Development</a>
       </li>
     
   </ul>
