@@ -4,13 +4,105 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-11-17T10:13:31-05:00</updated>
+  <updated>2011-11-28T12:43:02-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Book Review: New Programmer&#8217;s Survival Manual</title>
+    <link href="http://blog.steveklabnik.com/2011/11/28/book-review-new-programmers-survival-manual.html"/>
+    <updated>2011-11-28T10:10:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/11/28/book-review-new-programmers-survival-manual</id>
+    <content type="html">&lt;p&gt;Disclaimer: I do have a small credit in this book. A long time ago, the
+author mentioned that he was looking for people to help out, so I stepped up.
+It was only participating in discussions like &amp;#8220;What do you think about
+version control&amp;#8217;s use in industry?&amp;#8221;; I didn&amp;#8217;t help with any actual
+writing, and yesterday was my first time reading virtually all the final
+content.&lt;/p&gt;
+
+&lt;h3&gt;Lots of new books lately&lt;/h3&gt;
+
+&lt;p&gt;I&amp;#8217;ve been doing a lot of reading over the last few weeks, some of it
+technical, some of it non. I&amp;#8217;ve been meaning to type up a few book
+reviews, and yesterday I finished reading my copy of Josh Carter&amp;#8217;s
+&lt;a href=&quot;http://pragprog.com/book/jcdeg/new-programmer-s-survival-manual&quot;&gt;&amp;#8220;New Programmer&amp;#8217;s Survival Manual,&amp;#8221;&lt;/a&gt;
+published by PragProg. Since that&amp;#8217;s a bit lighter material than Spinoza, I
+figured I&amp;#8217;d write it up first.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;Survival Manual&lt;/em&gt; is intended to be the book you should buy after you
+graduate from college, but before you get a job. It&amp;#8217;s a bunch of tips,
+arranged by topic, that give you a taste of what &amp;#8216;real world&amp;#8217; programming is
+like, as well as what working life is about. I think that it accomplishes this
+goal wonderfully, but if you&amp;#8217;d like to hear specifics, read on.&lt;/p&gt;
+
+&lt;h2&gt;The Good&lt;/h2&gt;
+
+&lt;p&gt;One of my roommates is not particularly technical. She picked the book up, and
+read the introduction and the first tip. She then said something that, after
+reading all of it, I agree with 100%. &amp;#8220;I like this guy&amp;#8217;s writing style. It&amp;#8217;s
+very&amp;#8230; readable.&amp;#8221; Josh&amp;#8217;s prose feels&amp;#8230; comfortable. Like you&amp;#8217;re talking to a
+down-to-earth friend, or co-worker. Which is great, given the topic. I
+really enjoyed the actual &lt;em&gt;reading&lt;/em&gt; of this book. Especially in technical
+books, this is a great quality to have, but I guess this book isn&amp;#8217;t
+exactly technical; it&amp;#8217;s much more about soft skills than hard.&lt;/p&gt;
+
+&lt;p&gt;I also really enjoyed the cookbook-style organization. Basically, the book is
+one big ball of tips that you can read individually. They&amp;#8217;re grouped together
+with three or four others that are on the same topic, but each stands alone, and
+they cross-reference each other when appropriate. While I sat down and read it
+front to back, I&amp;#8217;d imagine it&amp;#8217;s pretty easy to cherry-pick certain things and
+read it in a more non-linear fashion.&lt;/p&gt;
+
+&lt;p&gt;I also feel that &amp;#8216;pragmatic&amp;#8217; is a good description of most of the content. In
+particular, as much as we all love DVCS, the book frankly states that most
+places still use centralized version control, which is totally true. He makes
+sure to carefully not be particularly dogmatic about the specifics of anything,
+focusing on strategy more than tactics. For example, &amp;#8220;Get good with your editor,
+make sure it can work effectively without using the mouse, for speed,&amp;#8221; not &amp;#8220;zomg
+emacs r teh suck, use vim.&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;Finally, Josh links to copious other works, and provides references for all of
+it. Some stuff is just general internet culture, but the bibliography alone
+would assist any programmer in finding some useful primary materials to read.
+Here&amp;#8217;s the first six: &lt;em&gt;SICP&lt;/em&gt;, &lt;em&gt;Getting Things Done&lt;/em&gt;, &lt;em&gt;Extreme Programming
+Explained&lt;/em&gt;, &lt;em&gt;TDD By Example&lt;/em&gt;, &lt;em&gt;The Mythical Man-Month&lt;/em&gt;, and &lt;em&gt;Foundations of
+Object Oriented Languages: Types and Semantics&lt;/em&gt;. Oh, and just because there&amp;#8217;s
+some XP/Agile stuff in those particular books, don&amp;#8217;t think it&amp;#8217;s slanted towards
+that: waterfall is explained as well. Just so happens those books were first.&lt;/p&gt;
+
+&lt;h2&gt;The Bad&lt;/h2&gt;
+
+&lt;p&gt;There&amp;#8217;s not that much bad that I can say about this book, really. There are a
+few small things, though:&lt;/p&gt;
+
+&lt;p&gt;There&amp;#8217;s a &amp;#8216;white belt brown belt black belt&amp;#8217; metaphor that&amp;#8217;s supposed to
+indicate a difficulty of each tip. Given that there&amp;#8217;s only two black belt tips,
+I didn&amp;#8217;t feel that three levels were really needed. I also just thought that
+there wasn&amp;#8217;t a huge difference between white and brown, either, so I&amp;#8217;m not sure
+that it really adds any utility.&lt;/p&gt;
+
+&lt;p&gt;Because this book is fairly high-level, it might be hard to actually &lt;em&gt;apply&lt;/em&gt;
+these lessons. This might be more of a problem with readers than with the actual
+book, but I can&amp;#8217;t count how many times I (and others) have said &amp;#8220;Of course,
+write descriptive variable names!!1&amp;#8221; and then typed &lt;code&gt;x = 5&lt;/code&gt;. It&amp;#8217;s just the way
+things are. And since this book is essentially a collection of advice at that
+high level, I can see someone reading this book, and then just simply not
+following the advice. I&amp;#8217;m not sure if this is something Josh could have fixed,
+or if it&amp;#8217;s inherent in this kind of book. Also, it won&amp;#8217;t affect a diligent
+reader. It is something to think about, though.&lt;/p&gt;
+
+&lt;h2&gt;Summary: If you just graduated, buy this book&lt;/h2&gt;
+
+&lt;p&gt;This book is totally worth it. The style reminds me of the seminal &lt;em&gt;Pragmatic
+Programmers&lt;/em&gt;. If you&amp;#8217;re a freshly minted graduate, put this book at the top of
+your reading list, then also grab a copy of all the books in the bibliography to
+read later.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Burnout</title>
@@ -4202,41 +4294,6 @@ information for the end user first ensures that it&amp;#8217;s done properly, th
 all development works in accordance with the documentation, and that all
 of the use-cases for an end-user have been thought of and are being
 addressed.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>The next iteration of my blog</title>
-    <link href="http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog.html"/>
-    <updated>2011-05-12T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/05/12/the-next-iteration-of-my-blog</id>
-    <content type="html">&lt;p&gt;Well well well, some things never change. Long ago, I hosted my own
-blog, and here we are again. I&amp;#8217;ve moved everything over to Jekyll, if
-that means anything to you. You can now &lt;a href=&quot;https://github.com/steveklabnik/blog&quot;&gt;look at my blog on
-GitHub&lt;/a&gt;. Big thanks to &lt;a href=&quot;http://www.jstorimer.com/2009/12/29/jekyll-on-heroku.html&quot;&gt;this
-article&lt;/a&gt; for
-lots of help and pointers with final deployment stuff, and &lt;a href=&quot;http://mikeferrier.ca/2011/04/29/blogging-with-jekyll-haml-sass-and-jammit/&quot;&gt;this one&lt;/a&gt; for haml and sass and stuff. Yay!&lt;/p&gt;
-
-&lt;h2&gt;New-ish beginnings&lt;/h2&gt;
-
-&lt;p&gt;So why&amp;#8217;d I do this? Well, this is just part of moving more towards
-hosting all of my own services, and not relying on services that others
-provide. This isn&amp;#8217;t some sort of argument over individualism vs.
-collectivism, it&amp;#8217;s more about &lt;a href=&quot;http://nomoresharecropping.org/&quot;&gt;No More Sharecropping&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I&amp;#8217;m still relying on people for hosting, of course. Nobody is 100%
-removed, but with my own backup of everything, I&amp;#8217;m in total control
-here. It&amp;#8217;s really minimal work to keep this going, and only a few hours
-of setup to move everything over.&lt;/p&gt;
-
-&lt;h2&gt;A small change in focus, too&lt;/h2&gt;
-
-&lt;p&gt;I&amp;#8217;m also going to stop bitching about politics so often, and try to be
-more constructive in general. I have a lot to say about this new
-humanities angle that my life has taken as of late. Hence, I&amp;#8217;ve changed
-the title of my blog. And you can expect more posts along those lines.
-More about books, more about art and code, less whining. One may think
-I&amp;#8217;m maturing or something&amp;#8230;&lt;/p&gt;
 </content>
   </entry>
   
