@@ -233,11 +233,17 @@
         <lastmod>2011-11-28T12:46:25-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html
+        </loc>
+        <lastmod>2011-12-11T16:21:51-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://blog.steveklabnik.com/blog/archives/</loc>
-        <lastmod>2011-11-28T12:46:25-05:00</lastmod>
+        <lastmod>2011-12-11T16:21:51-05:00</lastmod>
     </url>
     <url>
         <loc>http://blog.steveklabnik.com/</loc>
-        <lastmod>2011-11-28T12:46:25-05:00</lastmod>
+        <lastmod>2011-12-11T16:21:51-05:00</lastmod>
     </url>
 </urlset>

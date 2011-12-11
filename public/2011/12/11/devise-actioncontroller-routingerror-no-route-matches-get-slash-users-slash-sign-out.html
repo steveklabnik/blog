@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out) - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-11T15:38:00-05:00" pubdate  data-updated="true" >Dec 11<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Just a quick note about Devise, and its RESTful implications. I ran across this
+error today, and thought I&#8217;d share.</p>
+
+<p>Here&#8217;s the error:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class=''><div class='line'>Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Uhhhhh what? I run rake routes&#8230;</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+</pre></td><td class='code' width='100%'><pre><code class=''><div class='line'>$ rake routes | grep destroy_user
+</div><div class='line'>    destroy_user_session DELETE /users/sign_out(.:format)      {:action=&gt;"destroy", :controller=&gt;"devise/sessions"}</div></code></pre></td></tr></table></div></figure>
+
+
+<p>So, wtf? Well, there is that pesky <code>DELETE</code>&#8230; Googling for this error led me to
+<a href="https://github.com/plataformatec/devise/commit/f3385e96abf50e80d2ae282e1fb9bdad87a83d3c">this commit</a>.
+Looks like they changed some behavior, you can&#8217;t just go to that page anymore
+and log out. Bummer. But why?</p>
+
+<h2>HTTP verbs: transfer semantics, not state</h2>
+
+<p>As I&#8217;ve been doing my research for <a href="http://getsomere.st/">my book on REST</a>, I&#8217;ve
+been doing a lot of reading about HTTP. And I kept coming across these kinds of
+curious comments in the spec. For example:</p>
+
+<blockquote><p>HTTP/1.1 does not define how a PUT method affects the state of an origin server.</p><footer><strong>HTTP sec 9.6: PUT</strong><cite><a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6'>www.w3.org/Protocols/rfc2616/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Uhhh&#8230; what? Don&#8217;t we all know that PUT means that we should be updating a
+resource? And that we have to send the whole representation?</p>
+
+<p>When trying to get to the bottom of this, I came across this:
+ comment from Fielding]():</p>
+
+<blockquote><p>FWIW, PUT does not mean store.  I must have repeated that a million<br/>times in webdav and related lists.  HTTP defines the intended<br/>semantics of the communication &#8211; the expectations of each party.<br/>The protocol does not define how either side fulfills those expectations,<br/>and it makes damn sure it doesn&#8217;t prevent a server from having<br/>absolute authority over its own resources.  Also, resources are<br/>known to change over time, so if a server accepts an invalid Atom<br/>entry via PUT one second and then immediately thereafter decides<br/>to change it to a valid entry for later GETs, life is grand.</p><footer><strong>Roy Fielding</strong><cite><a href='http://www.imc.org/atom-protocol/mail-archive/msg05425.html'>Re: Meaning of PUT, With (Gasp) Evidence</a></cite></footer></blockquote>
+
+
+<p>Soooooooo wtf?</p>
+
+<p>Let&#8217;s take a look again at what <code>PUT</code> does:</p>
+
+<blockquote><p>The PUT method requests that the enclosed entity be stored under the supplied Request-URI. If the Request-URI refers to an already existing resource, the enclosed entity SHOULD be considered as a modified version of the one residing on the origin server. If the Request-URI does not point to an existing resource, and that URI is capable of being defined as a new resource by the requesting user agent, the origin server can create the resource with that URI.</p></blockquote>
+
+
+<p>It says &#8220;store,&#8221; Roy says &#8220;I don&#8217;t mean store.&#8221; Uhhhh&#8230;</p>
+
+<p>Here&#8217;s my &#8216;translated for the laymen&#8217; version of that quote:</p>
+
+<blockquote><p>PUT means &#8216;I&#8217;d like to later GET something at this URI.&#8217; If something is already<br/>there, update it. If there isn&#8217;t anything there, then create it.</p></blockquote>
+
+
+<p>That&#8217;s it. It&#8217;s talking about the semantics of what goes on: create or update.
+It doesn&#8217;t actually say anything about how this is implemented. But if you PUT
+something to a URI, a GET needs to 200 afterwards. So what&#8217;s the difference between PUT and POST?</p>
+
+<blockquote><p>The POST method is used to request that the origin server accept the entity<br/>enclosed in the request as a new subordinate of the resource identified by the<br/>Request-URI in the Request-Line.</p><p>The actual function performed by the POST method is determined by the server and<br/>is usually dependent on the Request-URI. The posted entity is subordinate to<br/>that URI in the same way that a file is subordinate to a directory containing<br/>it, a news article is subordinate to a newsgroup to which it is posted, or a<br/>record is subordinate to a database.</p><p>The action performed by the POST method might not result in a resource that can<br/>be identified by a URI.</p><footer><strong>HTTP sec 9.5: POST</strong><cite><a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5'>www.w3.org/Protocols/rfc2616/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Again, it&#8217;s really vague about what it <em>does</em>. With POST, it basically says &#8220;You
+have no idea what a POST does.&#8221; What you <em>do</em> know is the semantics of the
+action, POST &#8216;requests a new subordinate, but it might not create something.&#8217;</p>
+
+<p>The <em>main</em> difference is actually mentioned here:</p>
+
+<blockquote><p>Methods can also have the property of &#8220;idempotence&#8221; in that (aside from error or<br/>expiration issues) the side-effects of N > 0 identical requests is the same as<br/>for a single request. The methods GET, HEAD, PUT and DELETE share this property.</p><footer><strong>HTTP sec 9.1.2: Idempotent Methods</strong><cite><a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2'>www.w3.org/Protocols/rfc2616/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Semantics again. PUT is <em>idempotent</em>, and POST is not. They could both be used
+for creation, they could both be used for updating. With POST, you don&#8217;t need a
+URI, and PUT specifies a specfic one. That&#8217;s it. Nowhere in those two sentences
+states &#8216;store in the database,&#8217; nowhere does it says &#8216;full representation,&#8217;
+nowhere does it say &#8216;POST is create and PUT is update.&#8217; However you fulfill
+these semantics are up to you, but the semantics are what&#8217;s important.</p>
+
+<h2>So wtf does this have to do with Devise?</h2>
+
+<p>The issue is that Devise&#8217;s old semantics were wrong. A GET to <code>/users/sign_out</code> shouldn&#8217;t modify state:</p>
+
+<blockquote><p>In particular, the convention has been established that the GET and HEAD methods<br/>SHOULD NOT have the significance of taking an action other than retrieval. These<br/>methods ought to be considered &#8220;safe&#8221;.</p><footer><strong>HTTP sec 9.1.1: Safe Methods</strong><cite><a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.1'>www.w3.org/Protocols/rfc2616/&hellip;</a></cite></footer></blockquote>
+
+
+<p>When Devise used GETs to log you out, that was a violation of the semantics of
+GET. Here&#8217;s the interesting part, though: Since POST is a super generic &#8216;unsafe
+action&#8217; method, you could also use POST to represent a logging out. POST also
+has unsafe, non-idempotent semantics. DELETE specifically says delete, and POST
+says &#8216;any action,&#8217; and &#8216;delete&#8217; is a subset of &#8216;any action.&#8217; So DELETE is
+<em>better</em>, but POST is not <em>wrong</em>, categorically.</p>
+
+<h2>Fixing the &#8216;bug&#8217;</h2>
+
+<p>So how do we take care of this? Personally, I did the pragmatic thing. In
+<code>/config/initializers/devise.rb</code></p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+</pre></td><td class='code' width='100%'><pre><code class=''><div class='line'>config.sign_out_via = :delete
+</div><div class='line'>config.sign_out_via = :get if Rails.env.test?</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, during normal operations, we have our usual DELETE semantics, but in our
+test environment, we can just hit it with GET. This way we don&#8217;t have to hit a page, use Javascript to make a link with DELETE, and hit the page. This keeps my test times down, means I can run my tests with rack-test and not Selenium, and still gives me a high level of confidence that my tests work properly, even though it&#8217;s technically not the exact same thing as production.</p>
+
+<h2>In conclusion</h2>
+
+<p>The HTTP spec defines <em>semantics</em> but not implementation details. Semantics
+should be obeyed. But in testing, obeying them 100% may not be worth it.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-11T15:38:00-05:00" pubdate  data-updated="true" >Dec 11<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/28/book-review-new-programmers-survival-manual.html">Book Review: New Programmer's Survival Manual</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/17/burnout.html">Burnout</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I'm Killing My Cell Phone</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

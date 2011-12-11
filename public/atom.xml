@@ -4,13 +4,130 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-11-28T12:48:42-05:00</updated>
+  <updated>2011-12-11T16:21:58-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</title>
+    <link href="http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html"/>
+    <updated>2011-12-11T15:38:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out</id>
+    <content type="html">&lt;p&gt;Just a quick note about Devise, and its RESTful implications. I ran across this
+error today, and thought I&amp;#8217;d share.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#8217;s the error:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8221;&gt;&lt;div class=&#8217;line&#8217;&gt;Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Uhhhhh what? I run rake routes&amp;#8230;&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8221;&gt;&lt;div class=&#8217;line&#8217;&gt;$ rake routes | grep destroy_user
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    destroy_user_session DELETE /users/sign_out(.:format)      {:action=&amp;gt;&quot;destroy&quot;, :controller=&amp;gt;&quot;devise/sessions&quot;}&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;So, wtf? Well, there is that pesky &lt;code&gt;DELETE&lt;/code&gt;&amp;#8230; Googling for this error led me to
+&lt;a href=&quot;https://github.com/plataformatec/devise/commit/f3385e96abf50e80d2ae282e1fb9bdad87a83d3c&quot;&gt;this commit&lt;/a&gt;.
+Looks like they changed some behavior, you can&amp;#8217;t just go to that page anymore
+and log out. Bummer. But why?&lt;/p&gt;
+
+&lt;h2&gt;HTTP verbs: transfer semantics, not state&lt;/h2&gt;
+
+&lt;p&gt;As I&amp;#8217;ve been doing my research for &lt;a href=&quot;http://getsomere.st/&quot;&gt;my book on REST&lt;/a&gt;, I&amp;#8217;ve
+been doing a lot of reading about HTTP. And I kept coming across these kinds of
+curious comments in the spec. For example:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;HTTP/1.1 does not define how a PUT method affects the state of an origin server.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;HTTP sec 9.6: PUT&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6&#8217;&gt;www.w3.org/Protocols/rfc2616/&amp;hellip;&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;Uhhh&amp;#8230; what? Don&amp;#8217;t we all know that PUT means that we should be updating a
+resource? And that we have to send the whole representation?&lt;/p&gt;
+
+&lt;p&gt;When trying to get to the bottom of this, I came across this:
+ comment from Fielding]():&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;FWIW, PUT does not mean store.  I must have repeated that a million&lt;br/&gt;times in webdav and related lists.  HTTP defines the intended&lt;br/&gt;semantics of the communication &amp;#8211; the expectations of each party.&lt;br/&gt;The protocol does not define how either side fulfills those expectations,&lt;br/&gt;and it makes damn sure it doesn&amp;#8217;t prevent a server from having&lt;br/&gt;absolute authority over its own resources.  Also, resources are&lt;br/&gt;known to change over time, so if a server accepts an invalid Atom&lt;br/&gt;entry via PUT one second and then immediately thereafter decides&lt;br/&gt;to change it to a valid entry for later GETs, life is grand.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;Roy Fielding&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.imc.org/atom-protocol/mail-archive/msg05425.html&#8217;&gt;Re: Meaning of PUT, With (Gasp) Evidence&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;Soooooooo wtf?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#8217;s take a look again at what &lt;code&gt;PUT&lt;/code&gt; does:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The PUT method requests that the enclosed entity be stored under the supplied Request-URI. If the Request-URI refers to an already existing resource, the enclosed entity SHOULD be considered as a modified version of the one residing on the origin server. If the Request-URI does not point to an existing resource, and that URI is capable of being defined as a new resource by the requesting user agent, the origin server can create the resource with that URI.&lt;/p&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;It says &amp;#8220;store,&amp;#8221; Roy says &amp;#8220;I don&amp;#8217;t mean store.&amp;#8221; Uhhhh&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#8217;s my &amp;#8216;translated for the laymen&amp;#8217; version of that quote:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;PUT means &amp;#8216;I&amp;#8217;d like to later GET something at this URI.&amp;#8217; If something is already&lt;br/&gt;there, update it. If there isn&amp;#8217;t anything there, then create it.&lt;/p&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;That&amp;#8217;s it. It&amp;#8217;s talking about the semantics of what goes on: create or update.
+It doesn&amp;#8217;t actually say anything about how this is implemented. But if you PUT
+something to a URI, a GET needs to 200 afterwards. So what&amp;#8217;s the difference between PUT and POST?&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The POST method is used to request that the origin server accept the entity&lt;br/&gt;enclosed in the request as a new subordinate of the resource identified by the&lt;br/&gt;Request-URI in the Request-Line.&lt;/p&gt;&lt;p&gt;The actual function performed by the POST method is determined by the server and&lt;br/&gt;is usually dependent on the Request-URI. The posted entity is subordinate to&lt;br/&gt;that URI in the same way that a file is subordinate to a directory containing&lt;br/&gt;it, a news article is subordinate to a newsgroup to which it is posted, or a&lt;br/&gt;record is subordinate to a database.&lt;/p&gt;&lt;p&gt;The action performed by the POST method might not result in a resource that can&lt;br/&gt;be identified by a URI.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;HTTP sec 9.5: POST&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5&#8217;&gt;www.w3.org/Protocols/rfc2616/&amp;hellip;&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;Again, it&amp;#8217;s really vague about what it &lt;em&gt;does&lt;/em&gt;. With POST, it basically says &amp;#8220;You
+have no idea what a POST does.&amp;#8221; What you &lt;em&gt;do&lt;/em&gt; know is the semantics of the
+action, POST &amp;#8216;requests a new subordinate, but it might not create something.&amp;#8217;&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;main&lt;/em&gt; difference is actually mentioned here:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Methods can also have the property of &amp;#8220;idempotence&amp;#8221; in that (aside from error or&lt;br/&gt;expiration issues) the side-effects of N &gt; 0 identical requests is the same as&lt;br/&gt;for a single request. The methods GET, HEAD, PUT and DELETE share this property.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;HTTP sec 9.1.2: Idempotent Methods&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2&#8217;&gt;www.w3.org/Protocols/rfc2616/&amp;hellip;&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;Semantics again. PUT is &lt;em&gt;idempotent&lt;/em&gt;, and POST is not. They could both be used
+for creation, they could both be used for updating. With POST, you don&amp;#8217;t need a
+URI, and PUT specifies a specfic one. That&amp;#8217;s it. Nowhere in those two sentences
+states &amp;#8216;store in the database,&amp;#8217; nowhere does it says &amp;#8216;full representation,&amp;#8217;
+nowhere does it say &amp;#8216;POST is create and PUT is update.&amp;#8217; However you fulfill
+these semantics are up to you, but the semantics are what&amp;#8217;s important.&lt;/p&gt;
+
+&lt;h2&gt;So wtf does this have to do with Devise?&lt;/h2&gt;
+
+&lt;p&gt;The issue is that Devise&amp;#8217;s old semantics were wrong. A GET to &lt;code&gt;/users/sign_out&lt;/code&gt; shouldn&amp;#8217;t modify state:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;In particular, the convention has been established that the GET and HEAD methods&lt;br/&gt;SHOULD NOT have the significance of taking an action other than retrieval. These&lt;br/&gt;methods ought to be considered &amp;#8220;safe&amp;#8221;.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;HTTP sec 9.1.1: Safe Methods&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.1&#8217;&gt;www.w3.org/Protocols/rfc2616/&amp;hellip;&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;When Devise used GETs to log you out, that was a violation of the semantics of
+GET. Here&amp;#8217;s the interesting part, though: Since POST is a super generic &amp;#8216;unsafe
+action&amp;#8217; method, you could also use POST to represent a logging out. POST also
+has unsafe, non-idempotent semantics. DELETE specifically says delete, and POST
+says &amp;#8216;any action,&amp;#8217; and &amp;#8216;delete&amp;#8217; is a subset of &amp;#8216;any action.&amp;#8217; So DELETE is
+&lt;em&gt;better&lt;/em&gt;, but POST is not &lt;em&gt;wrong&lt;/em&gt;, categorically.&lt;/p&gt;
+
+&lt;h2&gt;Fixing the &amp;#8216;bug&amp;#8217;&lt;/h2&gt;
+
+&lt;p&gt;So how do we take care of this? Personally, I did the pragmatic thing. In
+&lt;code&gt;/config/initializers/devise.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8221;&gt;&lt;div class=&#8217;line&#8217;&gt;config.sign_out_via = :delete
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;config.sign_out_via = :get if Rails.env.test?&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Now, during normal operations, we have our usual DELETE semantics, but in our
+test environment, we can just hit it with GET. This way we don&amp;#8217;t have to hit a page, use Javascript to make a link with DELETE, and hit the page. This keeps my test times down, means I can run my tests with rack-test and not Selenium, and still gives me a high level of confidence that my tests work properly, even though it&amp;#8217;s technically not the exact same thing as production.&lt;/p&gt;
+
+&lt;h2&gt;In conclusion&lt;/h2&gt;
+
+&lt;p&gt;The HTTP spec defines &lt;em&gt;semantics&lt;/em&gt; but not implementation details. Semantics
+should be obeyed. But in testing, obeying them 100% may not be worth it.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Book Review: New Programmer&#8217;s Survival Manual</title>
@@ -3912,388 +4029,6 @@ considered these kinds of problems in the past. That doesn&amp;#8217;t mean that
 they always have the right answer, but they usually do have an answer,
 and it&amp;#8217;d behoove you to know what it is before you invent something on
 your own.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Single text, many masters</title>
-    <link href="http://blog.steveklabnik.com/2011/05/21/single-text-many-masters.html"/>
-    <updated>2011-05-21T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/05/21/single-text-many-masters</id>
-    <content type="html">&lt;p&gt;Hey everyone. Here&amp;#8217;s a draft of an essay I&amp;#8217;ve been working on. I&amp;#8217;d love
-to hear your feedback.&lt;/p&gt;
-
-&lt;p&gt;The word &amp;#8216;engineering&amp;#8217; has a deep connection to the word &amp;#8216;trade-offs&amp;#8217; in
-my mind. Most engineering decisions come down to evaluating a few
-differing alternatives, and often multiple factors end up being
-negatively correlated. You can make something stronger, but then it will
-be heavier. It can be made faster, but then it&amp;#8217;s significantly more
-expensive. A good engineer is able to take all of these factors into
-account, and design a system such that it maximizes its effectiveness
-across the sum of all of the relevant constraints. No matter if you consider
-the act of writing software an art, science, or engineering, its indisputable
-that designing complex software systems is identical in this respect. There are
-dozens of different metrics that system architects take into consideration while
-crafting a plan of attack, but but there&amp;#8217;s a deeper question of balance
-here that&amp;#8217;s significantly different than these more traditional
-engineering issues.&lt;/p&gt;
-
-&lt;p&gt;Text, in the form of source code, presents unique challenges of
-composition. These difficulties all stem from the same root: source code is a
-singular text, but must be intelligible to multiple, simultaneous
-audiences. More traditional forms of authorship still take audience into
-consideration, of course, but the decision to engage a diverse group of
-people is the choice of the writer. While mass appeal may be
-something that certain authors strive to attain, it&amp;#8217;s not an inherent
-property of their chosen form of expression. Source code, while text,
-inhabits a multiplicity of forms, and software developers are confronted
-with this inherent multi-faceted complexity when composing any
-particular software work. Some of these forms suit certain audiences
-better than others, and so it falls to the programmer to manage which
-form they are currently working in, consider which audience they are
-attempting to write for, and arrange all of these forms amongst one
-another in such a way that any particular audience is able to navigate
-and extract the proper information from the source without confusion.&lt;/p&gt;
-
-&lt;p&gt;In this post, I&amp;#8217;ll expand on the concept of audiences for code, and in a
-future post, I&amp;#8217;ll explore the simultaneous forms that code takes.&lt;/p&gt;
-
-&lt;h2&gt;The multitude of audiences&lt;/h2&gt;
-
-&lt;h3&gt;The default audience: the computer&lt;/h3&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Science is what we understand well enough to explain to a computer. Art
-is everything else we do.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Don Knuth&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This may seem obvious, but the when considering the question of &amp;#8220;Who are
-programs written for?&amp;#8221;, many would say &amp;#8220;The computer. Duh.&amp;#8221; In many
-ways, a computer is the primary reader of a particular piece of source
-code. The code that&amp;#8217;s given to a computer will be executed billions of
-times per second, repeated, recalculated, and re-interpreted over and
-over and over again.&lt;/p&gt;
-
-&lt;p&gt;The computer&amp;#8217;s native understanding of software comes from machine
-code. Machine code are the binary numbers that the CPU loads into memory
-and processes directly. For example, here&amp;#8217;s a line of machine code for
-an x86 machine that puts the value &amp;#8216;97&amp;#8217; into the AL register, graciously
-stolen &lt;a href=&quot;http://en.wikipedia.org/wiki/Assembly_language#Assembly_language&quot;&gt;from
-Wikipedia&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;10110000 01100001
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;While most would consider this unintelligible, computers were actually
-programmed this way at one time. My uncle actually did this by flipping
-switches to set the binary and pushed a button to store it in memory.
-Unfortunately, what&amp;#8217;s good for the computer isn&amp;#8217;t good for the human
-programmer. This is why assembly language was created. Assembly language
-has a 1 to 1 mapping to machine code, but is much easier for humans to
-understand. Here&amp;#8217;s that same line in assembly:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MOV AL, 61h       ; Load AL with 97 decimal (61 hex)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;MOV&lt;/code&gt; corresponds with &lt;code&gt;10110&lt;/code&gt;, &lt;code&gt;AL&lt;/code&gt; maps to &lt;code&gt;000&lt;/code&gt;, and 61 hex is
-&lt;code&gt;01100001&lt;/code&gt;. &lt;code&gt;MOV&lt;/code&gt; is short for &amp;#8216;move,&amp;#8217; though, and this mnemonic is just
-a bit easier to understand than &lt;code&gt;10110&lt;/code&gt;. This is the most basic example
-of a compositional trade-off. It&amp;#8217;s not a true trade-off, because they
-map perfectly to one another, but it illustrates the difference between
-composing in a language that the computer understands and one that&amp;#8217;s
-more natural for the programmer. Another important concept comes into
-play, that of &lt;em&gt;compilation&lt;/em&gt;. Virtually every work of composition created
-in software is automatically translated to another form before it is
-executed. We&amp;#8217;ll address this concept more fully when we discuss form
-later.&lt;/p&gt;
-
-&lt;p&gt;If that&amp;#8217;s where assembly stopped, it would remain a 1 to 1 mapping.
-However, virtually every assembly language also offers macros, and this
-moves the code further away from the machine and destroys the
-synchrony of the two forms. Here&amp;#8217;s an example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MOV EAX, [EBX]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;[]&lt;/code&gt; characters change the meaning of &lt;code&gt;EBX&lt;/code&gt;, rather than be the
-value stored in that particular register, they imply that the value is a
-memory address, and we want to move the contents of that address to
-&lt;code&gt;EAX&lt;/code&gt;. The generated machine code could now be processed into multiple
-valid assembly forms, and so the transformation is only perfect in one
-direction, even if it&amp;#8217;s possible to &amp;#8216;decompile&amp;#8217; it into one of those
-possible encodings. This is considered to be an acceptable trade-off for
-human readability; we very rarely want to turn machine code back into
-assembly.&lt;/p&gt;
-
-&lt;p&gt;There&amp;#8217;s also a jump between higher level languages, as well. Here&amp;#8217;s the
-assembly statements that adds 2 and 3 together:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MOV EAX, 2
-ADD EAX, 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;ADD&lt;/code&gt;, of course, is the statement that adds a number to the register
-that&amp;#8217;s given. Now &lt;code&gt;EAX&lt;/code&gt; has the value 5. Here&amp;#8217;s the same code, but in C:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int x = 2;
-x = x + 3;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Pretty simple. You can see how the C is much easier to understand; we
-say what type &lt;code&gt;x&lt;/code&gt; is (an integer), and it&amp;#8217;s a bit more explicit. &lt;code&gt;x&lt;/code&gt; is
-equal to &lt;code&gt;x&lt;/code&gt; + three. However, since the C is divorced from the machine,
-and is written for the person, we can change our compiler to make
-assembly code that works on a different kind of processor architecture.
-If we were to compile the above C for x86_64, a 64 bit version of x86,
-we might get some assembly that&amp;#8217;d look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MOVL RAX, 2
-ADDL RAX, 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;While this code looks similar to the above, it is quite different. This
-uses the native 64 bit types, rather than the 32 bit types above. The
-other important thing is that by writing code that&amp;#8217;s divorced from the
-machine, and written for people, we&amp;#8217;re able to translate it into the
-code for multiple machines. If we had written the assembly above, when
-moving to another architecture, it would have required a total re-write.
-And while this particular sample looks very similar, a more complex
-piece of code will be significantly divergent, but I don&amp;#8217;t want to go
-into the details of two kinds of assembly code. Because we can define
-the languages for humans, and the language of computers is somewhat
-beholden to the physical machine itself, it&amp;#8217;s significantly easier to do
-the translation from C to the two kinds of machines, rather than trying
-to translate from one machine to another. What we lose in this kind of
-translation, though, is efficiency. Code that was hand-crafted for each
-machine would be more performant, and better represent each individual
-platform.&lt;/p&gt;
-
-&lt;p&gt;Even though we may choose to use a language that&amp;#8217;s more understandable
-to people, it still has to be understood by the computer in some form.
-This translation will introduce some amount of penalty, and so it&amp;#8217;s
-important that this gets taken into consideration. Sometimes, code must
-be written in a way that&amp;#8217;s not easy for a person to read, because it&amp;#8217;s
-easier for the computer to be efficient with a more opaque
-implementation.&lt;/p&gt;
-
-&lt;h3&gt;The reflexive audience: the programmer himself&lt;/h3&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Debugging is twice as hard as writing the code in the first place.
-Therefore, if you write the code as cleverly as possible, you are, by
-definition, not smart enough to debug it.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Brian Kernighan&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Everyone who writes code has experienced this at some time or another.
-You write a whole bunch of code, and then a few months goes by, and you
-take a look at it, and it&amp;#8217;s absolutely unintelligible. This happens
-because at the time of inception, the author of a particular piece of
-code has an incredibly close relationship to it. As it was just written,
-the code is obvious to the author. They&amp;#8217;re in the proper mindset to
-understand the intention that was drawn upon to necessitate bringing
-those lines into the world, and so no extra explanation is necessary. As
-time goes on, however, the author becomes more close to the third
-audience, other programmers. It&amp;#8217;s important for coders to recognize this
-fact, and take preventative steps to ameliorate this confusion.&lt;/p&gt;
-
-&lt;p&gt;Even though the author will approach the position of the other audience
-eventually, this audience is distinct because there is a certain level
-of explanation that sits between undocumented, inexpressive code and
-code that&amp;#8217;s well explained, and this is the position most code is in. An
-explanation that&amp;#8217;s helpful to those who understand the code, but not to
-those who don&amp;#8217;t is better than nothing. This sort of code may be overly
-contextual, and could use some added information to improve its clarity.&lt;/p&gt;
-
-&lt;h3&gt;The other audience: colleagues and coworkers&lt;/h3&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Always code as if the guy who ends up maintaining your code is a violent
-psychopath who knows where you live.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Martin Golding&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;As I touched on earlier, there&amp;#8217;s a similarity between the &amp;#8216;other&amp;#8217;
-audience and the reflexive. The primary distinction is drawn around the
-proximity to the source. The other does not have the advantage of having
-authored the code, and therefore doesn&amp;#8217;t have the native&amp;#8217;s understanding
-of the underlying logical organization of the source. This disadvantage
-can be overcome via composing in such a manner that the meaning is
-emergent from the design. Even if it&amp;#8217;s too complex to be obvious, good
-documentation can address this particular deficiency.&lt;/p&gt;
-
-&lt;p&gt;Ultimately, much of software design is about modeling. Software that
-solves a particular problem should emulate the nature of the challenge
-it&amp;#8217;s attempting to address. If this can be achieved, it&amp;#8217;s significantly
-easier for those who understand the problem to figure out how the
-software works. Therefore, good design can help improve the
-effectiveness of a given piece of source to communicate its intent.
-Along a similar vector, if the design is similar to code that solves a
-particular issue, it&amp;#8217;s easier to understand. As an example, a friend
-recently asked for feedback about an interface that he&amp;#8217;d designed. It
-loaded a save game file for StarCraft 2. This is what he came up with:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;replay_file = File.new(&quot;spec/fixtures/1v1-game1.sc2replay&quot;)
-@replay = SC2Refinery::Parser.parse(replay_file)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;However, Ruby already has several kinds of code in its standard library
-that loads some information from disk and parses it into some kind of
-data structure that you can use in your program. The JSON, YAML, and
-Marshall classes already use a set of methods to import and export data,
-and they&amp;#8217;re named &lt;code&gt;load&lt;/code&gt; and &lt;code&gt;dump&lt;/code&gt;, and they&amp;#8217;re part of the class
-directly. Also, in this case, the user of the code shouldn&amp;#8217;t need to
-deal with the creation of a file, since it&amp;#8217;s unreasonable to assume that
-a game replay would come from any other source. Therefore, after some
-discussion, he adopted the following interface instead:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;@replay = SC2Refinery.load(&quot;spec/fixtures/1v1-game1.sc2replay&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is much nicer to use, and is much simpler. While it may not seem
-like a whole lot, when rules like this are applied across an entire
-codebase, they can significantly increase understanding. Multiple
-reductions of mental overhead add up quickly.&lt;/p&gt;
-
-&lt;p&gt;My new favorite trick for adding a little bit of modeling that
-significantly reduces overhead for the user is the Presenter Pattern.
-Jeff Casimir demonstrated this very clearly in his presentation at
-RailsConf 2011, &amp;#8221;&lt;a href=&quot;http://dl.dropbox.com/u/69001/Fat%20Models%20Aren%27t%20Enough%20-%20RailsConf.pdf&quot;&gt;Fat Models Aren&amp;#8217;t
-Enough&lt;/a&gt;&amp;#8221;.
-Here&amp;#8217;s a slightly modified example. Imagine that we have a system that
-manages students, and we&amp;#8217;d like to display a report card for them. We
-might start with some code that looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;student = Student.find(options[:student_id])
-term = Term.find(options[:term_id])
-report_type = ReportType.find(options[:report_type])
-
-puts &quot;#{student.last_name}, #{student.first_name}&quot;
-puts &quot;#{report_type.report_title} for #{term.start_date} to #{term.end_date}&quot;
-student.courses.each do |course|
-  course_report = student.report_data_for_course(course)
-  puts course_report.to_s
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Honestly, until this past week, this is the exact code that I would have
-written. But it turns out that we can do better. Basically, we&amp;#8217;re
-displaying some information that comes from a combination of three
-different objects. If we think about it some more, we&amp;#8217;re really trying
-to display a report card. So let&amp;#8217;s make an object that represents the
-card, and delegates to its sub-objects. It will then know how to display
-itself.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;class ReportCard
-  delegate :start_date, :end_date, :to =&amp;gt; :term
-  delegate :first_name, :last_name, :courses, :report_data_for_course, :to =&amp;gt; :student
-  delegate :report_title, :to =&amp;gt; :report_type
-
-  def initialize(params)
-    @student = Student.find params[:student_id]
-    @term = Term.find params[:term_id]
-    @report_type = ReportType.find params[:report_type_id]
-  end
-
-  def student_name
-    [last_name, first_name].join(&quot;, &quot;)
-  end
-
-  def title
-    &quot;#{report_title} for #{start_date} to #{end_date}&quot;
-  end
-
-  def course_reports
-    out = &quot;&quot;
-    courses.each do |course|
-      out += report_data_for_course(course)
-    end
-    out
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, this is a lot of code. However, as you can see, it&amp;#8217;s all focused on
-composing the information and exposing an interface that makes sense for
-a report card. Using it is super easy:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;report = ReportCard.new(options)
-puts report.student_name
-puts report.title
-puts report.course_reports
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Bam! It&amp;#8217;s incredibly obvious. This code is much more clear than before.
-We&amp;#8217;ll see if I&amp;#8217;m still as hot on this pattern as I am now in a few
-months, but I feel the extra object adds a significant amount of
-clarity.&lt;/p&gt;
-
-&lt;p&gt;If the model is too hard to create, or if additional clarity is needed,
-documentation in the form of comments can also help to improve the
-understanding of the &amp;#8216;other&amp;#8217; audience. Comments can be a difficult form
-of prose to write, because they need to be written at the correct level
-of abstraction. If they simply repeat what the code does, they&amp;#8217;re
-useless, and if they&amp;#8217;re too high-level, certain details and semantics
-may not be made clear.&lt;/p&gt;
-
-&lt;p&gt;Individual bits of code can also be made more clear by developing a
-narrative within any particular method that&amp;#8217;s being written. Telling a
-story with code may not be something you&amp;#8217;ve considered before, but it&amp;#8217;s
-really about maintaining a proper flow in the actions your code is
-taking. For example, if there&amp;#8217;s a bunch of error handling strewn about
-inside of a method, it&amp;#8217;s less clear than bunching all of the error
-handling near the end. Most code should be an act in three parts: input,
-processing, and output. If these three parts are mixed together, it can
-appear much more complicated.&lt;/p&gt;
-
-&lt;h3&gt;The forgotten audience: end-users&lt;/h3&gt;
-
-&lt;blockquote&gt;&lt;p&gt;If I asked my customers what they wanted, they&amp;#8217;d have told me, &amp;#8220;A
-faster horse.&amp;#8221;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Henry Ford&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In the end, all software is used by someone. Use-value is the driving
-force of virtually all code. Code that doesn&amp;#8217;t do anything may be making
-some kind of important philosophical statement, but isn&amp;#8217;t really the
-sort that I&amp;#8217;m talking about.&lt;/p&gt;
-
-&lt;p&gt;The introduction of a user imposes significant restrictions upon the way
-that code is composed. End-users do not need to understand the code
-itself, but they do need to be able to understand its external
-interfaces. These needs place an imposition on the way that the code
-needs to be written, because it &lt;em&gt;must&lt;/em&gt; address this issue of interface.
-Sometimes, interface requirements can create a burden on the internal
-implementation. Needing to support certain behaviors and forms can
-create complexity for an implementor.&lt;/p&gt;
-
-&lt;p&gt;Documentation created for end users must be completely different than
-that which is created for those inspecting the code itself. Most
-end-users will not be literate in the arts of software development, and
-so approach the software object in an entirely different way than those
-who write code do. Yet, the same semantics must be passed on to them,
-but at a higher level. There&amp;#8217;s a strong movement within the community to
-start designing software with this kind of end-user documentation in
-mind, called &lt;a href=&quot;http://tom.preston-werner.com/2010/08/23/readme-driven-development.html&quot;&gt;README driven development&lt;/a&gt;.
-There are advantages to thinking on this level when beginning, but a
-nice effect of doing it first is that you can ensure it gets done. A
-surprising amount of software has poor documentation for its users,
-because it&amp;#8217;s created after the software is finished, and at that time
-there&amp;#8217;s intense pressure to ship it out the door. Writing down
-information for the end user first ensures that it&amp;#8217;s done properly, that
-all development works in accordance with the documentation, and that all
-of the use-cases for an end-user have been thought of and are being
-addressed.&lt;/p&gt;
 </content>
   </entry>
   
