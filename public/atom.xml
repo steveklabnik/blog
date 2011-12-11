@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-11T16:21:58-05:00</updated>
+  <updated>2011-12-11T16:26:12-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -20,7 +20,7 @@
     <content type="html">&lt;p&gt;Just a quick note about Devise, and its RESTful implications. I ran across this
 error today, and thought I&amp;#8217;d share.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#8217;s the error:&lt;/p&gt;
+&lt;p&gt;I was trying to log out, so I hit the normal route for such things with my browser. Here&amp;#8217;s the error:&lt;/p&gt;
 
 &lt;figure role=code&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8221;&gt;&lt;div class=&#8217;line&#8217;&gt;Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;

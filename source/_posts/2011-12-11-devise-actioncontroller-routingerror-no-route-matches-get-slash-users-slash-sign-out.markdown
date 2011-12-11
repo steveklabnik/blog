@@ -9,7 +9,7 @@ categories:
 Just a quick note about Devise, and its RESTful implications. I ran across this
 error today, and thought I'd share.
 
-Here's the error:
+I was trying to log out, so I hit the normal route for such things with my browser. Here's the error:
 
 ```
 Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)
