@@ -41,7 +41,7 @@ Uhhh... what? Don't we all know that PUT means that we should be updating a
 resource? And that we have to send the whole representation?
 
 When trying to get to the bottom of this, I came across this:
- comment from Fielding]():
+ comment from Fielding:
 
 {% blockquote Roy Fielding http://www.imc.org/atom-protocol/mail-archive/msg05425.html Re: Meaning of PUT, with (gasp) evidence %}
 FWIW, PUT does not mean store.  I must have repeated that a million
