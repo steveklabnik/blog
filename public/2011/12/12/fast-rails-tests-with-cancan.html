@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Fast Rails Tests With CanCan. - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/12/12/fast-rails-tests-with-cancan.html"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Fast Rails Tests With CanCan.</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-12T13:19:00-05:00" pubdate  data-updated="true" >Dec 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>If you haven&#8217;t used it, <a href="https://github.com/ryanb/cancan">CanCan</a> is a great
+library for Rails that handles authorization for you. Its calling card is
+simplicity; just do this:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">Ability</span>
+</div><div class='line'>  <span class="kp">include</span> <span class="no">CanCan</span><span class="o">::</span><span class="no">Ability</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">user</span> <span class="o">||=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is?</span> <span class="ss">:paying_customer</span>
+</div><div class='line'>      <span class="n">can</span> <span class="ss">:show</span><span class="p">,</span> <span class="no">Article</span>
+</div><div class='line'>    <span class="k">else</span>
+</div><div class='line'>      <span class="n">can</span> <span class="ss">:show</span><span class="p">,</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</div><div class='line'>      <span class="n">cannot</span> <span class="ss">:show</span><span class="p">,</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">false</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>And then in a controller:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">show</span>
+</div><div class='line'>  <span class="vi">@article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">authorize!</span> <span class="ss">:read</span><span class="p">,</span> <span class="vi">@article</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Super simple! However, as simple as CanCan is, if you want to keep your test
+times super low, there&#8217;s a few things that you should know about.</p>
+
+<h2>Incidental coupling: the silent killer</h2>
+
+<p>The biggest problem with CanCan from the Fast Tests perspective is that we&#8217;ve
+got coupling with class names. In order to test our Ability class, we also have
+to load User and Article. Let&#8217;s try it without concern for how isolated our
+tests are:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s2">&quot;cancan/matchers&quot;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s2">&quot;spec_helper&quot;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="no">Ability</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:subject</span><span class="p">)</span> <span class="p">{</span> <span class="no">Ability</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:free_article</span><span class="p">)</span> <span class="p">{</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:paid_article</span><span class="p">)</span> <span class="p">{</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">context</span> <span class="s2">&quot;random people&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="kp">nil</span> <span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">free_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;cannot see non-free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">paid_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_false</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">context</span> <span class="s2">&quot;paying users&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+</div><div class='line'>      <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">u</span><span class="o">|</span>
+</div><div class='line'>        <span class="n">u</span><span class="o">.</span><span class="n">roles</span> <span class="o">&lt;&lt;</span> <span class="ss">:paying_customer</span>
+</div><div class='line'>      <span class="k">end</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">free_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see non-free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">paid_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>A few notes about testing with CanCan: I like to organize them with contexts for
+the different kinds of users, and then what their abilities are below. It gives
+you a really nice way of setting up those <code>let</code> blocks, and our tests read real nicely.</p>
+
+<p>Anyway, so yeah. This loads up all of our models, connects to the DB, etc. This
+is unfortunate. It&#8217;d be nice if we didn&#8217;t have to load up <code>User</code> and <code>Article</code>.
+Unfortunately, there&#8217;s no real way around it in our <code>Ability</code>, I mean, if you
+want them to read all Articles, you have to pass in <code>Article</code>&#8230; hmm. What about
+this?</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:free_article</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:class</span> <span class="o">=&gt;</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:paid_article</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:class</span> <span class="o">=&gt;</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Turns out this works just as well. CanCan reflects on the class that you pass
+in, so if we just give our double the right class, it&#8217;s all gravy. Now we&#8217;re not
+loading <code>Article</code>, but what about <code>User</code>?</p>
+
+<p>The key is in the <code>||=</code>. If we pass in a <code>User</code>, we won&#8217;t call <code>User.new</code>. So let&#8217;s
+stub that:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:is?</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'><span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">double</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">u</span><span class="o">|</span> <span class="c1">#tap not strictly needed in this example, but if you want multiple roles...</span>
+</div><div class='line'>    <span class="n">u</span><span class="o">.</span><span class="n">stub</span><span class="p">(</span><span class="ss">:is?</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="ss">:paying_customer</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Sweet! The first one is a random user: all their <code>is?</code> calls should be false.
+The second is our user who&#8217;s paid up; we need to stub out their role properly,
+but that&#8217;s about it.</p>
+
+<h2>It&#8217;s that easy</h2>
+
+<p>With some dillegence, isolating your tests isn&#8217;t hard, and works really well. I
+have a few more tests in the example I took this from, and 14 examples still
+take about a third of a second. Not too shabby!</p>
+
+<p>Happy authorizing!</p>
+
+<p>Oh, and the final spec, for reference:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s2">&quot;cancan/matchers&quot;</span>
+</div><div class='line'><span class="nb">require</span> <span class="s2">&quot;app/models/ability&quot;</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">describe</span> <span class="no">Ability</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:subject</span><span class="p">)</span> <span class="p">{</span> <span class="no">Ability</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:free_article</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:class</span> <span class="o">=&gt;</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:paid_article</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:class</span> <span class="o">=&gt;</span> <span class="no">Article</span><span class="p">,</span> <span class="ss">:free</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">context</span> <span class="s2">&quot;random people&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="ss">:is?</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">free_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;cannot see non-free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">paid_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_false</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="n">context</span> <span class="s2">&quot;users&quot;</span> <span class="k">do</span>
+</div><div class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">double</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">u</span><span class="o">|</span>
+</div><div class='line'>        <span class="n">u</span><span class="o">.</span><span class="n">stub</span><span class="p">(</span><span class="ss">:is?</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</div><div class='line'>      <span class="k">end</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">free_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="n">it</span> <span class="s2">&quot;can see non-free Articles&quot;</span> <span class="k">do</span>
+</div><div class='line'>      <span class="n">subject</span><span class="o">.</span><span class="n">can?</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="n">paid_article</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-12T13:19:00-05:00" pubdate  data-updated="true" >Dec 12<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/12/12/fast-rails-tests-with-cancan.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/12/12/fast-rails-tests-with-cancan.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/28/book-review-new-programmers-survival-manual.html">Book Review: New Programmer's Survival Manual</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/17/burnout.html">Burnout</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

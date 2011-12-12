@@ -4,13 +4,283 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-11T16:26:12-05:00</updated>
+  <updated>2011-12-12T13:55:19-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Fast Rails Tests With CanCan.</title>
+    <link href="http://blog.steveklabnik.com/2011/12/12/fast-rails-tests-with-cancan.html"/>
+    <updated>2011-12-12T13:19:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/12/12/fast-rails-tests-with-cancan</id>
+    <content type="html">&lt;p&gt;If you haven&amp;#8217;t used it, &lt;a href=&quot;https://github.com/ryanb/cancan&quot;&gt;CanCan&lt;/a&gt; is a great
+library for Rails that handles authorization for you. Its calling card is
+simplicity; just do this:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Ability&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CanCan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Ability&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is?&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:paying_customer&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;can&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;can&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;cannot&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;And then in a controller:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;vi&quot;&gt;@article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;authorize!&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@article&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Super simple! However, as simple as CanCan is, if you want to keep your test
+times super low, there&amp;#8217;s a few things that you should know about.&lt;/p&gt;
+
+&lt;h2&gt;Incidental coupling: the silent killer&lt;/h2&gt;
+
+&lt;p&gt;The biggest problem with CanCan from the Fast Tests perspective is that we&amp;#8217;ve
+got coupling with class names. In order to test our Ability class, we also have
+to load User and Article. Let&amp;#8217;s try it without concern for how isolated our
+tests are:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;16&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;17&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;18&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;19&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;20&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;21&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;22&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;23&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;24&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;25&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;26&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;27&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;28&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;29&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;30&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;31&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;32&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;33&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;34&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;35&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;36&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;cancan/matchers&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;spec_helper&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Ability&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:subject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Ability&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;random people&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;cannot see non-free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_false&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;paying users&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;        &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;roles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:paying_customer&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see non-free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;A few notes about testing with CanCan: I like to organize them with contexts for
+the different kinds of users, and then what their abilities are below. It gives
+you a really nice way of setting up those &lt;code&gt;let&lt;/code&gt; blocks, and our tests read real nicely.&lt;/p&gt;
+
+&lt;p&gt;Anyway, so yeah. This loads up all of our models, connects to the DB, etc. This
+is unfortunate. It&amp;#8217;d be nice if we didn&amp;#8217;t have to load up &lt;code&gt;User&lt;/code&gt; and &lt;code&gt;Article&lt;/code&gt;.
+Unfortunately, there&amp;#8217;s no real way around it in our &lt;code&gt;Ability&lt;/code&gt;, I mean, if you
+want them to read all Articles, you have to pass in &lt;code&gt;Article&lt;/code&gt;&amp;#8230; hmm. What about
+this?&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Turns out this works just as well. CanCan reflects on the class that you pass
+in, so if we just give our double the right class, it&amp;#8217;s all gravy. Now we&amp;#8217;re not
+loading &lt;code&gt;Article&lt;/code&gt;, but what about &lt;code&gt;User&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;The key is in the &lt;code&gt;||=&lt;/code&gt;. If we pass in a &lt;code&gt;User&lt;/code&gt;, we won&amp;#8217;t call &lt;code&gt;User.new&lt;/code&gt;. So let&amp;#8217;s
+stub that:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:is?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tap not strictly needed in this example, but if you want multiple roles&#8230;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:is?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:paying_customer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;and_return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Sweet! The first one is a random user: all their &lt;code&gt;is?&lt;/code&gt; calls should be false.
+The second is our user who&amp;#8217;s paid up; we need to stub out their role properly,
+but that&amp;#8217;s about it.&lt;/p&gt;
+
+&lt;h2&gt;It&amp;#8217;s that easy&lt;/h2&gt;
+
+&lt;p&gt;With some dillegence, isolating your tests isn&amp;#8217;t hard, and works really well. I
+have a few more tests in the example I took this from, and 14 examples still
+take about a third of a second. Not too shabby!&lt;/p&gt;
+
+&lt;p&gt;Happy authorizing!&lt;/p&gt;
+
+&lt;p&gt;Oh, and the final spec, for reference:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;16&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;17&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;18&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;19&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;20&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;21&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;22&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;23&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;24&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;25&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;26&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;27&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;28&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;29&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;30&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;31&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;32&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;33&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;34&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;35&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;36&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;cancan/matchers&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;app/models/ability&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Ability&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:subject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Ability&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:free&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;random people&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:is?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;cannot see non-free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_false&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;users&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;        &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:is?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;and_return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;free_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;can see non-free Articles&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;can?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;paid_article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+</content>
+  </entry>
   
   <entry>
     <title>Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</title>
@@ -52,7 +322,7 @@ curious comments in the spec. For example:&lt;/p&gt;
 resource? And that we have to send the whole representation?&lt;/p&gt;
 
 &lt;p&gt;When trying to get to the bottom of this, I came across this:
- comment from Fielding]():&lt;/p&gt;
+ comment from Fielding:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;FWIW, PUT does not mean store.  I must have repeated that a million&lt;br/&gt;times in webdav and related lists.  HTTP defines the intended&lt;br/&gt;semantics of the communication &amp;#8211; the expectations of each party.&lt;br/&gt;The protocol does not define how either side fulfills those expectations,&lt;br/&gt;and it makes damn sure it doesn&amp;#8217;t prevent a server from having&lt;br/&gt;absolute authority over its own resources.  Also, resources are&lt;br/&gt;known to change over time, so if a server accepts an invalid Atom&lt;br/&gt;entry via PUT one second and then immediately thereafter decides&lt;br/&gt;to change it to a valid entry for later GETs, life is grand.&lt;/p&gt;&lt;footer&gt;&lt;strong&gt;Roy Fielding&lt;/strong&gt;&lt;cite&gt;&lt;a href=&#8217;http://www.imc.org/atom-protocol/mail-archive/msg05425.html&#8217;&gt;Re: Meaning of PUT, With (Gasp) Evidence&lt;/a&gt;&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;
 
@@ -3727,308 +3997,6 @@ out shortly.&lt;/p&gt;
 &lt;p&gt;Just remember: if you use a service like Twitter that&amp;#8217;s controlled by a
 company like Twitter, you have to play by their rules. And sometimes,
 they&amp;#8217;ll change the rules, and it&amp;#8217;ll be time to move on.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Nobody Understands REST or HTTP</title>
-    <link href="http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http.html"/>
-    <updated>2011-07-03T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/07/03/nobody-understands-rest-or-http</id>
-    <content type="html">&lt;p&gt;Update: Part II of this post is &lt;a href=&quot;http://blog.steveklabnik.com/2011/08/07/some-people-understand-rest-and-http.html&quot;&gt;here&lt;/a&gt;. Check it out, and there&amp;#8217;s an announcement at the end!&lt;/p&gt;
-
-&lt;p&gt;The more that I&amp;#8217;ve learned about web development, the more that I&amp;#8217;ve
-come to appreciate the thoroughness and thoughtfulness of the authors of
-the HTTP RFC and Roy Fielding&amp;#8217;s dissertation. It seems like the answers
-to most problems come down to &amp;#8220;There&amp;#8217;s a section of the spec for that.&amp;#8221;
-Now, obviously, they&amp;#8217;re not infallible, and I&amp;#8217;m not saying that there&amp;#8217;s
-zero room for improvement. But it really disappoints me when people
-don&amp;#8217;t understand the way that a given issue is supposed to be solved,
-and so they make up a partial solution that solves their given case but
-doesn&amp;#8217;t jive well with the way that everything else works. There are
-valid criticisms of the specs, but they have to come from an informed
-place about what the spec says in the first place.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#8217;s talk about a few cases where either REST or HTTP (which is clearly
-RESTful in its design) solves a common web development problem.&lt;/p&gt;
-
-&lt;h3&gt;I need to design my API&lt;/h3&gt;
-
-&lt;p&gt;This one is a bit more general, but the others build off of it, so bear
-with me.&lt;/p&gt;
-
-&lt;p&gt;The core idea of REST is right there in the name: &amp;#8220;Representational
-State Transfer&amp;#8221; It&amp;#8217;s about transferring representations of the state&amp;#8230;
-of resources. Okay, so one part isn&amp;#8217;t in the name. But still, let&amp;#8217;s
-break this down.&lt;/p&gt;
-
-&lt;h4&gt;Resources&lt;/h4&gt;
-
-&lt;p&gt;From &lt;a href=&quot;http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_1&quot;&gt;Fielding&amp;#8217;s dissertation&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;The key abstraction of information in REST is a resource. Any information
-that can be named can be a resource: a document or image, a temporal service
-(e.g. &amp;#8220;today&amp;#8217;s weather in Los Angeles&amp;#8221;), a collection of other resources, a
-non-virtual object (e.g. a person), and so on. In other words, any concept that
-might be the target of an author&amp;#8217;s hypertext reference must fit within the
-definition of a resource. A resource is a conceptual mapping to a set of
-entities, not the entity that corresponds to the mapping at any particular
-point in time.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;When we interact with a RESTful system, we&amp;#8217;re interacting with a set of
-resources. Clients request resources from the server in a variety of
-ways. But the key thing here is that resources are &lt;em&gt;nouns&lt;/em&gt;. So a RESTful
-API consists of a set of URIs that map entities in your system to
-endpoints, and then you use HTTP itself for the verbs. If your URLs have
-action words in them, you&amp;#8217;re doing it wrong. Let&amp;#8217;s look at an example of
-this, from the early days of Rails. When Rails first started messing
-around with REST, the URLs looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/posts/show/1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If you use Rails today, you&amp;#8217;ll note that the corresponding URL is
-this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/posts/1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Why? Well, it&amp;#8217;s because the &amp;#8216;show&amp;#8217; is unnecessary; you&amp;#8217;re performing a
-GET request, and that demonstrates that you want to show that resource.
-It doesn&amp;#8217;t need to be in the URL.&lt;/p&gt;
-
-&lt;h4&gt;A digression about actions&lt;/h4&gt;
-
-&lt;p&gt;Sometimes, you need to perform some sort of action, though. Verbs are
-useful. So how&amp;#8217;s this fit in? Let&amp;#8217;s consider the example of transferring
-money from one Account to another. You might decided to build a URI like
-this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;POST /accounts/1/transfer/500.00/to/2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;to transfer $500 from Account 1 to Account 2. But this is wrong! What
-you really need to do is consider the nouns. You&amp;#8217;re not transferring
-money, you&amp;#8217;re creating a Transaction resource:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;POST /transactions HTTP/1.1
-Host: &amp;lt;snip, and all other headers&amp;gt;
-
-from=1&amp;amp;to=2&amp;amp;amount=500.00
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Got it? So then, it returns the URI for your new Transaction:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;HTTP/1.1 201 OK
-Date: Sun, 3 Jul 2011 23:59:59 GMT
-Content-Type: application/json
-Content-Length: 12345
-Location: http://foo.com/transactions/1
-
-{&quot;transaction&quot;:{&quot;id&quot;:1,&quot;uri&quot;:&quot;/transactions/1&quot;,&quot;type&quot;:&quot;transfer&quot;}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Whoah, &lt;a href=&quot;http://timelessrepo.com/haters-gonna-hateoas&quot;&gt;HATEOS&lt;/a&gt;! Also, it
-may or may not be a good idea to return this JSON as the body; the
-important thing is that we have the Location header which tells us where
-our new resource is. If we give a client the ID, they might try to
-construct their own URL, and the URI is a little redundant, since we
-have one in the Location. Regardless, I&amp;#8217;m leaving that JSON there,
-because that&amp;#8217;s the way I typed it first. I&amp;#8217;d love to &lt;a href=&quot;mailto:steve@steveklabnik.com&quot;&gt;hear your thoughts
-on this&lt;/a&gt; if you feel strongly one way or
-the other.&lt;/p&gt;
-
-&lt;p&gt;EDIT: I&amp;#8217;ve since decided that yes, including the URI is a bad idea. The
-Location header makes much more sense. More on this in Part ii, yet to
-come.&lt;/p&gt;
-
-&lt;p&gt;Anyway, so now we can GET our Transaction:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;GET /transactions/1 HTTP/1.1
-Accept: application/json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;and the response:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;HTTP/1.1 blah blah blah
-
-{&quot;id&quot;:1,&quot;type&quot;:&quot;transfer&quot;,&quot;status&quot;:&quot;in-progress&quot;}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So we know it&amp;#8217;s working. We can continue to poll the URI and see when
-our transaction is finished, or if it failed, or whatever. Easy! But
-it&amp;#8217;s about manipulating those nouns.&lt;/p&gt;
-
-&lt;h4&gt;Representations&lt;/h4&gt;
-
-&lt;p&gt;You&amp;#8217;ll notice a pair of headers in the above HTTP requests and
-responses: Accept and Content-Type. These describe the different
-&amp;#8216;representation&amp;#8217; of any given resource. From &lt;a href=&quot;http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_2&quot;&gt;Fielding&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;REST components perform actions on a resource by using a representation to
-capture the current or intended state of that resource and transferring that
-representation between components. A representation is a sequence of bytes,
-plus representation metadata to describe those bytes. Other commonly used but
-less precise names for a representation include: document, file, and HTTP
-message entity, instance, or variant.&lt;/p&gt;
-
-&lt;p&gt;A representation consists of data, metadata describing the data, and, on
-occasion, metadata to describe the metadata (usually for the purpose of
-verifying message integrity).&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;So &lt;code&gt;/accounts/1&lt;/code&gt; represents a resource. But it doesn&amp;#8217;t include the form
-that the resource takes. That&amp;#8217;s what these two headers are for.&lt;/p&gt;
-
-&lt;p&gt;This is also why adding &lt;code&gt;.html&lt;/code&gt; to the end of your URLs is kinda silly.
-If I request &lt;code&gt;/accounts/1.html&lt;/code&gt; with an &lt;code&gt;Accept&lt;/code&gt; header of
-&lt;code&gt;application/json&lt;/code&gt;, then I&amp;#8217;ll get JSON. The &lt;code&gt;Content-Type&lt;/code&gt; header is the
-server telling us what kind of representation it&amp;#8217;s sending back as well.
-The important thing, though, is that a given resource can have many
-different representations. Ideally, there should be one unambiguous
-source of information in a system, and you can get different
-representations using &lt;code&gt;Accept&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4&gt;State and Transfer&lt;/h4&gt;
-
-&lt;p&gt;This is more about the way HTTP is designed, so I&amp;#8217;ll just keep this
-short: Requests are designed to be stateless, and the server holds all
-of the state for its resources. This is important for caching and a few
-other things, but it&amp;#8217;s sort of out of the scope of this post.&lt;/p&gt;
-
-&lt;p&gt;Okay. With all of that out of the way, let&amp;#8217;s talk about some more
-specific problems that REST/HTTP solve.&lt;/p&gt;
-
-&lt;h3&gt;I want my API to be versioned&lt;/h3&gt;
-
-&lt;p&gt;The first thing that people do when they want a versioned API is to
-shove a /v1/ in the URL. &lt;em&gt;&lt;em&gt;THIS IS BAD!!!!!1&lt;/em&gt;&lt;/em&gt;. &lt;code&gt;Accept&lt;/code&gt; solves this
-problem. What you&amp;#8217;re really asking for is &amp;#8220;I&amp;#8217;d like the version two
-representation of this resource.&amp;#8221; So use accept!&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#8217;s an example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;GET /accounts/1 HTTP/1.1
-Accept: application/vnd.steveklabnik-v2+json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You&amp;#8217;ll notice a few things: we have a + in our MIME type, and before it
-is a bunch of junk that wasn&amp;#8217;t there before. It breaks down into three
-things: &lt;code&gt;vnd&lt;/code&gt;, my name, and &lt;code&gt;v2&lt;/code&gt;. You can guess what v2 means, but what
-about &lt;code&gt;vnd&lt;/code&gt;. It&amp;#8217;s a &lt;a href=&quot;http://tools.ietf.org/html/rfc4288#section-3.2&quot;&gt;Vendor MIME Type&lt;/a&gt;.
-After all, we don&amp;#8217;t really want just any old JSON, we want my specific
-form of JSON. This lets us still have our one URL to represent our
-resource, yet version everything appropriately.&lt;/p&gt;
-
-&lt;p&gt;I got a comment from &lt;a href=&quot;http://avdi.org/&quot;&gt;Avdi Grimm&lt;/a&gt; about this, too:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Here&amp;#8217;s an article you might find interesting: &lt;a href=&quot;http://www.informit.com/articles/article.aspx?p=1566460&quot;&gt;http://www.informit.com/articles/article.aspx?p=1566460&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;vnd.example-com.foo+json; version=1.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Sadly, Rails does not (yet) understand this format.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;h3&gt;I&amp;#8217;d like my content to be displayed in multiple languages&lt;/h3&gt;
-
-&lt;p&gt;This is related, but a little different. What about pages in different
-languages? Again, we have a question of representation, not one of
-content. /en/whatever is not appropriate here. Turns out, &lt;a href=&quot;http://tools.ietf.org/html/rfc2616#section-14.4&quot;&gt;there&amp;#8217;s a
-header for that: Accept-Language&lt;/a&gt;.
-Respect the headers, and everything works out.&lt;/p&gt;
-
-&lt;p&gt;Oh, and I should say this, too: this doesn&amp;#8217;t solve the problem of &amp;#8220;I&amp;#8217;d
-like to read this article in Spanish, even though I usually browse in
-English.&amp;#8221; Giving your users the option to view your content in different
-ways is a good thing. Personally, I&amp;#8217;d consider this to fall out in two
-ways:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;It&amp;#8217;s temporary. Stick this option in the session, and if they have the
-option set, it trumps the header. You&amp;#8217;re still respecting their usual
-preferences, but allowing them to override it.&lt;/li&gt;
-&lt;li&gt;It&amp;#8217;s more permanent. Make it some aspect of their account, and it
-trumps a specific header. Same deal.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h3&gt;I&amp;#8217;d like my content to have a mobile view&lt;/h3&gt;
-
-&lt;p&gt;Sounds like I&amp;#8217;m beating a dead horse, but again: it&amp;#8217;s a representation
-question. In this case, you&amp;#8217;d like to vary the response by the
-User-Agent: give one that&amp;#8217;s mobile-friendly. There&amp;#8217;s a whole list of
-&lt;a href=&quot;http://www.w3.org/TR/mobile-bp/&quot;&gt;mobile best practices&lt;/a&gt; that the w3c
-recommends, but the short of it is this: the User-Agent should let you
-know that you&amp;#8217;re dealing with a mobile device. For example, here&amp;#8217;s the
-first iPhone UA:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, once detecting you have a mobile User-Agent, you&amp;#8217;d give back a
-mobile version of the site. Hosting it on a subdomain is a minor sin,
-but really, like I said above, this is really a question of
-representation, and so having two URLs that point to the same resource
-is kinda awkward.&lt;/p&gt;
-
-&lt;p&gt;Whatever you do, for the love of users, please don&amp;#8217;t detect these
-headers, then redirect your users to m.whatever.com, at the root. One of my
-local news websites does this, and it means that every time I try to follow a
-link from Twitter in my mobile browser, I don&amp;#8217;t see their article, I see
-their homepage. It&amp;#8217;s infuriating.&lt;/p&gt;
-
-&lt;h3&gt;I&amp;#8217;d like to hide some of my content&lt;/h3&gt;
-
-&lt;p&gt;Every once in a while, you see a story like this: &lt;a href=&quot;http://www.boingboing.net/2010/10/25/local-newspaper-boas.html&quot;&gt;Local paper boasts
-ultimate passive-agressive paywall policy&lt;/a&gt;.
-Now, I find paywalls distasteful, but this is not the way to do it.
-There are technological means to limit content on the web: making users
-be logged-in to read things, for example.&lt;/p&gt;
-
-&lt;p&gt;When this was discussed on Hacker News, &lt;a href=&quot;http://news.ycombinator.com/item?id=1834075&quot;&gt;here&amp;#8217;s&lt;/a&gt;
-what I had to say:&lt;/p&gt;
-
-&lt;p&gt;nkurz:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;I presume if I had an unattended roadside vegetable stand with a cash-box, that I&amp;#8217;d be able to prosecute someone who took vegetables without paying, certainly if they also made off with the cash-box. Why is this different on the web? And if a written prohibition has no legal standing, why do so many companies pay lawyers to write click-through &amp;#8220;terms of service&amp;#8221; agreements?&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;me:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;Why is this different on the web?&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;Let&amp;#8217;s go through what happens when I visit a web site. I type a URL in my bar, and hit enter. My web browser makes a request via http to a server, and the server inspects the request, determines if I should see the content or not, and returns either a 200 if I am allowed, and a 403 if I&amp;#8217;m not. So, by viewing their pages, I&amp;#8217;m literally asking permission, and being allowed.&lt;/p&gt;
-
-&lt;p&gt;It sounds to me like a misconfiguration of their server; it&amp;#8217;s not doing what they want it to.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;h3&gt;I&amp;#8217;d like to do some crazy ajax, yet have permalinks&lt;/h3&gt;
-
-&lt;p&gt;This is an example of where the spec is obviously deficient, and so
-something had to be done.&lt;/p&gt;
-
-&lt;p&gt;As the web grew, AJAXy &amp;#8216;web applications&amp;#8217; started to become more and
-more the norm. And so applications wanted to provide deep-linking
-capabilities to users, but there&amp;#8217;s a problem: they couldn&amp;#8217;t manipulate
-the URL with Javascript without causing a redirect. They &lt;em&gt;could&lt;/em&gt;
-manipulate the anchor, though. You know, that part after the #. So,
-Google came up with a convention: &lt;a href=&quot;http://code.google.com/web/ajaxcrawling/docs/getting-started.html&quot;&gt;Ajax Fragments&lt;/a&gt;.
-This fixed the problem in the short term, but then the spec got fixed in
-the long term: &lt;a href=&quot;http://dev.w3.org/html5/spec-author-view/history.html&quot;&gt;pushState&lt;/a&gt;.
-This lets you still provide a nice deep URL to your users, but not have
-that awkward #!.&lt;/p&gt;
-
-&lt;p&gt;In this case, there was a legitimate technical issue with the spec, and
-so it&amp;#8217;s valid to invent something. But then the standard improved, and
-so people should stop using #! as HTML5 gains browser support.&lt;/p&gt;
-
-&lt;h3&gt;In conclusion&lt;/h3&gt;
-
-&lt;p&gt;Seriously, most of the problems that you&amp;#8217;re solving are social, not
-technical. The web is decades old at this point, most people have
-considered these kinds of problems in the past. That doesn&amp;#8217;t mean that
-they always have the right answer, but they usually do have an answer,
-and it&amp;#8217;d behoove you to know what it is before you invent something on
-your own.&lt;/p&gt;
 </content>
   </entry>
   

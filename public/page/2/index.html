@@ -64,6 +64,130 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/23/more-rstat-dot-us-refactoring.html">More rstat.us Refactoring</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-23T17:03:00-04:00" pubdate  data-updated="true" >Sep 23<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hey everyone! I just wanted to share One More Thing with you about this rstat.us
+refactoring.</p>
+
+<p>The main thrust of the last article I posted was to show you a technique for
+extracting a class, getting it under some kind of test, and then refactoring it
+a bit. Refactoring is always an iterative process, and Ryan Bates from the
+always awesome <a href="http://railscasts.com">Railscasts</a> asked me why I made the
+Salmon class into a module, especially given my recent <a href="/2011/09/06/the-secret-to-rails-oo-design.html">rant</a>
+against modules. The answer was, &#8216;because it&#8217;s simpler, and the first thing
+I thought of.&#8217; He shared with me an alternate implementation that I like too,
+and I wanted to share with you. Check it:</p>
+
+<figure role=code><figcaption><span>app/models/salmon_notifier.rb</span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">SalmonNotifier</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">feed</span><span class="p">)</span>
+</div><div class='line'>    <span class="vi">@user</span> <span class="o">=</span> <span class="n">user</span>
+</div><div class='line'>    <span class="vi">@feed</span> <span class="o">=</span> <span class="n">feed</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">mention</span><span class="p">(</span><span class="n">update</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">deliver</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">to_atom</span><span class="p">(</span><span class="s2">&quot;http://</span><span class="si">#{</span><span class="vi">@user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">))</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">follow</span>
+</div><div class='line'>    <span class="n">deliver</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_follow</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="vi">@feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">unfollow</span>
+</div><div class='line'>    <span class="n">deliver</span> <span class="no">OStatus</span><span class="o">::</span><span class="no">Salmon</span><span class="o">.</span><span class="n">from_unfollow</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">,</span> <span class="vi">@feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">to_atom</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="kp">protected</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">deliver</span><span class="p">(</span><span class="n">salmon</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">send_envelope_to_salmon_endpoint</span> <span class="n">salmon</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">to_rsa_keypair</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">send_envelope_to_salmon_endpoint</span><span class="p">(</span><span class="n">envelope</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="vi">@feed</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">salmon_url</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">envelope</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/magic-envelope+xml&quot;</span><span class="p">})</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This follows a more OO style, and is a bit more well-factored. Here&#8217;s his
+description of what he did:</p>
+
+<blockquote><p>1. Switched to a class and gave it a name that is a noun (maybe name<br/>should be different though).<br/>2. Moved common method params into instance variables.<br/>3. This simplified the mention/follow/unfollow methods enough to be on one line.<br/>4. Renamed &#8220;send_to_salmon_endpoint&#8221; to &#8220;deliver&#8221; because it feels<br/>nicer, the &#8220;salmon endpoint&#8221; can be assumed due to the name of the<br/>class. I generally don&#8217;t like to put the class name in the method<br/>name.<br/>5. Extracted commented out into its own method with the same name. I<br/>don&#8217;t know if this is really necessary though (same reason as above).</p><p>The only thing that bothers me now is the constant access of<br/>@user.author and @feed.author. This makes me think it should be<br/>interacting directly with authors. However you still need access to<br/>@user.to_rsa_keypair but maybe that method could be moved elsewhere<br/>more accessible.</p></blockquote>
+
+
+<p>All of these changes are pretty good. Ryan&#8217;s suggestions for moving forward are
+pretty good, as well, but I&#8217;d add one more thing: we&#8217;re starting to collect a
+bunch of methods all related to delivering more generic HTTP requests in the
+protected section. This also might be worth pulling out, too.  Protected/private
+in general is a minor smell that indicates there&#8217;s code being used multiple
+times that&#8217;s not part of the main objective of the class.  It might not be worth
+it yet, but then again, it might. Speaking of protected methods, you might
+wonder why I ended up mocking out my protected method in the last post, as well.
+There are no more tests that actually test the method is working properly.  This
+is true, and it&#8217;s because I was leading into thinking of something like this.
+Mocked tests are almost always unit tests, and two methods are two separate
+units, so I had just ended up doing it out of habit. This further shows that
+maybe an extraction of another class is worthwhile.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/22/extracting-domain-models-a-practical-example.html">Extracting Domain Models: A Practical Example</a></h1>
     
     
@@ -2967,330 +3091,6 @@ they&#8217;ll change the rules, and it&#8217;ll be time to move on.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/07/03/nobody-understands-rest-or-http.html">Nobody Understands REST or HTTP</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-07-03T00:00:00-04:00" pubdate  data-updated="true" >Jul 3<span>rd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Update: Part II of this post is <a href="/2011/08/07/some-people-understand-rest-and-http.html">here</a>. Check it out, and there&#8217;s an announcement at the end!</p>
-
-<p>The more that I&#8217;ve learned about web development, the more that I&#8217;ve
-come to appreciate the thoroughness and thoughtfulness of the authors of
-the HTTP RFC and Roy Fielding&#8217;s dissertation. It seems like the answers
-to most problems come down to &#8220;There&#8217;s a section of the spec for that.&#8221;
-Now, obviously, they&#8217;re not infallible, and I&#8217;m not saying that there&#8217;s
-zero room for improvement. But it really disappoints me when people
-don&#8217;t understand the way that a given issue is supposed to be solved,
-and so they make up a partial solution that solves their given case but
-doesn&#8217;t jive well with the way that everything else works. There are
-valid criticisms of the specs, but they have to come from an informed
-place about what the spec says in the first place.</p>
-
-<p>Let&#8217;s talk about a few cases where either REST or HTTP (which is clearly
-RESTful in its design) solves a common web development problem.</p>
-
-<h3>I need to design my API</h3>
-
-<p>This one is a bit more general, but the others build off of it, so bear
-with me.</p>
-
-<p>The core idea of REST is right there in the name: &#8220;Representational
-State Transfer&#8221; It&#8217;s about transferring representations of the state&#8230;
-of resources. Okay, so one part isn&#8217;t in the name. But still, let&#8217;s
-break this down.</p>
-
-<h4>Resources</h4>
-
-<p>From <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_1">Fielding&#8217;s dissertation</a>:</p>
-
-<blockquote><p>The key abstraction of information in REST is a resource. Any information
-that can be named can be a resource: a document or image, a temporal service
-(e.g. &#8220;today&#8217;s weather in Los Angeles&#8221;), a collection of other resources, a
-non-virtual object (e.g. a person), and so on. In other words, any concept that
-might be the target of an author&#8217;s hypertext reference must fit within the
-definition of a resource. A resource is a conceptual mapping to a set of
-entities, not the entity that corresponds to the mapping at any particular
-point in time.</p></blockquote>
-
-<p>When we interact with a RESTful system, we&#8217;re interacting with a set of
-resources. Clients request resources from the server in a variety of
-ways. But the key thing here is that resources are <em>nouns</em>. So a RESTful
-API consists of a set of URIs that map entities in your system to
-endpoints, and then you use HTTP itself for the verbs. If your URLs have
-action words in them, you&#8217;re doing it wrong. Let&#8217;s look at an example of
-this, from the early days of Rails. When Rails first started messing
-around with REST, the URLs looked like this:</p>
-
-<pre><code>/posts/show/1
-</code></pre>
-
-<p>If you use Rails today, you&#8217;ll note that the corresponding URL is
-this:</p>
-
-<pre><code>/posts/1
-</code></pre>
-
-<p>Why? Well, it&#8217;s because the &#8216;show&#8217; is unnecessary; you&#8217;re performing a
-GET request, and that demonstrates that you want to show that resource.
-It doesn&#8217;t need to be in the URL.</p>
-
-<h4>A digression about actions</h4>
-
-<p>Sometimes, you need to perform some sort of action, though. Verbs are
-useful. So how&#8217;s this fit in? Let&#8217;s consider the example of transferring
-money from one Account to another. You might decided to build a URI like
-this:</p>
-
-<pre><code>POST /accounts/1/transfer/500.00/to/2
-</code></pre>
-
-<p>to transfer $500 from Account 1 to Account 2. But this is wrong! What
-you really need to do is consider the nouns. You&#8217;re not transferring
-money, you&#8217;re creating a Transaction resource:</p>
-
-<pre><code>POST /transactions HTTP/1.1
-Host: &lt;snip, and all other headers&gt;
-
-from=1&amp;to=2&amp;amount=500.00
-</code></pre>
-
-<p>Got it? So then, it returns the URI for your new Transaction:</p>
-
-<pre><code>HTTP/1.1 201 OK
-Date: Sun, 3 Jul 2011 23:59:59 GMT
-Content-Type: application/json
-Content-Length: 12345
-Location: http://foo.com/transactions/1
-
-{"transaction":{"id":1,"uri":"/transactions/1","type":"transfer"}}
-</code></pre>
-
-<p>Whoah, <a href="http://timelessrepo.com/haters-gonna-hateoas">HATEOS</a>! Also, it
-may or may not be a good idea to return this JSON as the body; the
-important thing is that we have the Location header which tells us where
-our new resource is. If we give a client the ID, they might try to
-construct their own URL, and the URI is a little redundant, since we
-have one in the Location. Regardless, I&#8217;m leaving that JSON there,
-because that&#8217;s the way I typed it first. I&#8217;d love to <a href="mailto:steve@steveklabnik.com">hear your thoughts
-on this</a> if you feel strongly one way or
-the other.</p>
-
-<p>EDIT: I&#8217;ve since decided that yes, including the URI is a bad idea. The
-Location header makes much more sense. More on this in Part ii, yet to
-come.</p>
-
-<p>Anyway, so now we can GET our Transaction:</p>
-
-<pre><code>GET /transactions/1 HTTP/1.1
-Accept: application/json
-</code></pre>
-
-<p>and the response:</p>
-
-<pre><code>HTTP/1.1 blah blah blah
-
-{"id":1,"type":"transfer","status":"in-progress"}
-</code></pre>
-
-<p>So we know it&#8217;s working. We can continue to poll the URI and see when
-our transaction is finished, or if it failed, or whatever. Easy! But
-it&#8217;s about manipulating those nouns.</p>
-
-<h4>Representations</h4>
-
-<p>You&#8217;ll notice a pair of headers in the above HTTP requests and
-responses: Accept and Content-Type. These describe the different
-&#8216;representation&#8217; of any given resource. From <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2_1_2">Fielding</a>:</p>
-
-<blockquote><p>REST components perform actions on a resource by using a representation to
-capture the current or intended state of that resource and transferring that
-representation between components. A representation is a sequence of bytes,
-plus representation metadata to describe those bytes. Other commonly used but
-less precise names for a representation include: document, file, and HTTP
-message entity, instance, or variant.</p>
-
-<p>A representation consists of data, metadata describing the data, and, on
-occasion, metadata to describe the metadata (usually for the purpose of
-verifying message integrity).</p></blockquote>
-
-<p>So <code>/accounts/1</code> represents a resource. But it doesn&#8217;t include the form
-that the resource takes. That&#8217;s what these two headers are for.</p>
-
-<p>This is also why adding <code>.html</code> to the end of your URLs is kinda silly.
-If I request <code>/accounts/1.html</code> with an <code>Accept</code> header of
-<code>application/json</code>, then I&#8217;ll get JSON. The <code>Content-Type</code> header is the
-server telling us what kind of representation it&#8217;s sending back as well.
-The important thing, though, is that a given resource can have many
-different representations. Ideally, there should be one unambiguous
-source of information in a system, and you can get different
-representations using <code>Accept</code>.</p>
-
-<h4>State and Transfer</h4>
-
-<p>This is more about the way HTTP is designed, so I&#8217;ll just keep this
-short: Requests are designed to be stateless, and the server holds all
-of the state for its resources. This is important for caching and a few
-other things, but it&#8217;s sort of out of the scope of this post.</p>
-
-<p>Okay. With all of that out of the way, let&#8217;s talk about some more
-specific problems that REST/HTTP solve.</p>
-
-<h3>I want my API to be versioned</h3>
-
-<p>The first thing that people do when they want a versioned API is to
-shove a /v1/ in the URL. <em><em>THIS IS BAD!!!!!1</em></em>. <code>Accept</code> solves this
-problem. What you&#8217;re really asking for is &#8220;I&#8217;d like the version two
-representation of this resource.&#8221; So use accept!</p>
-
-<p>Here&#8217;s an example:</p>
-
-<pre><code>GET /accounts/1 HTTP/1.1
-Accept: application/vnd.steveklabnik-v2+json
-</code></pre>
-
-<p>You&#8217;ll notice a few things: we have a + in our MIME type, and before it
-is a bunch of junk that wasn&#8217;t there before. It breaks down into three
-things: <code>vnd</code>, my name, and <code>v2</code>. You can guess what v2 means, but what
-about <code>vnd</code>. It&#8217;s a <a href="http://tools.ietf.org/html/rfc4288#section-3.2">Vendor MIME Type</a>.
-After all, we don&#8217;t really want just any old JSON, we want my specific
-form of JSON. This lets us still have our one URL to represent our
-resource, yet version everything appropriately.</p>
-
-<p>I got a comment from <a href="http://avdi.org/">Avdi Grimm</a> about this, too:</p>
-
-<blockquote><p>Here&#8217;s an article you might find interesting: <a href="http://www.informit.com/articles/article.aspx?p=1566460">http://www.informit.com/articles/article.aspx?p=1566460</a></p>
-
-<p>The author points out that MIMETypes can have parameters, which means you can actually have a mimetype that looks like this:</p>
-
-<pre><code>vnd.example-com.foo+json; version=1.0
-</code></pre>
-
-<p>Sadly, Rails does not (yet) understand this format.</p></blockquote>
-
-<h3>I&#8217;d like my content to be displayed in multiple languages</h3>
-
-<p>This is related, but a little different. What about pages in different
-languages? Again, we have a question of representation, not one of
-content. /en/whatever is not appropriate here. Turns out, <a href="http://tools.ietf.org/html/rfc2616#section-14.4">there&#8217;s a
-header for that: Accept-Language</a>.
-Respect the headers, and everything works out.</p>
-
-<p>Oh, and I should say this, too: this doesn&#8217;t solve the problem of &#8220;I&#8217;d
-like to read this article in Spanish, even though I usually browse in
-English.&#8221; Giving your users the option to view your content in different
-ways is a good thing. Personally, I&#8217;d consider this to fall out in two
-ways:</p>
-
-<ul>
-<li>It&#8217;s temporary. Stick this option in the session, and if they have the
-option set, it trumps the header. You&#8217;re still respecting their usual
-preferences, but allowing them to override it.</li>
-<li>It&#8217;s more permanent. Make it some aspect of their account, and it
-trumps a specific header. Same deal.</li>
-</ul>
-
-
-<h3>I&#8217;d like my content to have a mobile view</h3>
-
-<p>Sounds like I&#8217;m beating a dead horse, but again: it&#8217;s a representation
-question. In this case, you&#8217;d like to vary the response by the
-User-Agent: give one that&#8217;s mobile-friendly. There&#8217;s a whole list of
-<a href="http://www.w3.org/TR/mobile-bp/">mobile best practices</a> that the w3c
-recommends, but the short of it is this: the User-Agent should let you
-know that you&#8217;re dealing with a mobile device. For example, here&#8217;s the
-first iPhone UA:</p>
-
-<pre><code>Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
-</code></pre>
-
-<p>Then, once detecting you have a mobile User-Agent, you&#8217;d give back a
-mobile version of the site. Hosting it on a subdomain is a minor sin,
-but really, like I said above, this is really a question of
-representation, and so having two URLs that point to the same resource
-is kinda awkward.</p>
-
-<p>Whatever you do, for the love of users, please don&#8217;t detect these
-headers, then redirect your users to m.whatever.com, at the root. One of my
-local news websites does this, and it means that every time I try to follow a
-link from Twitter in my mobile browser, I don&#8217;t see their article, I see
-their homepage. It&#8217;s infuriating.</p>
-
-<h3>I&#8217;d like to hide some of my content</h3>
-
-<p>Every once in a while, you see a story like this: <a href="http://www.boingboing.net/2010/10/25/local-newspaper-boas.html">Local paper boasts
-ultimate passive-agressive paywall policy</a>.
-Now, I find paywalls distasteful, but this is not the way to do it.
-There are technological means to limit content on the web: making users
-be logged-in to read things, for example.</p>
-
-<p>When this was discussed on Hacker News, <a href="http://news.ycombinator.com/item?id=1834075">here&#8217;s</a>
-what I had to say:</p>
-
-<p>nkurz:</p>
-
-<blockquote><p>I presume if I had an unattended roadside vegetable stand with a cash-box, that I&#8217;d be able to prosecute someone who took vegetables without paying, certainly if they also made off with the cash-box. Why is this different on the web? And if a written prohibition has no legal standing, why do so many companies pay lawyers to write click-through &#8220;terms of service&#8221; agreements?</p></blockquote>
-
-<p>me:</p>
-
-<blockquote><blockquote><p>Why is this different on the web?</p></blockquote>
-
-<p>Let&#8217;s go through what happens when I visit a web site. I type a URL in my bar, and hit enter. My web browser makes a request via http to a server, and the server inspects the request, determines if I should see the content or not, and returns either a 200 if I am allowed, and a 403 if I&#8217;m not. So, by viewing their pages, I&#8217;m literally asking permission, and being allowed.</p>
-
-<p>It sounds to me like a misconfiguration of their server; it&#8217;s not doing what they want it to.</p></blockquote>
-
-<h3>I&#8217;d like to do some crazy ajax, yet have permalinks</h3>
-
-<p>This is an example of where the spec is obviously deficient, and so
-something had to be done.</p>
-
-<p>As the web grew, AJAXy &#8216;web applications&#8217; started to become more and
-more the norm. And so applications wanted to provide deep-linking
-capabilities to users, but there&#8217;s a problem: they couldn&#8217;t manipulate
-the URL with Javascript without causing a redirect. They <em>could</em>
-manipulate the anchor, though. You know, that part after the #. So,
-Google came up with a convention: <a href="http://code.google.com/web/ajaxcrawling/docs/getting-started.html">Ajax Fragments</a>.
-This fixed the problem in the short term, but then the spec got fixed in
-the long term: <a href="http://dev.w3.org/html5/spec-author-view/history.html">pushState</a>.
-This lets you still provide a nice deep URL to your users, but not have
-that awkward #!.</p>
-
-<p>In this case, there was a legitimate technical issue with the spec, and
-so it&#8217;s valid to invent something. But then the standard improved, and
-so people should stop using #! as HTML5 gains browser support.</p>
-
-<h3>In conclusion</h3>
-
-<p>Seriously, most of the problems that you&#8217;re solving are social, not
-technical. The web is decades old at this point, most people have
-considered these kinds of problems in the past. That doesn&#8217;t mean that
-they always have the right answer, but they usually do have an answer,
-and it&#8217;d behoove you to know what it is before you invent something on
-your own.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -3321,6 +3121,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
       </li>
     
@@ -3334,10 +3138,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/19/for-science-im-killing-my-cell-phone.html">For Science: I&#8217;m Killing My Cell Phone</a>
       </li>
     
   </ul>
