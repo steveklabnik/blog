@@ -56,7 +56,7 @@ causes much more thinking for someone who doesn't grok it.
 
 This happens often in education. DHH made [a comment](http://news.ycombinator.com/item?id=3328427)
 about this recently that illustrates this principle, and he couches it in terms of
-"learability" vs. "readability":
+"learnability" vs. "readability":
 
 > If you optimize a framework for beginners, you're optimizing for
 > learnability. That's great for the first few days or even weeks of learning.
@@ -220,7 +220,7 @@ great example in and of itself of domain specific langauge and density. Here:
 
 > Property is theft.
 
-This is a quote by [Proudhorn](http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon), 
+This is a quote by [Proudhon](http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon), 
 the first person to call himself an anarchist. Let's unpack the first few layers
 of this statement:
 
