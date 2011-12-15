@@ -90,7 +90,7 @@ This tendency means that most language that's specific to a domain will
 generally trend towards the usable at the expense of the learnable. The impact
 this has on individuals new to the domain, however, is that of a wall. An
 impediment. Overcoming this obstacle requries a bit of good faith on the part
-of the beginner; to advance cross quickly over the chasam between beginner and
+of the beginner; to cross quickly over the chasm between beginner and
 expert, they must recognize and respect this aspect of the conversations they
 will invariably become a part of. When faced with a term that is used in a
 strange way, beginners should ask for clarification, and not start arguments
