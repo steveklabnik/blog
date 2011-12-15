@@ -64,6 +64,398 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/12/15/marx-anarchism-and-web-standards.html">Marx, Anarchism, and Web Standards</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-15T12:01:00-05:00" pubdate  data-updated="true" >Dec 15<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h3>An aside for software devs</h3>
+
+<p>You might not care about anarchism, and I can almost guarantee that you don&#8217;t
+care about Marx, but please bear with me. I think my point is best made by
+putting the web stuff at the end, so please, just read it. ;) It&#8217;ll be good
+for you, I swear. I&#8217;ll explain better at the end.</p>
+
+<h2>Domain Specific Languages and information density</h2>
+
+<p>I&#8217;ve been noticing an effect lately that&#8217;s certainly not new; it&#8217;s just come up
+frequently. When working within a domain that&#8217;s new to them, most people tend
+to not respect the density of the information being given to them, and it
+causes them to draw incorrect inferences.</p>
+
+<p>For example, this tweet earlier:</p>
+
+<blockquote class="twitter-tweet"><p>Does anybody else&#8217;s head explode when they read an &#8220;unless&#8221; statement? What good is readability if comprehension goes out the window?</p>&mdash; Christopher Deutsch (@cdeutsch) <a href="https://twitter.com/twitterapi/status/147349882246676480" data-datetime="2011-12-15T11:18:00-05:00">December 15, 2011</a></blockquote>
+
+
+<p>And this response:</p>
+
+<blockquote class="twitter-tweet"><p>@cdeutsch There are weirder idioms. @users.collect{|u| u.email} vs @users.collect(&:email) :) That should weird you out more.</p>&mdash; Brian P. Hogan (@bphogan) <a href="https://twitter.com/twitterapi/status/147359596602851328" data-datetime="2011-12-15T11:54:00-05:00">December 15, 2011</a></blockquote>
+
+
+<p>Now, I&#8217;m not saying that Christopher is in the wrong here, in fact, he agrees
+with what I&#8217;m about to say:</p>
+
+<blockquote class="twitter-tweet"><p>@philcrissman @bphogan I&#8217;m sure I&#8217;ll get used to the &#8220;unless&#8221; pattern someday. But from a Ruby outsiders perspective it&#8217;s hard to comprehend</p>&mdash; Christopher Deutsch (@cdeutsch) <a href="https://twitter.com/twitterapi/status/147358978404401152" data-datetime="2011-12-15T11:54:00-05:00">December 15, 2011</a></blockquote>
+
+
+<p>From someone new to Ruby, <code>Symbol#to_proc</code> or <code>unless</code> are hard to understand
+initially, and that&#8217;s because they&#8217;ve increased the density of information
+being conveyed. <code>unless</code> is the same as <code>if not</code> and <code>&amp;:foo</code> is the same as
+<code>{|a| a.foo }</code>. Both of these constructs condense something more complicated
+into something that is simpler, but denser.</p>
+
+<p>You&#8217;ll note that I said &#8216;simpler,&#8217; but by a certain measure, <code>&amp;:foo</code> is actually
+more complex. When I say <code>&amp;:foo</code> is simpler, I&#8217;m meaning for someone who&#8217;s well
+versed in Ruby, functional programming, or first-class functions. I have this exact
+background, and so for me, <code>collection.map &amp;:foo</code> is simpler and more readable
+than <code>collection.map {|a| a.foo }</code>. When I read the first example, I say in my head
+&#8220;Map foo over the collection.&#8221; You have to grok what map really is to get that sentence
+or the corresponding code. Whereas what (I imagine) someone who does not have this
+kind of background thinks when they see the second example is &#8220;Okay, so map is
+like an each, and for each thing in the collection, we&#8217;re going to call foo on it.&#8221;
+This is a totally valid interpretation, but notice how much longer it is, and how much
+more involved in the details it is. That&#8217;s cool, but to someone who groks map, it
+has a much larger amount of mental overhead, in the same way that my consise explanation
+causes much more thinking for someone who doesn&#8217;t grok it.</p>
+
+<p>This happens often in education. DHH made <a href="http://news.ycombinator.com/item?id=3328427">a comment</a>
+about this recently that illustrates this principle, and he couches it in terms of
+&#8220;learability&#8221; vs. &#8220;readability&#8221;:</p>
+
+<blockquote><p>If you optimize a framework for beginners, you&#8217;re optimizing for
+learnability. That&#8217;s great for the first few days or even weeks of learning.
+But once you&#8217;re past that, it&#8217;s not so great. What you care more about is the
+usability of the thing once you know it. There are plenty of cases where
+learnability and usability are in conflict. Letting learnability win is a
+short-term relief.</p>
+
+<p>If you on the other hand optimize for usability, for making things simple and
+easy to use for someone who understands the basics, you&#8217;ll often end up with
+something that has great learnability as well. Maybe not as much as could be
+achieved as if that was your only goal, but plenty still.</p></blockquote>
+
+<p>I think that &#8216;learnability&#8217; is a pretty good shortening for &#8216;light density&#8217; and
+&#8216;usability&#8217; is decent for &#8216;heavy density.&#8217; It&#8217;s the same effect, though. For the
+rest of this essay, I&#8217;ll be using &#8216;learnable&#8217; and &#8216;usable&#8217; to mean this
+particular usage.</p>
+
+<p>Any time you encounter experts in a particular domain, they&#8217;ll often have
+fairly specific language that corresponds to that domain. This language is
+usually designed to be usable, not learnable. This is because they&#8217;ve already done
+the learning; learnability holds no utlility for them. However, usability is
+incredibly&#8230; useful. To them. They&#8217;re working at a higher level of abstraction,
+and don&#8217;t want to get bogged down in details they already know well. Using
+learnable language would cause them to take twice as long to say things; to
+return to the density analogy, dense information is transferred from one person
+to another more quickly. If you can read a sentence a second, but that sentence
+is dense, you acquire much more information per second than if it was lighter.</p>
+
+<p>This tendency means that most language that&#8217;s specific to a domain will
+generally trend towards the usable at the expense of the learnable. The impact
+this has on individuals new to the domain, however, is that of a wall. An
+impediment. Overcoming this obstacle requries a bit of good faith on the part
+of the beginner; to advance cross quickly over the chasam between beginner and
+expert, they must recognize and respect this aspect of the conversations they
+will invariably become a part of. When faced with a term that is used in a
+strange way, beginners should ask for clarification, and not start arguments
+over semantics they don&#8217;t yet even understand. Experts will recognize these
+arguments as coming from a place where concepts are not yet fully understood,
+and while they may recognize the need to help educate, if the newbie is being
+belligerant, they may just ignore them instead. Nobody wins; the signal/noise
+ratio has been decreased, the beginner doesn&#8217;t learn, and everyone&#8217;s time is
+wasted.</p>
+
+<p>Here&#8217;s three other situations where I&#8217;ve seen this happen lately:</p>
+
+<h2>Marx and the labor theory of value</h2>
+
+<p>Philosophy writing is generally a great example of text that is very much
+usable, and not at all learnable. Some writers can still be learnable, but
+most are not, in my experience. One of the reasons this happens is that they
+introduce concepts early in a text and then utilize them later without
+referring back to the earlier definition. This isn&#8217;t a problem for anyone
+who&#8217;s thinking about taking off the training wheels or anyone who reads the
+entire text. The danger comes in when someone <em>not</em> versed in the entire text
+attempts to take portions of it out of its context.</p>
+
+<p>Consider Marx, and <em>Capital</em>. The meaning of &#8216;value&#8217; is a central concern
+of his writing, and indeed, entire critique of the political economy. It&#8217;s
+so important that the first few chapters are devoted to an (excruciatingly,
+frankly) detailed explanation of his thoughts on the true meaning of value.
+The rest of <em>Capital</em> is built on top of this: at least in my understanding of
+Marx, it all boils back down to that one question. And when having discussions
+between people who are devotees of Marx and those who come from other schools
+of economics, this kind of language gets in the way.</p>
+
+<p>It also causes ideas to be misrepresented: the first time I was ever introduced
+to the labor theory of value, it was by a close friend who&#8217;s very libertarian.
+This was a few years ago, so it&#8217;s an obvious paraphrase, but he summarized
+it thusly: &#8220;Yeah, I mean, the labor theory of value basically says that people
+should be paid for however much work they put into things, so if I take six
+hours to make a widget and you take four, the price of a widget from you should
+be six yet mine should only be four, and ideas like &#8216;market value&#8217; should be
+disregarded. It&#8217;s totally irrelevant if I suck at making widgets, I should get
+paid more than you anyway.&#8221; Which, to put it lightly, is a misrepresentation.
+While explaining the labor theory of value is outside of the scope of this
+post, what I will say is that to Marx, &#8216;value&#8217; is something intrinsic to an
+object; it&#8217;s the &#8216;socially necessary abstract labor&#8217; inherent to it. Talk about
+dense language! What a capitalist would call &#8216;value,&#8217; a Marxist would call
+&#8216;price.&#8217;</p>
+
+<p>As you can see, even just one little word, &#8216;value,&#8217; can be quite dense! Can
+you imagine a discussion intended to be &#8216;learnable&#8217; to outsiders about what&#8217;s
+meant? Imagine the expansion: &#8216;value&#8217; -> &#8216;socially neccesary abstract
+labor&#8217; -> &#8230; Marx is already long enough; Capital would be thousands of pages!
+Yet to a beginner who flips to Chapter 12, they&#8217;ll read a sentence that contains
+&#8216;value&#8217; and draw poor conclusions! They wouldn&#8217;t even realize they&#8217;re making a
+mistake, I mean, how could five letters be misinterpreted?</p>
+
+<p>Furthermore, people who haven&#8217;t read Marx don&#8217;t generally draw distinctions
+between his critique of capitalism and his solution: communism. This is annoying
+when trying to explain to people that I love his critique, but am critical
+of his answers to its problems; they percieve this weakness in his answer
+as a weakness in his description of the problem. Furthermore, they then say
+&#8220;but I thought you call yourself a communist?&#8221; and I respond with &#8220;sure; the
+issues I have are with the dictatorship of the proletariat, not with the
+general idea of communism&#8221; and then their eyes glaze over and they change
+the subject. Information density claims another victim&#8230;</p>
+
+<p>Oh, and a great example of Marxist economics in a usable form <a href="http://people.wku.edu/jan.garrett/303/marxecon.htm">is here</a>.</p>
+
+<h2>Anarchism and &#8216;anarcho&#8217;-capitalists</h2>
+
+<p>Arguments often boil down to these kinds of questions of definition, but one
+place where I see it happen almost <em>constantly</em> is amongst anarchists. I mean,
+from the outset, anarchists have to battle against the general definition of
+&#8216;chaos and disorder&#8217; versus the domain-specific &#8216;without rulers.&#8217; Within that,
+&#8216;rulers&#8217; in anarchism is fraught with the same sort of questions that &#8216;value&#8217;
+has for Marx. The prime example of this are the terribly misguided
+&#8216;anarcho&#8217;-capitalists, better described as &#8216;voluntaryists.&#8217;</p>
+
+<p>Here&#8217;s the deal: ancaps lack an understanding of the vast majority of historical
+anarchist thought, and so try to appropriate the term &#8216;anarchism&#8217; to describe
+their philosohpy which is decidedly not anarchist. The ones who do have started
+using &#8216;voluntaryist&#8217; to describe themselves, which is a great example of using
+information density to mislead, but that&#8217;s a whole separate rant. Here&#8217;s the
+411, from <a href="http://infoshop.org/page/AnarchistFAQSectionF1">the Anarchist FAQ</a>,
+which has its own things to say about density when it comes to the language
+specific to political theory discussions:</p>
+
+<blockquote><p>&#8220;Anarcho&#8221;-capitalists claim to be anarchists because they say that they oppose
+government. As noted in the last section, they use a dictionary definition of
+anarchism. However, this fails to appreciate that anarchism is a political
+theory. As dictionaries are rarely politically sophisticated things, this means
+that they fail to recognise that anarchism is more than just opposition to
+government, it is also marked a opposition to capitalism (i.e. exploitation and
+private property). Thus, opposition to government is a necessary but not
+sufficient condition for being an anarchist &#8211; you also need to be opposed to
+exploitation and capitalist private property. As &#8220;anarcho&#8221;-capitalists do not
+consider interest, rent and profits (i.e. capitalism) to be exploitative nor
+oppose capitalist property rights, they are not anarchists.</p>
+
+<p>Part of the problem is that Marxists, like many academics, also tend to assert
+that anarchists are simply against the state. It is significant that both
+Marxists and &#8220;anarcho&#8221;-capitalists tend to define anarchism as purely
+opposition to government. This is no co-incidence, as both seek to exclude
+anarchism from its place in the wider socialist movement. This makes perfect
+sense from the Marxist perspective as it allows them to present their ideology
+as the only serious anti-capitalist one around (not to mention associating
+anarchism with &#8220;anarcho&#8221;-capitalism is an excellent way of discrediting our
+ideas in the wider radical movement). It should go without saying that this is
+an obvious and serious misrepresentation of the anarchist position as even a
+superficial glance at anarchist theory and history shows that no anarchist
+limited their critique of society simply at the state. So while academics and
+Marxists seem aware of the anarchist opposition to the state, they usually fail
+to grasp the anarchist critique applies to all other authoritarian social
+institutions and how it fits into the overall anarchist analysis and struggle.
+They seem to think the anarchist condemnation of capitalist private property,
+patriarchy and so forth are somehow superfluous additions rather than a logical
+position which reflects the core of anarchism.</p></blockquote>
+
+<p>Part of the problem with the second half of this quote is that I&#8217;m such an
+&#8216;expert&#8217; on this kind of language that I don&#8217;t even know if it&#8217;ll make sense to
+you; without the kind of background reading in socialist political philosophies,
+it might just be gibberish. At least, the first paragraph should be pretty
+straightforward, and you can take the second as an example of this kind of
+language.</p>
+
+<p>Giving you a short explanation of why anarchists are against Capitalism is a
+great example in and of itself of domain specific langauge and density. Here:</p>
+
+<blockquote><p>Property is theft.</p></blockquote>
+
+<p>This is a quote by <a href="http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon">Proudhorn</a>,
+the first person to call himself an anarchist. Let&#8217;s unpack the first few layers
+of this statement:</p>
+
+<p>Property. Here&#8217;s <a href="http://en.wikipedia.org/wiki/Private_property">Wikipedia&#8217;s explanation</a>:</p>
+
+<blockquote><p>Private property is the right of persons and firms to obtain, own, control,
+employ, dispose of, and bequeath land, capital, and other forms of property.
+Private property is distinguishable from public property, which refers to
+assets owned by a state, community or government rather than by individuals or
+a business entity. Private property emerged as the dominant form of property
+in the means of production and land during the Industrial Revolution in the
+early 18th century, displacing feudal property, guilds, cottage industry and
+craft production, which were based on ownership of the tools for production by
+individual laborers or guilds of craftspeople.</p>
+
+<p>Marxists and socialists distinguish between &#8220;private property&#8221; and &#8220;personal
+property&#8221;, defining the former as the means of production in reference to
+private enterprise based on socialized production and wage labor; and the
+latter as consumer goods or goods produced by an individual.</p></blockquote>
+
+<p>Whew! There&#8217;s a few things to note here: Captialists like to pretend that capitalism
+is synonymous with &#8216;trade,&#8217; and not something that started in the 1800s. Likewise,
+that private property rights are something that has always existed. However,
+as this alludes to, there are many different kinds of property rights that have
+existed at different places and times.</p>
+
+<p>So in &#8216;property is theft,&#8217; Proudhorn is referring to private ownership of the
+&#8216;means of production.&#8217; Let&#8217;s expand that. Again, <a href="http://en.wikipedia.org/wiki/Means_of_production">Wikipedia</a>:</p>
+
+<blockquote><p>Means of production refers to physical, non-human inputs used in production—the
+factories, machines, and tools used to produce wealth — along with both
+infrastructural capital and natural capital. This includes the classical
+factors of production minus financial capital and minus human capital. They
+include two broad categories of objects: instruments of labour (tools,
+factories, infrastructure, etc.) and subjects of labour (natural resources and
+raw materials). People operate on the subjects of labour, using the instruments
+of labour, to create a product; or, stated another way, labour acting on the
+means of production creates a product. When used in the broad sense, the
+&#8220;means of production&#8221; includes the &#8220;means of distribution&#8221; which includes
+stores, banks, and railroads. The term can be simply and picturesquely
+described in an agrarian society as the soil and the shovel; in an industrial
+society, the mines and the factories.</p></blockquote>
+
+<p>We could continue to discuss how to distinguish between this &#8216;private property&#8217;
+and &#8216;possessions,&#8217; which anarchists are <em>not</em> against, but I&#8217;m just trying to
+demonstrate that this word &#8216;property&#8217; is incredibly complex.</p>
+
+<p>Okay, so Proudhorn claims that &#8216;owning the physical inputs used in factories used
+to produce wealth is theft.&#8217; I could expand on &#8216;theft,&#8217; but really, I think my
+point about density is made.  For more on this, see
+<a href="http://anarchism.pageabode.com/afaq/secB3.html">Why are anarchists against private property?</a>.</p>
+
+<h2>Web standards</h2>
+
+<p>Web standards are another great example of a domain that has a lot of very specific
+language. And one that people often think they can grab random chunks out of and
+quote without fully understanding the rest of the context.</p>
+
+<p>This is going on right now <a href="https://github.com/rails/rails/pull/505">with Rails</a>.
+There&#8217;s a discussion about if the <code>PATCH</code> HTTP verb should get support, and if it
+should be the verb that matches to the <code>update</code> action or not. It&#8217;s ended up
+in a discussion about the semantics of <code>PUT</code>, which has resulted in a lot of
+random quoting of standards documents by myself and others. Here&#8217;s some running
+commentary on some of the comments. It&#8217;s impossible to do this without it becoming
+semi-personal, so let me just say upfront that I think everyone is participating
+honestly in this discussion, but I think it&#8217;s a great example of people who aren&#8217;t
+familliar with a domain jumping in and drawing incorrect conclusions.</p>
+
+<p>First up, benatkin comments:</p>
+
+<blockquote><p>I googled for HTTP verbs and clicked the first result and PATCH isn&#8217;t listed.</p>
+
+<p>http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html</p>
+
+<p>Where is it?</p></blockquote>
+
+<p>Anyone participating in a discussion about <code>PATCH</code> should be reasonably familliar
+with <code>PATCH</code>. Learning where <code>PATCH</code> is defined is as simple as <a href="https://www.google.com/#hl=en&amp;q=http+patch">Googling HTTP PATCH</a>,
+which shows it being defined in <a href="http://tools.ietf.org/html/rfc5789">RFC 5879</a>.
+With that said, this is a good example of asking for clarification, and not
+immediately progressing into an argumentatitive &#8220;It&#8217;s not in HTTP 1.1, so it&#8217;s
+bullshit!&#8221; style of learning where <code>PATCH</code> is being defined.</p>
+
+<p>Of course, the thread starts to dissolve later, when @stevegraham mentions:</p>
+
+<blockquote><p>i must be the only person in the world that disagrees with &#8220;PUT requires a
+complete replacement&#8221;, as per RFC2616 &#8220;HTTP/1.1 does not define how a PUT
+method affects the state of an origin server&#8221;</p></blockquote>
+
+<p>Now, Steve is an awesome guy, but he&#8217;s a bit misguided in this case. This is
+a great example of drawing an incorrect conclusion based on one sentence out
+of context. He&#8217;s not <em>wrong</em> in a strict sense, <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC2616</a>
+does contain that line. However, this is because <a href="http://www.imc.org/atom-protocol/mail-archive/msg05425.html">HTTP defines the semantics of communication</a>,
+and the semantics are &#8216;idempotent creation or replacement.&#8217; The fact that
+HTTP does not define how PUT affects state is irrelevant, an entire representation
+is needed for idempotency reasons. <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6">PUT&#8217;s definition</a>
+also says pretty clearly:</p>
+
+<blockquote><p>The PUT method requests that the enclosed entity be stored under the supplied
+Request-URI. If the Request-URI refers to an already existing resource, the
+enclosed entity SHOULD be considered as a modified version of the one residing
+on the origin server. If the Request-URI does not point to an existing
+resource, and that URI is capable of being defined as a new resource by the
+requesting user agent, the origin server can create the resource with that URI.</p></blockquote>
+
+<p>&#8220;The enclosed entity be stored&#8221; is pretty straightforward: it needs an entity,
+not a portion of an entity. Furthermore, how is a server going to create a
+resource without a complete representation if the resource didn&#8217;t already exist?</p>
+
+<p>In this case, the standard&#8217;s organization also doesn&#8217;t help: if you just read
+the section titled <code>PUT</code>, you wouldn&#8217;t get the full understanding, since the fact
+that it&#8217;s safe and idempotent is mentioned above in the section regarding those
+two things. I&#8217;m not sure why those aspects aren&#8217;t in each definition, and are
+in a different section above, but the point is that you need to consider the
+full document in its entirety to understand the semantics of <code>PUT</code>. Steve is
+only reading one section and then extrapolating from there.</p>
+
+<p>There&#8217;s a lot more in that pull request, but one more example: Konstantin points
+out that Rails supports a lot of things that aren&#8217;t standards:</p>
+
+<blockquote><p>You mean Rails should not support proposed standards like, say, Cookies?</p></blockquote>
+
+<p>Yep. Did you know that? Cookies aren&#8217;t actually a standard, just a proposed one.</p>
+
+<p>Anyway, I also want to say this: I am not a perfect interpreter of these things
+either. I often change my opinions after learning more things, and I think this
+is a good thing. There&#8217;s nothing the matter with being wrong; it&#8217;s how you handle
+it that matters. The discussion in this thread continues. RFCs are also not
+perfect, and do have wiggle-room; but it&#8217;s important that agreements are followed.
+Amongst people who discuss REST and HTTP, the fact that PUT requires a full
+representation is not controversial; it&#8217;s simply understood as true.</p>
+
+<h2>It&#8217;s good for you!</h2>
+
+<p>I don&#8217;t want to turn anyone off from learning new things; exploring new domains
+is a great path towards personal growth. I&#8217;ve said a few times that I think
+more programmers should read Marx, and it&#8217;s because I think this experience of
+jumping into the deep end of a new set of language that you don&#8217;t fully
+understand is a tremendous educational experience. But to truly learn, an open
+mind and open ears are crucial. Making arguments on semantics doesn&#8217;t work if
+you don&#8217;t understand the context and semantics of words, as words change
+significantly when placed in different surroundings.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a></h1>
     
     
@@ -1406,55 +1798,6 @@ about it.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/09/26/im-deleting-my-facebook-tonight.html">I&#8217;m Deleting My Facebook Tonight.</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-09-26T08:34:00-04:00" pubdate  data-updated="true" >Sep 26<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Well, <a href="http://adrianshort.co.uk/2011/09/25/its-the-end-of-the-web-as-we-know-it/">it&#8217;s the end of the web as we know it</a>.
-I&#8217;d already been thinking about this all weekend, and last night, I decided. I
-just can&#8217;t deal with Facebook&#8217;s crazy privacy stuff anymore. I mean, I already
-basically <a href="http://rstat.us">forked Twitter</a> over their ToS, and Facebook has been
-a lot more evil for a lot longer. Frictionless sharing is pretty much the last
-straw.</p>
-
-<p>I&#8217;ll be using this as an excuse to keep helping out with the federated web.
-There&#8217;s a lot of cool stuff in this area, but it needs help. If you&#8217;re a
-developer, consider helping out with the <a href="https://github.com/LockerProject/Locker">Locker Project</a>
-or <a href="https://github.com/homesteading">the Homesteading Project</a>. The only way
-that we can prevent people from becoming digial sharecroppers is by helping them
-to &#8216;own their own land.&#8217;</p>
-
-<p>If we&#8217;re Facebook friends, you can always find out how to reach me at
-<a href="http://steveklabnik.com">http://steveklabnik.com</a>. Please be careful, and
-consider if Facebook&#8217;s privacy settings are really worth it to you. They may be,
-and they may not. I&#8217;m under no illusions that the vast majority of people will
-give up Facebook, but I figured I&#8217;d warn you anyways.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -1483,6 +1826,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/12/15/marx-anarchism-and-web-standards.html">Marx, Anarchism, and Web Standards</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a>
       </li>
     
@@ -1496,10 +1843,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/11/17/burnout.html">Burnout</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/25/your-startup-is-not-a-platform.html">Your Startup is NOT a Platform</a>
       </li>
     
   </ul>

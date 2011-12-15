@@ -4,13 +4,383 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-12T13:58:23-05:00</updated>
+  <updated>2011-12-15T15:49:57-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Marx, Anarchism, and Web Standards</title>
+    <link href="http://blog.steveklabnik.com/2011/12/15/marx-anarchism-and-web-standards.html"/>
+    <updated>2011-12-15T12:01:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/12/15/marx-anarchism-and-web-standards</id>
+    <content type="html">&lt;script src=&quot;http://blog.steveklabnik.com//platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+
+
+&lt;h3&gt;An aside for software devs&lt;/h3&gt;
+
+&lt;p&gt;You might not care about anarchism, and I can almost guarantee that you don&amp;#8217;t
+care about Marx, but please bear with me. I think my point is best made by
+putting the web stuff at the end, so please, just read it. ;) It&amp;#8217;ll be good
+for you, I swear. I&amp;#8217;ll explain better at the end.&lt;/p&gt;
+
+&lt;h2&gt;Domain Specific Languages and information density&lt;/h2&gt;
+
+&lt;p&gt;I&amp;#8217;ve been noticing an effect lately that&amp;#8217;s certainly not new; it&amp;#8217;s just come up
+frequently. When working within a domain that&amp;#8217;s new to them, most people tend
+to not respect the density of the information being given to them, and it
+causes them to draw incorrect inferences.&lt;/p&gt;
+
+&lt;p&gt;For example, this tweet earlier:&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p&gt;Does anybody else&amp;#8217;s head explode when they read an &amp;#8220;unless&amp;#8221; statement? What good is readability if comprehension goes out the window?&lt;/p&gt;&amp;mdash; Christopher Deutsch (@cdeutsch) &lt;a href=&quot;https://twitter.com/twitterapi/status/147349882246676480&quot; data-datetime=&quot;2011-12-15T11:18:00-05:00&quot;&gt;December 15, 2011&lt;/a&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;And this response:&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p&gt;@cdeutsch There are weirder idioms. @users.collect{|u| u.email} vs @users.collect(&amp;:email) :) That should weird you out more.&lt;/p&gt;&amp;mdash; Brian P. Hogan (@bphogan) &lt;a href=&quot;https://twitter.com/twitterapi/status/147359596602851328&quot; data-datetime=&quot;2011-12-15T11:54:00-05:00&quot;&gt;December 15, 2011&lt;/a&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;Now, I&amp;#8217;m not saying that Christopher is in the wrong here, in fact, he agrees
+with what I&amp;#8217;m about to say:&lt;/p&gt;
+
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p&gt;@philcrissman @bphogan I&amp;#8217;m sure I&amp;#8217;ll get used to the &amp;#8220;unless&amp;#8221; pattern someday. But from a Ruby outsiders perspective it&amp;#8217;s hard to comprehend&lt;/p&gt;&amp;mdash; Christopher Deutsch (@cdeutsch) &lt;a href=&quot;https://twitter.com/twitterapi/status/147358978404401152&quot; data-datetime=&quot;2011-12-15T11:54:00-05:00&quot;&gt;December 15, 2011&lt;/a&gt;&lt;/blockquote&gt;
+
+
+&lt;p&gt;From someone new to Ruby, &lt;code&gt;Symbol#to_proc&lt;/code&gt; or &lt;code&gt;unless&lt;/code&gt; are hard to understand
+initially, and that&amp;#8217;s because they&amp;#8217;ve increased the density of information
+being conveyed. &lt;code&gt;unless&lt;/code&gt; is the same as &lt;code&gt;if not&lt;/code&gt; and &lt;code&gt;&amp;amp;:foo&lt;/code&gt; is the same as
+&lt;code&gt;{|a| a.foo }&lt;/code&gt;. Both of these constructs condense something more complicated
+into something that is simpler, but denser.&lt;/p&gt;
+
+&lt;p&gt;You&amp;#8217;ll note that I said &amp;#8216;simpler,&amp;#8217; but by a certain measure, &lt;code&gt;&amp;amp;:foo&lt;/code&gt; is actually
+more complex. When I say &lt;code&gt;&amp;amp;:foo&lt;/code&gt; is simpler, I&amp;#8217;m meaning for someone who&amp;#8217;s well
+versed in Ruby, functional programming, or first-class functions. I have this exact
+background, and so for me, &lt;code&gt;collection.map &amp;amp;:foo&lt;/code&gt; is simpler and more readable
+than &lt;code&gt;collection.map {|a| a.foo }&lt;/code&gt;. When I read the first example, I say in my head
+&amp;#8220;Map foo over the collection.&amp;#8221; You have to grok what map really is to get that sentence
+or the corresponding code. Whereas what (I imagine) someone who does not have this
+kind of background thinks when they see the second example is &amp;#8220;Okay, so map is
+like an each, and for each thing in the collection, we&amp;#8217;re going to call foo on it.&amp;#8221;
+This is a totally valid interpretation, but notice how much longer it is, and how much
+more involved in the details it is. That&amp;#8217;s cool, but to someone who groks map, it
+has a much larger amount of mental overhead, in the same way that my consise explanation
+causes much more thinking for someone who doesn&amp;#8217;t grok it.&lt;/p&gt;
+
+&lt;p&gt;This happens often in education. DHH made &lt;a href=&quot;http://news.ycombinator.com/item?id=3328427&quot;&gt;a comment&lt;/a&gt;
+about this recently that illustrates this principle, and he couches it in terms of
+&amp;#8220;learability&amp;#8221; vs. &amp;#8220;readability&amp;#8221;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;If you optimize a framework for beginners, you&amp;#8217;re optimizing for
+learnability. That&amp;#8217;s great for the first few days or even weeks of learning.
+But once you&amp;#8217;re past that, it&amp;#8217;s not so great. What you care more about is the
+usability of the thing once you know it. There are plenty of cases where
+learnability and usability are in conflict. Letting learnability win is a
+short-term relief.&lt;/p&gt;
+
+&lt;p&gt;If you on the other hand optimize for usability, for making things simple and
+easy to use for someone who understands the basics, you&amp;#8217;ll often end up with
+something that has great learnability as well. Maybe not as much as could be
+achieved as if that was your only goal, but plenty still.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;I think that &amp;#8216;learnability&amp;#8217; is a pretty good shortening for &amp;#8216;light density&amp;#8217; and
+&amp;#8216;usability&amp;#8217; is decent for &amp;#8216;heavy density.&amp;#8217; It&amp;#8217;s the same effect, though. For the
+rest of this essay, I&amp;#8217;ll be using &amp;#8216;learnable&amp;#8217; and &amp;#8216;usable&amp;#8217; to mean this
+particular usage.&lt;/p&gt;
+
+&lt;p&gt;Any time you encounter experts in a particular domain, they&amp;#8217;ll often have
+fairly specific language that corresponds to that domain. This language is
+usually designed to be usable, not learnable. This is because they&amp;#8217;ve already done
+the learning; learnability holds no utlility for them. However, usability is
+incredibly&amp;#8230; useful. To them. They&amp;#8217;re working at a higher level of abstraction,
+and don&amp;#8217;t want to get bogged down in details they already know well. Using
+learnable language would cause them to take twice as long to say things; to
+return to the density analogy, dense information is transferred from one person
+to another more quickly. If you can read a sentence a second, but that sentence
+is dense, you acquire much more information per second than if it was lighter.&lt;/p&gt;
+
+&lt;p&gt;This tendency means that most language that&amp;#8217;s specific to a domain will
+generally trend towards the usable at the expense of the learnable. The impact
+this has on individuals new to the domain, however, is that of a wall. An
+impediment. Overcoming this obstacle requries a bit of good faith on the part
+of the beginner; to advance cross quickly over the chasam between beginner and
+expert, they must recognize and respect this aspect of the conversations they
+will invariably become a part of. When faced with a term that is used in a
+strange way, beginners should ask for clarification, and not start arguments
+over semantics they don&amp;#8217;t yet even understand. Experts will recognize these
+arguments as coming from a place where concepts are not yet fully understood,
+and while they may recognize the need to help educate, if the newbie is being
+belligerant, they may just ignore them instead. Nobody wins; the signal/noise
+ratio has been decreased, the beginner doesn&amp;#8217;t learn, and everyone&amp;#8217;s time is
+wasted.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#8217;s three other situations where I&amp;#8217;ve seen this happen lately:&lt;/p&gt;
+
+&lt;h2&gt;Marx and the labor theory of value&lt;/h2&gt;
+
+&lt;p&gt;Philosophy writing is generally a great example of text that is very much
+usable, and not at all learnable. Some writers can still be learnable, but
+most are not, in my experience. One of the reasons this happens is that they
+introduce concepts early in a text and then utilize them later without
+referring back to the earlier definition. This isn&amp;#8217;t a problem for anyone
+who&amp;#8217;s thinking about taking off the training wheels or anyone who reads the
+entire text. The danger comes in when someone &lt;em&gt;not&lt;/em&gt; versed in the entire text
+attempts to take portions of it out of its context.&lt;/p&gt;
+
+&lt;p&gt;Consider Marx, and &lt;em&gt;Capital&lt;/em&gt;. The meaning of &amp;#8216;value&amp;#8217; is a central concern
+of his writing, and indeed, entire critique of the political economy. It&amp;#8217;s
+so important that the first few chapters are devoted to an (excruciatingly,
+frankly) detailed explanation of his thoughts on the true meaning of value.
+The rest of &lt;em&gt;Capital&lt;/em&gt; is built on top of this: at least in my understanding of
+Marx, it all boils back down to that one question. And when having discussions
+between people who are devotees of Marx and those who come from other schools
+of economics, this kind of language gets in the way.&lt;/p&gt;
+
+&lt;p&gt;It also causes ideas to be misrepresented: the first time I was ever introduced
+to the labor theory of value, it was by a close friend who&amp;#8217;s very libertarian.
+This was a few years ago, so it&amp;#8217;s an obvious paraphrase, but he summarized
+it thusly: &amp;#8220;Yeah, I mean, the labor theory of value basically says that people
+should be paid for however much work they put into things, so if I take six
+hours to make a widget and you take four, the price of a widget from you should
+be six yet mine should only be four, and ideas like &amp;#8216;market value&amp;#8217; should be
+disregarded. It&amp;#8217;s totally irrelevant if I suck at making widgets, I should get
+paid more than you anyway.&amp;#8221; Which, to put it lightly, is a misrepresentation.
+While explaining the labor theory of value is outside of the scope of this
+post, what I will say is that to Marx, &amp;#8216;value&amp;#8217; is something intrinsic to an
+object; it&amp;#8217;s the &amp;#8216;socially necessary abstract labor&amp;#8217; inherent to it. Talk about
+dense language! What a capitalist would call &amp;#8216;value,&amp;#8217; a Marxist would call
+&amp;#8216;price.&amp;#8217;&lt;/p&gt;
+
+&lt;p&gt;As you can see, even just one little word, &amp;#8216;value,&amp;#8217; can be quite dense! Can
+you imagine a discussion intended to be &amp;#8216;learnable&amp;#8217; to outsiders about what&amp;#8217;s
+meant? Imagine the expansion: &amp;#8216;value&amp;#8217; -&gt; &amp;#8216;socially neccesary abstract
+labor&amp;#8217; -&gt; &amp;#8230; Marx is already long enough; Capital would be thousands of pages!
+Yet to a beginner who flips to Chapter 12, they&amp;#8217;ll read a sentence that contains
+&amp;#8216;value&amp;#8217; and draw poor conclusions! They wouldn&amp;#8217;t even realize they&amp;#8217;re making a
+mistake, I mean, how could five letters be misinterpreted?&lt;/p&gt;
+
+&lt;p&gt;Furthermore, people who haven&amp;#8217;t read Marx don&amp;#8217;t generally draw distinctions
+between his critique of capitalism and his solution: communism. This is annoying
+when trying to explain to people that I love his critique, but am critical
+of his answers to its problems; they percieve this weakness in his answer
+as a weakness in his description of the problem. Furthermore, they then say
+&amp;#8220;but I thought you call yourself a communist?&amp;#8221; and I respond with &amp;#8220;sure; the
+issues I have are with the dictatorship of the proletariat, not with the
+general idea of communism&amp;#8221; and then their eyes glaze over and they change
+the subject. Information density claims another victim&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;Oh, and a great example of Marxist economics in a usable form &lt;a href=&quot;http://people.wku.edu/jan.garrett/303/marxecon.htm&quot;&gt;is here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Anarchism and &amp;#8216;anarcho&amp;#8217;-capitalists&lt;/h2&gt;
+
+&lt;p&gt;Arguments often boil down to these kinds of questions of definition, but one
+place where I see it happen almost &lt;em&gt;constantly&lt;/em&gt; is amongst anarchists. I mean,
+from the outset, anarchists have to battle against the general definition of
+&amp;#8216;chaos and disorder&amp;#8217; versus the domain-specific &amp;#8216;without rulers.&amp;#8217; Within that,
+&amp;#8216;rulers&amp;#8217; in anarchism is fraught with the same sort of questions that &amp;#8216;value&amp;#8217;
+has for Marx. The prime example of this are the terribly misguided
+&amp;#8216;anarcho&amp;#8217;-capitalists, better described as &amp;#8216;voluntaryists.&amp;#8217;&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#8217;s the deal: ancaps lack an understanding of the vast majority of historical
+anarchist thought, and so try to appropriate the term &amp;#8216;anarchism&amp;#8217; to describe
+their philosohpy which is decidedly not anarchist. The ones who do have started
+using &amp;#8216;voluntaryist&amp;#8217; to describe themselves, which is a great example of using
+information density to mislead, but that&amp;#8217;s a whole separate rant. Here&amp;#8217;s the
+411, from &lt;a href=&quot;http://infoshop.org/page/AnarchistFAQSectionF1&quot;&gt;the Anarchist FAQ&lt;/a&gt;,
+which has its own things to say about density when it comes to the language
+specific to political theory discussions:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&amp;#8220;Anarcho&amp;#8221;-capitalists claim to be anarchists because they say that they oppose
+government. As noted in the last section, they use a dictionary definition of
+anarchism. However, this fails to appreciate that anarchism is a political
+theory. As dictionaries are rarely politically sophisticated things, this means
+that they fail to recognise that anarchism is more than just opposition to
+government, it is also marked a opposition to capitalism (i.e. exploitation and
+private property). Thus, opposition to government is a necessary but not
+sufficient condition for being an anarchist &amp;#8211; you also need to be opposed to
+exploitation and capitalist private property. As &amp;#8220;anarcho&amp;#8221;-capitalists do not
+consider interest, rent and profits (i.e. capitalism) to be exploitative nor
+oppose capitalist property rights, they are not anarchists.&lt;/p&gt;
+
+&lt;p&gt;Part of the problem is that Marxists, like many academics, also tend to assert
+that anarchists are simply against the state. It is significant that both
+Marxists and &amp;#8220;anarcho&amp;#8221;-capitalists tend to define anarchism as purely
+opposition to government. This is no co-incidence, as both seek to exclude
+anarchism from its place in the wider socialist movement. This makes perfect
+sense from the Marxist perspective as it allows them to present their ideology
+as the only serious anti-capitalist one around (not to mention associating
+anarchism with &amp;#8220;anarcho&amp;#8221;-capitalism is an excellent way of discrediting our
+ideas in the wider radical movement). It should go without saying that this is
+an obvious and serious misrepresentation of the anarchist position as even a
+superficial glance at anarchist theory and history shows that no anarchist
+limited their critique of society simply at the state. So while academics and
+Marxists seem aware of the anarchist opposition to the state, they usually fail
+to grasp the anarchist critique applies to all other authoritarian social
+institutions and how it fits into the overall anarchist analysis and struggle.
+They seem to think the anarchist condemnation of capitalist private property,
+patriarchy and so forth are somehow superfluous additions rather than a logical
+position which reflects the core of anarchism.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Part of the problem with the second half of this quote is that I&amp;#8217;m such an
+&amp;#8216;expert&amp;#8217; on this kind of language that I don&amp;#8217;t even know if it&amp;#8217;ll make sense to
+you; without the kind of background reading in socialist political philosophies,
+it might just be gibberish. At least, the first paragraph should be pretty
+straightforward, and you can take the second as an example of this kind of
+language.&lt;/p&gt;
+
+&lt;p&gt;Giving you a short explanation of why anarchists are against Capitalism is a
+great example in and of itself of domain specific langauge and density. Here:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Property is theft.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;This is a quote by &lt;a href=&quot;http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon&quot;&gt;Proudhorn&lt;/a&gt;,
+the first person to call himself an anarchist. Let&amp;#8217;s unpack the first few layers
+of this statement:&lt;/p&gt;
+
+&lt;p&gt;Property. Here&amp;#8217;s &lt;a href=&quot;http://en.wikipedia.org/wiki/Private_property&quot;&gt;Wikipedia&amp;#8217;s explanation&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Private property is the right of persons and firms to obtain, own, control,
+employ, dispose of, and bequeath land, capital, and other forms of property.
+Private property is distinguishable from public property, which refers to
+assets owned by a state, community or government rather than by individuals or
+a business entity. Private property emerged as the dominant form of property
+in the means of production and land during the Industrial Revolution in the
+early 18th century, displacing feudal property, guilds, cottage industry and
+craft production, which were based on ownership of the tools for production by
+individual laborers or guilds of craftspeople.&lt;/p&gt;
+
+&lt;p&gt;Marxists and socialists distinguish between &amp;#8220;private property&amp;#8221; and &amp;#8220;personal
+property&amp;#8221;, defining the former as the means of production in reference to
+private enterprise based on socialized production and wage labor; and the
+latter as consumer goods or goods produced by an individual.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Whew! There&amp;#8217;s a few things to note here: Captialists like to pretend that capitalism
+is synonymous with &amp;#8216;trade,&amp;#8217; and not something that started in the 1800s. Likewise,
+that private property rights are something that has always existed. However,
+as this alludes to, there are many different kinds of property rights that have
+existed at different places and times.&lt;/p&gt;
+
+&lt;p&gt;So in &amp;#8216;property is theft,&amp;#8217; Proudhorn is referring to private ownership of the
+&amp;#8216;means of production.&amp;#8217; Let&amp;#8217;s expand that. Again, &lt;a href=&quot;http://en.wikipedia.org/wiki/Means_of_production&quot;&gt;Wikipedia&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Means of production refers to physical, non-human inputs used in production—the
+factories, machines, and tools used to produce wealth — along with both
+infrastructural capital and natural capital. This includes the classical
+factors of production minus financial capital and minus human capital. They
+include two broad categories of objects: instruments of labour (tools,
+factories, infrastructure, etc.) and subjects of labour (natural resources and
+raw materials). People operate on the subjects of labour, using the instruments
+of labour, to create a product; or, stated another way, labour acting on the
+means of production creates a product. When used in the broad sense, the
+&amp;#8220;means of production&amp;#8221; includes the &amp;#8220;means of distribution&amp;#8221; which includes
+stores, banks, and railroads. The term can be simply and picturesquely
+described in an agrarian society as the soil and the shovel; in an industrial
+society, the mines and the factories.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;We could continue to discuss how to distinguish between this &amp;#8216;private property&amp;#8217;
+and &amp;#8216;possessions,&amp;#8217; which anarchists are &lt;em&gt;not&lt;/em&gt; against, but I&amp;#8217;m just trying to
+demonstrate that this word &amp;#8216;property&amp;#8217; is incredibly complex.&lt;/p&gt;
+
+&lt;p&gt;Okay, so Proudhorn claims that &amp;#8216;owning the physical inputs used in factories used
+to produce wealth is theft.&amp;#8217; I could expand on &amp;#8216;theft,&amp;#8217; but really, I think my
+point about density is made.  For more on this, see
+&lt;a href=&quot;http://anarchism.pageabode.com/afaq/secB3.html&quot;&gt;Why are anarchists against private property?&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Web standards&lt;/h2&gt;
+
+&lt;p&gt;Web standards are another great example of a domain that has a lot of very specific
+language. And one that people often think they can grab random chunks out of and
+quote without fully understanding the rest of the context.&lt;/p&gt;
+
+&lt;p&gt;This is going on right now &lt;a href=&quot;https://github.com/rails/rails/pull/505&quot;&gt;with Rails&lt;/a&gt;.
+There&amp;#8217;s a discussion about if the &lt;code&gt;PATCH&lt;/code&gt; HTTP verb should get support, and if it
+should be the verb that matches to the &lt;code&gt;update&lt;/code&gt; action or not. It&amp;#8217;s ended up
+in a discussion about the semantics of &lt;code&gt;PUT&lt;/code&gt;, which has resulted in a lot of
+random quoting of standards documents by myself and others. Here&amp;#8217;s some running
+commentary on some of the comments. It&amp;#8217;s impossible to do this without it becoming
+semi-personal, so let me just say upfront that I think everyone is participating
+honestly in this discussion, but I think it&amp;#8217;s a great example of people who aren&amp;#8217;t
+familliar with a domain jumping in and drawing incorrect conclusions.&lt;/p&gt;
+
+&lt;p&gt;First up, benatkin comments:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I googled for HTTP verbs and clicked the first result and PATCH isn&amp;#8217;t listed.&lt;/p&gt;
+
+&lt;p&gt;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html&lt;/p&gt;
+
+&lt;p&gt;Where is it?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Anyone participating in a discussion about &lt;code&gt;PATCH&lt;/code&gt; should be reasonably familliar
+with &lt;code&gt;PATCH&lt;/code&gt;. Learning where &lt;code&gt;PATCH&lt;/code&gt; is defined is as simple as &lt;a href=&quot;https://www.google.com/#hl=en&amp;amp;q=http+patch&quot;&gt;Googling HTTP PATCH&lt;/a&gt;,
+which shows it being defined in &lt;a href=&quot;http://tools.ietf.org/html/rfc5789&quot;&gt;RFC 5879&lt;/a&gt;.
+With that said, this is a good example of asking for clarification, and not
+immediately progressing into an argumentatitive &amp;#8220;It&amp;#8217;s not in HTTP 1.1, so it&amp;#8217;s
+bullshit!&amp;#8221; style of learning where &lt;code&gt;PATCH&lt;/code&gt; is being defined.&lt;/p&gt;
+
+&lt;p&gt;Of course, the thread starts to dissolve later, when @stevegraham mentions:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;i must be the only person in the world that disagrees with &amp;#8220;PUT requires a
+complete replacement&amp;#8221;, as per RFC2616 &amp;#8220;HTTP/1.1 does not define how a PUT
+method affects the state of an origin server&amp;#8221;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Now, Steve is an awesome guy, but he&amp;#8217;s a bit misguided in this case. This is
+a great example of drawing an incorrect conclusion based on one sentence out
+of context. He&amp;#8217;s not &lt;em&gt;wrong&lt;/em&gt; in a strict sense, &lt;a href=&quot;http://www.ietf.org/rfc/rfc2616.txt&quot;&gt;RFC2616&lt;/a&gt;
+does contain that line. However, this is because &lt;a href=&quot;http://www.imc.org/atom-protocol/mail-archive/msg05425.html&quot;&gt;HTTP defines the semantics of communication&lt;/a&gt;,
+and the semantics are &amp;#8216;idempotent creation or replacement.&amp;#8217; The fact that
+HTTP does not define how PUT affects state is irrelevant, an entire representation
+is needed for idempotency reasons. &lt;a href=&quot;http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6&quot;&gt;PUT&amp;#8217;s definition&lt;/a&gt;
+also says pretty clearly:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The PUT method requests that the enclosed entity be stored under the supplied
+Request-URI. If the Request-URI refers to an already existing resource, the
+enclosed entity SHOULD be considered as a modified version of the one residing
+on the origin server. If the Request-URI does not point to an existing
+resource, and that URI is capable of being defined as a new resource by the
+requesting user agent, the origin server can create the resource with that URI.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&amp;#8220;The enclosed entity be stored&amp;#8221; is pretty straightforward: it needs an entity,
+not a portion of an entity. Furthermore, how is a server going to create a
+resource without a complete representation if the resource didn&amp;#8217;t already exist?&lt;/p&gt;
+
+&lt;p&gt;In this case, the standard&amp;#8217;s organization also doesn&amp;#8217;t help: if you just read
+the section titled &lt;code&gt;PUT&lt;/code&gt;, you wouldn&amp;#8217;t get the full understanding, since the fact
+that it&amp;#8217;s safe and idempotent is mentioned above in the section regarding those
+two things. I&amp;#8217;m not sure why those aspects aren&amp;#8217;t in each definition, and are
+in a different section above, but the point is that you need to consider the
+full document in its entirety to understand the semantics of &lt;code&gt;PUT&lt;/code&gt;. Steve is
+only reading one section and then extrapolating from there.&lt;/p&gt;
+
+&lt;p&gt;There&amp;#8217;s a lot more in that pull request, but one more example: Konstantin points
+out that Rails supports a lot of things that aren&amp;#8217;t standards:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;You mean Rails should not support proposed standards like, say, Cookies?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Yep. Did you know that? Cookies aren&amp;#8217;t actually a standard, just a proposed one.&lt;/p&gt;
+
+&lt;p&gt;Anyway, I also want to say this: I am not a perfect interpreter of these things
+either. I often change my opinions after learning more things, and I think this
+is a good thing. There&amp;#8217;s nothing the matter with being wrong; it&amp;#8217;s how you handle
+it that matters. The discussion in this thread continues. RFCs are also not
+perfect, and do have wiggle-room; but it&amp;#8217;s important that agreements are followed.
+Amongst people who discuss REST and HTTP, the fact that PUT requires a full
+representation is not controversial; it&amp;#8217;s simply understood as true.&lt;/p&gt;
+
+&lt;h2&gt;It&amp;#8217;s good for you!&lt;/h2&gt;
+
+&lt;p&gt;I don&amp;#8217;t want to turn anyone off from learning new things; exploring new domains
+is a great path towards personal growth. I&amp;#8217;ve said a few times that I think
+more programmers should read Marx, and it&amp;#8217;s because I think this experience of
+jumping into the deep end of a new set of language that you don&amp;#8217;t fully
+understand is a tremendous educational experience. But to truly learn, an open
+mind and open ears are crucial. Making arguments on semantics doesn&amp;#8217;t work if
+you don&amp;#8217;t understand the context and semantics of words, as words change
+significantly when placed in different surroundings.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Fast Rails Tests With CanCan.</title>
@@ -3906,97 +4276,6 @@ available under a liberal license, in PDF, ePub, all that good stuff.&lt;/p&gt;
 related to RESTful design. Oh, and if you&amp;#8217;re on
 &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt;, I also have an account that&amp;#8217;ll syndicate
 the same content at &lt;a href=&quot;http://rstat.us/users/getsomerestbook&quot;&gt;@getsomerestbook&lt;/a&gt; too.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Twitter is too important to be owned by Twitter</title>
-    <link href="http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter.html"/>
-    <updated>2011-07-24T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/07/24/twitter-is-to-important-to-be-owned-by-twitter</id>
-    <content type="html">&lt;p&gt;When I spoke on a panel at &lt;a href=&quot;http://therealtimereport.com/&quot;&gt;RTLM NY &amp;#8216;11&lt;/a&gt;, I got a little rise out of
-the crowd when I said &amp;#8220;Twitter is too important to be owned by Twitter.&amp;#8221;
-This is still absolutely true, and yesterday was a great example of
-that: the #fuckyouwashington debacle.&lt;/p&gt;
-
-&lt;p&gt;If you haven&amp;#8217;t heard, &lt;a href=&quot;http://twitter.com/#!/jeffjarvis&quot;&gt;Jeff Jarvis&lt;/a&gt;
-started something on Twitter last night:&lt;/p&gt;
-
-&lt;!&#8211; http://twitter.com/#!/jeffjarvis/status/94919366818279424 &#8211;&gt;
-
-
-&lt;p&gt; &lt;style type=&#8217;text/css&#8217;&gt;.bbpBox94919366818279424 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}&lt;/style&gt; &lt;div class=&#8217;bbpBox94919366818279424&#8217;&gt;&lt;p class=&#8217;bbpTweet&#8217;&gt;Hey, Washington assholes, it&amp;#8217;s our country, our economy, our money. Stop fucking with it.&lt;span class=&#8217;timestamp&#8217;&gt;&lt;a title=&#8217;Sat Jul 23 23:58:35 +0000 2011&#8217; href=&#8217;http://twitter.com/#!/jeffjarvis/status/94919366818279424&#8217;&gt;less than a minute ago&lt;/a&gt; via &lt;a href=&quot;http://www.echofon.com/&quot; rel=&quot;nofollow&quot;&gt;Echofon&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/favorite?tweet_id=94919366818279424&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png&#8217; /&gt; Favorite&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/retweet?tweet_id=94919366818279424&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png&#8217; /&gt; Retweet&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/tweet?in_reply_to=94919366818279424&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/reply.png&#8217; /&gt; Reply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#8217;metadata&#8217;&gt;&lt;span class=&#8217;author&#8217;&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;&lt;img src=&#8217;http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg&#8217; /&gt;&lt;/a&gt;&lt;strong&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;Jeff Jarvis&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;jeffjarvis&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt; &lt;!&#8211; end of tweet &#8211;&gt;&lt;/p&gt;
-
-&lt;!&#8211; http://twitter.com/#!/jeffjarvis/status/94920264428699648 &#8211;&gt;
-
-
-&lt;p&gt; &lt;style type=&#8217;text/css&#8217;&gt;.bbpBox94920264428699648 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}&lt;/style&gt; &lt;div class=&#8217;bbpBox94920264428699648&#8217;&gt;&lt;p class=&#8217;bbpTweet&#8217;&gt;People, it&amp;#8217;s time to get fucking pissed off.&lt;span class=&#8217;timestamp&#8217;&gt;&lt;a title=&#8217;Sun Jul 24 00:02:09 +0000 2011&#8217; href=&#8217;http://twitter.com/#!/jeffjarvis/status/94920264428699648&#8217;&gt;less than a minute ago&lt;/a&gt; via &lt;a href=&quot;http://www.echofon.com/&quot; rel=&quot;nofollow&quot;&gt;Echofon&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/favorite?tweet_id=94920264428699648&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png&#8217; /&gt; Favorite&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/retweet?tweet_id=94920264428699648&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png&#8217; /&gt; Retweet&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/tweet?in_reply_to=94920264428699648&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/reply.png&#8217; /&gt; Reply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#8217;metadata&#8217;&gt;&lt;span class=&#8217;author&#8217;&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;&lt;img src=&#8217;http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg&#8217; /&gt;&lt;/a&gt;&lt;strong&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;Jeff Jarvis&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;jeffjarvis&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt; &lt;!&#8211; end of tweet &#8211;&gt;&lt;/p&gt;
-
-&lt;!&#8211; http://twitter.com/#!/jeffjarvis/status/94920803346419712 &#8211;&gt;
-
-
-&lt;p&gt; &lt;style type=&#8217;text/css&#8217;&gt;.bbpBox94920803346419712 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}&lt;/style&gt; &lt;div class=&#8217;bbpBox94920803346419712&#8217;&gt;&lt;p class=&#8217;bbpTweet&#8217;&gt;Can we start a Twitter chant: FUCK YOU, WASHINGTON! Pass it on.&lt;span class=&#8217;timestamp&#8217;&gt;&lt;a title=&#8217;Sun Jul 24 00:04:17 +0000 2011&#8217; href=&#8217;http://twitter.com/#!/jeffjarvis/status/94920803346419712&#8217;&gt;less than a minute ago&lt;/a&gt; via &lt;a href=&quot;http://www.echofon.com/&quot; rel=&quot;nofollow&quot;&gt;Echofon&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/favorite?tweet_id=94920803346419712&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png&#8217; /&gt; Favorite&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/retweet?tweet_id=94920803346419712&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png&#8217; /&gt; Retweet&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/tweet?in_reply_to=94920803346419712&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/reply.png&#8217; /&gt; Reply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#8217;metadata&#8217;&gt;&lt;span class=&#8217;author&#8217;&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;&lt;img src=&#8217;http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg&#8217; /&gt;&lt;/a&gt;&lt;strong&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;Jeff Jarvis&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;jeffjarvis&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt; &lt;!&#8211; end of tweet &#8211;&gt;&lt;/p&gt;
-
-&lt;p&gt;Lots of people were talking about the possibility of a &lt;a href=&quot;http://www.msnbc.msn.com/id/43864749/ns/politics-capitol_hill/t/congressional-leaders-work-avert-default/&quot;&gt;government
-default&lt;/a&gt;, but it ended up being a catch-all for any sort of venting
-that citizens had against their government. And they had &lt;a href=&quot;https://plus.google.com/105076678694475690385/posts/iFyTBwVmyKs&quot;&gt;a large
-variety of things to say.&lt;/a&gt; But then, of course, this happens:&lt;/p&gt;
-
-&lt;!&#8211; http://twitter.com/#!/jeffjarvis/status/94945261050273792 &#8211;&gt;
-
-
-&lt;p&gt; &lt;style type=&#8217;text/css&#8217;&gt;.bbpBox94945261050273792 {background:url(http://a0.twimg.com/images/themes/theme1/bg.png) #C0DEED;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}&lt;/style&gt; &lt;div class=&#8217;bbpBox94945261050273792&#8217;&gt;&lt;p class=&#8217;bbpTweet&#8217;&gt;Search for trending topic Schmucks and then search for &lt;a href=&quot;http://twitter.com/search?q=%23fuckyouwashington&quot; title=&quot;#fuckyouwashington&quot; class=&quot;tweet-url hashtag&quot; rel=&quot;nofollow&quot;&gt;#fuckyouwashington&lt;/a&gt;. No comparison. Blowing past it.&lt;span class=&#8217;timestamp&#8217;&gt;&lt;a title=&#8217;Sun Jul 24 01:41:28 +0000 2011&#8217; href=&#8217;http://twitter.com/#!/jeffjarvis/status/94945261050273792&#8217;&gt;less than a minute ago&lt;/a&gt; via &lt;a href=&quot;http://www.echofon.com/&quot; rel=&quot;nofollow&quot;&gt;Echofon&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/favorite?tweet_id=94945261050273792&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png&#8217; /&gt; Favorite&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/retweet?tweet_id=94945261050273792&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png&#8217; /&gt; Retweet&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/tweet?in_reply_to=94945261050273792&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/reply.png&#8217; /&gt; Reply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#8217;metadata&#8217;&gt;&lt;span class=&#8217;author&#8217;&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;&lt;img src=&#8217;http://a1.twimg.com/profile_images/41194122/blogdaddy_normal.jpg&#8217; /&gt;&lt;/a&gt;&lt;strong&gt;&lt;a href=&#8217;http://twitter.com/jeffjarvis&#8217;&gt;Jeff Jarvis&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;jeffjarvis&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt; &lt;!&#8211; end of tweet &#8211;&gt;&lt;/p&gt;
-
-&lt;!&#8211; http://twitter.com/#!/jaycousins/status/95106114391261184 &#8211;&gt;
-
-
-&lt;p&gt; &lt;style type=&#8217;text/css&#8217;&gt;.bbpBox95106114391261184 {background:url(http://a2.twimg.com/profile_background_images/32742344/jaytwitter.jpg) #9AE4E8;padding:20px;} p.bbpTweet{background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#000;font-size:18px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px} p.bbpTweet span.metadata{display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6} p.bbpTweet span.metadata span.author{line-height:19px} p.bbpTweet span.metadata span.author img{float:left;margin:0 7px 0 0px;width:38px;height:38px} p.bbpTweet a:hover{text-decoration:underline}p.bbpTweet span.timestamp{font-size:12px;display:block}&lt;/style&gt; &lt;div class=&#8217;bbpBox95106114391261184&#8217;&gt;&lt;p class=&#8217;bbpTweet&#8217;&gt;WTF! &lt;a href=&quot;http://twitter.com/search?q=%23fuckyouwashington&quot; title=&quot;#fuckyouwashington&quot; class=&quot;tweet-url hashtag&quot; rel=&quot;nofollow&quot;&gt;#fuckyouwashington&lt;/a&gt; blocked from trending but not &lt;a href=&quot;http://twitter.com/search?q=%23blamethemuslims&quot; title=&quot;#blamethemuslims&quot; class=&quot;tweet-url hashtag&quot; rel=&quot;nofollow&quot;&gt;#blamethemuslims&lt;/a&gt; (mmm &lt;a href=&quot;http://twitter.com/search?q=%23fuckyoutwitter&quot; title=&quot;#fuckyoutwitter&quot; class=&quot;tweet-url hashtag&quot; rel=&quot;nofollow&quot;&gt;#fuckyoutwitter&lt;/a&gt; ?)&lt;span class=&#8217;timestamp&#8217;&gt;&lt;a title=&#8217;Sun Jul 24 12:20:39 +0000 2011&#8217; href=&#8217;http://twitter.com/#!/jaycousins/status/95106114391261184&#8217;&gt;less than a minute ago&lt;/a&gt; via web &lt;a href=&#8217;http://twitter.com/intent/favorite?tweet_id=95106114391261184&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/favorite.png&#8217; /&gt; Favorite&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/retweet?tweet_id=95106114391261184&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/retweet.png&#8217; /&gt; Retweet&lt;/a&gt; &lt;a href=&#8217;http://twitter.com/intent/tweet?in_reply_to=95106114391261184&#8217;&gt;&lt;img src=&#8217;http://si0.twimg.com/images/dev/cms/intents/icons/reply.png&#8217; /&gt; Reply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#8217;metadata&#8217;&gt;&lt;span class=&#8217;author&#8217;&gt;&lt;a href=&#8217;http://twitter.com/jaycousins&#8217;&gt;&lt;img src=&#8217;http://a2.twimg.com/profile_images/384407232/me5_normal.jpg&#8217; /&gt;&lt;/a&gt;&lt;strong&gt;&lt;a href=&#8217;http://twitter.com/jaycousins&#8217;&gt;jaycousins&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;jaycousins&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt; &lt;!&#8211; end of tweet &#8211;&gt;&lt;/p&gt;
-
-&lt;p&gt;As of right this second, when I &lt;a href=&quot;http://twitter.com/#!/search/realtime/%23fuckyouwashington&quot;&gt;search for #fuckyouwashington on
-Twitter&lt;/a&gt;, they&amp;#8217;re coming in at two or three a second. It&amp;#8217;s crazy. And
-it&amp;#8217;s really interesting to read what people have to say, pro and con,
-picking their own issues, all of that stuff. Yet, it&amp;#8217;s been removed from
-the trending topics.&lt;/p&gt;
-
-&lt;p&gt;Now, maybe this particular trend was simply blocked because of the
-profanity. Sure, whatever. I don&amp;#8217;t like that, but some might. And
-Twitter certainly allows all kinds of trends to stick around that would
-also be &amp;#8216;offensive,&amp;#8217; for example, #babymakingsong, #turnoff, and
- #itsalwaystheuglypeople are currently trending. Don&amp;#8217;t even get me
-started on trends like #whatblackgirlslike #whatwhitegirls like and the
-other racially charged topics. Sure, fine, it&amp;#8217;s their site, they can do
-whatever they want.&lt;/p&gt;
-
-&lt;p&gt;That, however, is the root of the issue: they can do whatever they want.
-And we&amp;#8217;re all beholden to them. Nothing we can do. Maybe I&amp;#8217;m not
-sensitive to four letter words, and I &lt;em&gt;do&lt;/em&gt; want to hear about things
-like this. Too bad, Twitter says no. Maybe I don&amp;#8217;t want &lt;a href=&quot;http://venturebeat.com/2011/07/08/twitter-adding-promoted-tweets-to-your-stream-this-summer/&quot;&gt;promoted tweets
-added to my stream&lt;/a&gt;. Too bad, Twitter says yes.&lt;/p&gt;
-
-&lt;p&gt;And that&amp;#8217;s why I&amp;#8217;m feeling worse and worse about Twitter every day. It
-sucks, because I really like Twiter, the website. But Twitter, the
-company, really bums me out. They promised all of us nerds long ago that
-they wouldn&amp;#8217;t do this kind of thing, and they&amp;#8217;re not keeping that
-promise. Which means I&amp;#8217;m not really getting emotionally invested in
-Twitter any more. It&amp;#8217;s still valuable enough to me to keep using, but I
-can&amp;#8217;t care about it the way I used to.&lt;/p&gt;
-
-&lt;p&gt;This is why we&amp;#8217;re still hacking away at &lt;a href=&quot;http://rstat.us&quot;&gt;rstat.us&lt;/a&gt;. If you haven&amp;#8217;t
-heard about it before, you can &lt;a href=&quot;http://blog.steveklabnik.com/2011/03/23/announcing-rstat-us.html&quot;&gt;read my release announcement&lt;/a&gt;. If
-you&amp;#8217;re lazier than that, here&amp;#8217;s the summary: rstat.us is a distributed,
-open-source Twitter. You can use our public node at the website, or get
-your own copy of the code and run your own, make whatever customizations
-you&amp;#8217;d like, and you&amp;#8217;re still on equal footing with everyone else in the
-network. We&amp;#8217;re on the cusp of a 1.0 announcement, and I&amp;#8217;d love to have
-been able to make that in this post, but we&amp;#8217;re still working out some
-last kinks. If you&amp;#8217;ve seen it before, you won&amp;#8217;t find much differences
-right now, but we have 100% standards compliance, a complete visual
-refresh, and some other fun goodies waiting in the wings, ready to come
-out shortly.&lt;/p&gt;
-
-&lt;p&gt;Just remember: if you use a service like Twitter that&amp;#8217;s controlled by a
-company like Twitter, you have to play by their rules. And sometimes,
-they&amp;#8217;ll change the rules, and it&amp;#8217;ll be time to move on.&lt;/p&gt;
 </content>
   </entry>
   
