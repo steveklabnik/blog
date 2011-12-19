@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-15T15:49:57-05:00</updated>
+  <updated>2011-12-18T19:24:31-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -72,7 +72,7 @@ causes much more thinking for someone who doesn&amp;#8217;t grok it.&lt;/p&gt;
 
 &lt;p&gt;This happens often in education. DHH made &lt;a href=&quot;http://news.ycombinator.com/item?id=3328427&quot;&gt;a comment&lt;/a&gt;
 about this recently that illustrates this principle, and he couches it in terms of
-&amp;#8220;learability&amp;#8221; vs. &amp;#8220;readability&amp;#8221;:&lt;/p&gt;
+&amp;#8220;learnability&amp;#8221; vs. &amp;#8220;readability&amp;#8221;:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;If you optimize a framework for beginners, you&amp;#8217;re optimizing for
 learnability. That&amp;#8217;s great for the first few days or even weeks of learning.
@@ -106,7 +106,7 @@ is dense, you acquire much more information per second than if it was lighter.&l
 generally trend towards the usable at the expense of the learnable. The impact
 this has on individuals new to the domain, however, is that of a wall. An
 impediment. Overcoming this obstacle requries a bit of good faith on the part
-of the beginner; to advance cross quickly over the chasam between beginner and
+of the beginner; to cross quickly over the chasm between beginner and
 expert, they must recognize and respect this aspect of the conversations they
 will invariably become a part of. When faced with a term that is used in a
 strange way, beginners should ask for clarification, and not start arguments
@@ -236,7 +236,7 @@ great example in and of itself of domain specific langauge and density. Here:&lt
 
 &lt;blockquote&gt;&lt;p&gt;Property is theft.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;This is a quote by &lt;a href=&quot;http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon&quot;&gt;Proudhorn&lt;/a&gt;,
+&lt;p&gt;This is a quote by &lt;a href=&quot;http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon&quot;&gt;Proudhon&lt;/a&gt;,
 the first person to call himself an anarchist. Let&amp;#8217;s unpack the first few layers
 of this statement:&lt;/p&gt;
 
