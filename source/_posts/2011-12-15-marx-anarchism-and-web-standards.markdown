@@ -3,7 +3,7 @@ layout: post
 title: "Marx, Anarchism, and Web Standards"
 date: 2011-12-15 12:01
 comments: true
-categories: 
+categories:
 ---
 <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -51,7 +51,7 @@ kind of background thinks when they see the second example is "Okay, so map is
 like an each, and for each thing in the collection, we're going to call foo on it."
 This is a totally valid interpretation, but notice how much longer it is, and how much
 more involved in the details it is. That's cool, but to someone who groks map, it
-has a much larger amount of mental overhead, in the same way that my consise explanation
+has a much larger amount of mental overhead, in the same way that my concise explanation
 causes much more thinking for someone who doesn't grok it.
 
 This happens often in education. DHH made [a comment](http://news.ycombinator.com/item?id=3328427)
@@ -64,7 +64,7 @@ about this recently that illustrates this principle, and he couches it in terms 
 > usability of the thing once you know it. There are plenty of cases where
 > learnability and usability are in conflict. Letting learnability win is a
 > short-term relief.
-> 
+>
 > If you on the other hand optimize for usability, for making things simple and
 > easy to use for someone who understands the basics, you'll often end up with
 > something that has great learnability as well. Maybe not as much as could be
@@ -78,7 +78,7 @@ particular usage.
 Any time you encounter experts in a particular domain, they'll often have
 fairly specific language that corresponds to that domain. This language is
 usually designed to be usable, not learnable. This is because they've already done
-the learning; learnability holds no utlility for them. However, usability is
+the learning; learnability holds no utility for them. However, usability is
 incredibly... useful. To them. They're working at a higher level of abstraction,
 and don't want to get bogged down in details they already know well. Using
 learnable language would cause them to take twice as long to say things; to
@@ -89,7 +89,7 @@ is dense, you acquire much more information per second than if it was lighter.
 This tendency means that most language that's specific to a domain will
 generally trend towards the usable at the expense of the learnable. The impact
 this has on individuals new to the domain, however, is that of a wall. An
-impediment. Overcoming this obstacle requries a bit of good faith on the part
+impediment. Overcoming this obstacle requires a bit of good faith on the part
 of the beginner; to cross quickly over the chasm between beginner and
 expert, they must recognize and respect this aspect of the conversations they
 will invariably become a part of. When faced with a term that is used in a
@@ -97,7 +97,7 @@ strange way, beginners should ask for clarification, and not start arguments
 over semantics they don't yet even understand. Experts will recognize these
 arguments as coming from a place where concepts are not yet fully understood,
 and while they may recognize the need to help educate, if the newbie is being
-belligerant, they may just ignore them instead. Nobody wins; the signal/noise
+belligerent, they may just ignore them instead. Nobody wins; the signal/noise
 ratio has been decreased, the beginner doesn't learn, and everyone's time is
 wasted.
 
@@ -106,7 +106,7 @@ Here's three other situations where I've seen this happen lately:
 ## Marx and the labor theory of value
 
 Philosophy writing is generally a great example of text that is very much
-usable, and not at all learnable. Some writers can still be learnable, but 
+usable, and not at all learnable. Some writers can still be learnable, but
 most are not, in my experience. One of the reasons this happens is that they
 introduce concepts early in a text and then utilize them later without
 referring back to the earlier definition. This isn't a problem for anyone
@@ -140,7 +140,7 @@ dense language! What a capitalist would call 'value,' a Marxist would call
 
 As you can see, even just one little word, 'value,' can be quite dense! Can
 you imagine a discussion intended to be 'learnable' to outsiders about what's
-meant? Imagine the expansion: 'value' -> 'socially neccesary abstract
+meant? Imagine the expansion: 'value' -> 'socially necessary abstract
 labor' -> ... Marx is already long enough; Capital would be thousands of pages!
 Yet to a beginner who flips to Chapter 12, they'll read a sentence that contains
 'value' and draw poor conclusions! They wouldn't even realize they're making a
@@ -149,7 +149,7 @@ mistake, I mean, how could five letters be misinterpreted?
 Furthermore, people who haven't read Marx don't generally draw distinctions
 between his critique of capitalism and his solution: communism. This is annoying
 when trying to explain to people that I love his critique, but am critical
-of his answers to its problems; they percieve this weakness in his answer
+of his answers to its problems; they perceive this weakness in his answer
 as a weakness in his description of the problem. Furthermore, they then say
 "but I thought you call yourself a communist?" and I respond with "sure; the
 issues I have are with the dictatorship of the proletariat, not with the
@@ -170,7 +170,7 @@ has for Marx. The prime example of this are the terribly misguided
 
 Here's the deal: ancaps lack an understanding of the vast majority of historical
 anarchist thought, and so try to appropriate the term 'anarchism' to describe
-their philosohpy which is decidedly not anarchist. The ones who do have started
+their philosophy which is decidedly not anarchist. The ones who do have started
 using 'voluntaryist' to describe themselves, which is a great example of using
 information density to mislead, but that's a whole separate rant. Here's the
 411, from [the Anarchist FAQ](http://infoshop.org/page/AnarchistFAQSectionF1),
@@ -188,7 +188,7 @@ specific to political theory discussions:
 > exploitation and capitalist private property. As "anarcho"-capitalists do not
 > consider interest, rent and profits (i.e. capitalism) to be exploitative nor
 > oppose capitalist property rights, they are not anarchists.
-> 
+>
 > Part of the problem is that Marxists, like many academics, also tend to assert
 > that anarchists are simply against the state. It is significant that both
 > Marxists and "anarcho"-capitalists tend to define anarchism as purely
@@ -216,11 +216,11 @@ straightforward, and you can take the second as an example of this kind of
 language.
 
 Giving you a short explanation of why anarchists are against Capitalism is a
-great example in and of itself of domain specific langauge and density. Here:
+great example in and of itself of domain specific language and density. Here:
 
 > Property is theft.
 
-This is a quote by [Proudhon](http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon), 
+This is a quote by [Proudhon](http://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon),
 the first person to call himself an anarchist. Let's unpack the first few layers
 of this statement:
 
@@ -235,7 +235,7 @@ Property. Here's [Wikipedia's explanation](http://en.wikipedia.org/wiki/Private_
 > early 18th century, displacing feudal property, guilds, cottage industry and
 > craft production, which were based on ownership of the tools for production by
 > individual laborers or guilds of craftspeople.
-> 
+>
 > Marxists and socialists distinguish between "private property" and "personal
 > property", defining the former as the means of production in reference to
 > private enterprise based on socialized production and wage labor; and the
@@ -247,7 +247,7 @@ that private property rights are something that has always existed. However,
 as this alludes to, there are many different kinds of property rights that have
 existed at different places and times.
 
-So in 'property is theft,' Proudhorn is referring to private ownership of the 
+So in 'property is theft,' Proudhorn is referring to private ownership of the
 'means of production.' Let's expand that. Again, [Wikipedia](http://en.wikipedia.org/wiki/Means_of_production):
 
 > Means of production refers to physical, non-human inputs used in production—the
@@ -287,17 +287,17 @@ random quoting of standards documents by myself and others. Here's some running
 commentary on some of the comments. It's impossible to do this without it becoming
 semi-personal, so let me just say upfront that I think everyone is participating
 honestly in this discussion, but I think it's a great example of people who aren't
-familliar with a domain jumping in and drawing incorrect conclusions.
+familiar with a domain jumping in and drawing incorrect conclusions.
 
 First up, benatkin comments:
 
 > I googled for HTTP verbs and clicked the first result and PATCH isn't listed.
-> 
+>
 > http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
-> 
+>
 > Where is it?
 
-Anyone participating in a discussion about `PATCH` should be reasonably familliar
+Anyone participating in a discussion about `PATCH` should be reasonably familiar
 with `PATCH`. Learning where `PATCH` is defined is as simple as [Googling HTTP PATCH](https://www.google.com/#hl=en&q=http+patch),
 which shows it being defined in [RFC 5879](http://tools.ietf.org/html/rfc5789).
 With that said, this is a good example of asking for clarification, and not
