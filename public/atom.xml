@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-20T11:14:22-05:00</updated>
+  <updated>2011-12-20T13:51:26-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -192,13 +192,18 @@ but here&amp;#8217;s the TL;DR:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;There are a set of official types. Try to use those if they&amp;#8217;re
 applicable, but they&amp;#8217;re quite general, so that&amp;#8217;s often not the case.&lt;/li&gt;
-&lt;li&gt;You can put whatever else you want. Space delineated.&lt;/li&gt;
+&lt;li&gt;You can put whatever else you want. Space delineated. *&lt;/li&gt;
 &lt;li&gt;The best way is to use a URI and then make a resource at that URI
 that documents the relation&amp;#8217;s semantics.&lt;/li&gt;
 &lt;/ol&gt;
 
 
-&lt;p&gt;We&amp;#8217;ll go with option two for now, for simplicity.&lt;/p&gt;
+&lt;p&gt;We&amp;#8217;ll go with option two for now, for simplicity. In a real application, make
+it a URI.&lt;/p&gt;
+
+&lt;p&gt;(*) Technically, this isn&amp;#8217;t true. Extension relations are &lt;em&gt;required&lt;/em&gt; to be URIs,
+or something that can be serialized to a URI. Again, details are outside of the
+scope of this post.&lt;/p&gt;
 
 &lt;h2&gt;Making our link, with semantics.&lt;/h2&gt;
 

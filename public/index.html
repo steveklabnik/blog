@@ -257,13 +257,18 @@ but here&#8217;s the TL;DR:</p>
 <ol>
 <li>There are a set of official types. Try to use those if they&#8217;re
 applicable, but they&#8217;re quite general, so that&#8217;s often not the case.</li>
-<li>You can put whatever else you want. Space delineated.</li>
+<li>You can put whatever else you want. Space delineated. *</li>
 <li>The best way is to use a URI and then make a resource at that URI
 that documents the relation&#8217;s semantics.</li>
 </ol>
 
 
-<p>We&#8217;ll go with option two for now, for simplicity.</p>
+<p>We&#8217;ll go with option two for now, for simplicity. In a real application, make
+it a URI.</p>
+
+<p>(*) Technically, this isn&#8217;t true. Extension relations are <em>required</em> to be URIs,
+or something that can be serialized to a URI. Again, details are outside of the
+scope of this post.</p>
 
 <h2>Making our link, with semantics.</h2>
 

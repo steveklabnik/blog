@@ -182,11 +182,16 @@ but here's the TL;DR:
 
 1. There are a set of official types. Try to use those if they're
 applicable, but they're quite general, so that's often not the case.
-2. You can put whatever else you want. Space delineated.
+2. You can put whatever else you want. Space delineated. *
 3. The best way is to use a URI and then make a resource at that URI
 that documents the relation's semantics.
 
-We'll go with option two for now, for simplicity.
+We'll go with option two for now, for simplicity. In a real application, make
+it a URI.
+
+(*) Technically, this isn't true. Extension relations are _required_ to be URIs,
+or something that can be serialized to a URI. Again, details are outside of the
+scope of this post.
 
 ## Making our link, with semantics.
 
