@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Write Better Cukes With the Rel Attribute - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/12/20/write-better-cukes-with-the-rel-attribute.html"/>
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Write Better Cukes With the Rel Attribute</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-20T09:22:00-05:00" pubdate  data-updated="true" >Dec 20<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The other day, I was working on some Cucumber features for a project, and I
+discovered a neat technique that helps you to write better Cucumber steps.</p>
+
+<p>Nobody wants to be <a href="http://elabs.se/blog/15-you-re-cuking-it-wrong">cuking it wrong</a>,
+but what does that really mean? Here&#8217;s Jonas&#8217; prescription:</p>
+
+<blockquote><p>A step description should never contain regexen, CSS or XPath selectors, any<br/>kind of code or data structure. It should be easily understood just by reading<br/>the description.</p></blockquote>
+
+
+<p>Great. Let&#8217;s <a href="http://www.theregister.co.uk/2007/06/25/thoughtworks_req_manage/">pop the why stack</a>
+a few times, shall we?</p>
+
+<p><strong>Q1</strong>: Why do we want to have descriptions not use regexen, CSS selectors, or code?<br/>
+<strong>A1</strong>: To give it a simpler language.</p>
+
+<p><strong>Q2</strong>: Why do we want it to be in a simpler language?<br />
+<strong>A2</strong>: So that it&#8217;s easily understandable for stakeholders.</p>
+
+<p><strong>Q3</strong>: Why do we want it to be easily understandable for stakeholders?<br />
+<strong>A3</strong>: Because then we can share a <a href="http://domaindrivendesign.org/node/132">common language</a>.</p>
+
+<p><strong>Q4</strong>: Why is a common language important?<br />
+<strong>A4</strong>: A shared language assists in making sure our model matches the desires of our stakeholders.</p>
+
+<p><strong>Q5</strong>: Why do we want to match the desires of our stakeholders?<br />
+<strong>A5</strong>: That&#8217;s the whole reason we&#8217;re on this project in the first place!</p>
+
+<p>Anyway, that&#8217;s what it&#8217;s really all about: developing that common language.
+Cukes should be written in that common language so that we can make sure we&#8217;re
+on track. So fine: common language. Awesome. Let&#8217;s do this.</p>
+
+<h2>Write some cukes in common language</h2>
+
+<p>Time to write a cuke:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+</pre></td><td class='code' width='100%'><pre><code class=''><div class='line'>Scenario: Editing the home page
+</div><div class='line'>  Given I'm logged in as an administrator
+</div><div class='line'>  When I go to the home page
+</div><div class='line'>  And I choose to edit the article
+</div><div class='line'>  And I fill in some content
+</div><div class='line'>  And I save it
+</div><div class='line'>  Then I should see that content</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Basic CMS style stuff. I&#8217;m not going to argue that this is the best cuke in the
+world, but it&#8217;s pretty good. What I want to do is examine some of these steps
+in more detail. How would you implement these steps?</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">When</span><span class="sr"> /^I choose to edit the article$/</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">pending</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="no">When</span><span class="sr"> /^I fill in some content$/</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">pending</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="no">When</span><span class="sr"> /^I save it$/</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">pending</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="no">Then</span><span class="sr"> /^I should see that content$/</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">pending</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Go ahead. Write them down somewhere. I&#8217;ll wait.<br /><br /><br /><br /><br /><br /></p>
+
+<p>&#8230; done yet?</p>
+
+<br /><br /><br /><br />
+
+
+<h2>Implementing a step</h2>
+
+<p>Done? Okay! Before I show you my implementation, let&#8217;s talk about this step:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">When</span><span class="sr"> /^I choose to edit the article$/</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>When writing this step, I realized something. When trying to write steps like
+these, there&#8217;s a danger in tying them too closely to your specific HTML. It&#8217;s
+why many people don&#8217;t write view tests: they&#8217;re brittle. I actually like view
+tests, but that&#8217;s another blog post. Point is this: we know we&#8217;re going to
+follow a link, and we know that we want that link to go somewhere that will
+let us edit the article. We don&#8217;t really care <em>where</em> it is in the DOM, just
+that somewhere, we&#8217;ve got an &#8216;edit article&#8217; link. How to pull this off?</p>
+
+<h3>First idea: id attribute</h3>
+
+<p>You might be thinking &#8220;I&#8217;ll give it an id attribute!&#8221; Here&#8217;s the problem with
+that: ids have to be unique, per page. With article editing, that might not be
+a problem, but it&#8217;s certainly not a general solution. So that&#8217;s out.</p>
+
+<h3>Second time: class attribute</h3>
+
+<p>&#8220;Okay, then just use a class. Your blog sucks.&#8221; Well, let&#8217;s check out what
+<a href="http://www.w3.org/TR/html5/elements.html#classes">the HTML5 spec says about classes</a>.</p>
+
+<blockquote><p>Basically nothing about semantics.</p></blockquote>
+
+
+<p>Okay, so that&#8217;s paraphrased. But still, the spec basically says some stuff
+about the details of implementing classes, but absolutely nothing about the
+semantics of a class. In practice, classes are largely used for styling
+purposes. We don&#8217;t want to conflate our styling with our data, so overloading
+class for this purpose might work, but feels kinda wrong.</p>
+
+<h3>What about the text?</h3>
+
+<p>We could match on the text of the link. After all, that&#8217;s what people use to
+determine what links to click on. The link with the text &#8220;Edit this post&#8221; lets
+us know that that link will let us edit a post.</p>
+
+<p>Matching on the text is brittle, though. What happens when marketing comes
+through and changes the text to read &#8220;Edit my post&#8221;? Our tests break. Ugh.</p>
+
+<p>There&#8217;s got to be a better way. Otherwise, I wouldn&#8217;t be writing this blog post.</p>
+
+<h3>The best way: the rel attribute</h3>
+
+<p>When doing research for <a href="http://getsomere.st">my book on REST</a>, I&#8217;ve been doing
+a lot of digging into various standards documents. And one of the most important
+attributes from a REST perspective is one that nobody ever talks about or uses:
+the <code>rel</code> attribute. From <a href="http://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">the HTML5 spec</a>:</p>
+
+<blockquote><p>The rel attribute on a and area elements controls what kinds of links the<br/>elements create. The attribue&#8217;s value must be a set of space-separated tokens.<br/>The allowed keywords and their meanings are defined below.</p></blockquote>
+
+
+<p>Below? That&#8217;s <a href="http://www.w3.org/TR/html5/links.html#linkTypes">here</a>:</p>
+
+<blockquote><p>The following table summarizes the link types that are defined by this<br/>specification. This table is non-normative; the actual definitions for the link<br/>types are given in the next few sections.</p><p>alternate: Gives alternate representations of the current document.<br/>author: Gives a link to the current document&#8217;s author.<br/>bookmark: Gives the permalink for the nearest ancestor section.</p></blockquote>
+
+
+<p>Hey now! Seems like we&#8217;re on to something. There&#8217;s also <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>,
+&#8220;Web Linking&#8221;. <a href="http://tools.ietf.org/html/rfc5988#section-4">Section four</a>
+talks about Link Relation Types:</p>
+
+<blockquote><p>In the simplest case, a link relation type identifies the semantics<br/>of a link.  For example, a link with the relation type &#8220;copyright&#8221;<br/>indicates that the resource identified by the target IRI is a<br/>statement of the copyright terms applying to the current context IRI.</p><p>Link relation types can also be used to indicate that the target<br/>resource has particular attributes, or exhibits particular<br/>behaviours; for example, a &#8220;service&#8221; link implies that the identified<br/>resource is part of a defined protocol (in this case, a service<br/> description).</p></blockquote>
+
+
+<p>Bam! Awesome! This is exactly what we want!</p>
+
+<h2>So how do we use rel attributes?</h2>
+
+<p>I&#8217;ll be going into more depth about these kinds of topics in <a href="http://getsomere.st">my book</a>,
+but here&#8217;s the TL;DR:</p>
+
+<ol>
+<li>There are a set of official types. Try to use those if they&#8217;re
+applicable, but they&#8217;re quite general, so that&#8217;s often not the case.</li>
+<li>You can put whatever else you want. Space delineated.</li>
+<li>The best way is to use a URI and then make a resource at that URI
+that documents the relation&#8217;s semantics.</li>
+</ol>
+
+
+<p>We&#8217;ll go with option two for now, for simplicity.</p>
+
+<h2>Making our link, with semantics.</h2>
+
+<p>Here&#8217;s what a link with our newly minted relation looks like:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='html'><div class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/posts/1/edit&quot;</span> <span class="na">rel=</span><span class="s">&quot;edit-post&quot;</span><span class="nt">&gt;</span>Edit this post<span class="nt">&lt;/a&gt;</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Super simple. Just that one little attribute. Now we can write a step to match:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="no">When</span><span class="sr"> /^I choose to edit the article$/</span> <span class="k">do</span>
+</div><div class='line'>  <span class="n">find</span><span class="p">(</span><span class="s2">&quot;//a[@rel=&#39;edit-article&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This code matches what we&#8217;d do as a person really well. &#8220;Find the link that
+edits an article, and click on it.&#8221; We&#8217;ve not only made the title of our step
+match our idea of what a person would do, but the code has followed suit.
+Awesome. We can move this link anywhere on the page, our test doesn&#8217;t break.
+We can change the text of the link, and our test doesn&#8217;t break. So cool.</p>
+
+<h2>Better tests through web standards</h2>
+
+<p>Turns out that diving around in standards has some practical benefits after all,
+eh? Think about the relationship between your cukes, your tests, and your API
+clients: Cucumber, through Selenium, is an automated agent that interacts with
+your web service. API clients are automated agents that interact with your web
+service. Hmmmm&#8230;</p>
+
+<p>If you want to know more about this, that&#8217;s what <a href="http://getsomere.st">my book</a>
+is for. I&#8217;ll be covering topics like this in depth, and explaining standards in
+simple language.</p>
+
+<p>Seriously. Did you sign up for <a href="http://getsomere.st">my book</a> yet? ;)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-20T09:22:00-05:00" pubdate  data-updated="true" >Dec 20<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/12/20/write-better-cukes-with-the-rel-attribute.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/12/20/write-better-cukes-with-the-rel-attribute.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/12/20/write-better-cukes-with-the-rel-attribute.html">Write Better Cukes With the Rel Attribute</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/15/marx-anarchism-and-web-standards.html">Marx, Anarchism, and Web Standards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/28/book-review-new-programmers-survival-manual.html">Book Review: New Programmer's Survival Manual</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>
