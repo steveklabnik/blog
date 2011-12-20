@@ -122,11 +122,11 @@ class for this purpose might work, but feels kinda wrong.
 ### What about the text?
 
 We could match on the text of the link. After all, that's what people use to
-determine what links to click on. The link with the text "Edit this post" lets
-us know that that link will let us edit a post.
+determine what links to click on. The link with the text "Edit this article"
+lets us know that that link will let us edit a article.
 
 Matching on the text is brittle, though. What happens when marketing comes
-through and changes the text to read "Edit my post"? Our tests break. Ugh.
+through and changes the text to read "Edit my article"? Our tests break. Ugh.
 
 There's got to be a better way. Otherwise, I wouldn't be writing this blog post.
 
@@ -193,7 +193,7 @@ We'll go with option two for now, for simplicity.
 Here's what a link with our newly minted relation looks like:
 
 ``` html
-<a href="/posts/1/edit" rel="edit-post">Edit this post</a>
+<a href="/articles/1/edit" rel="edit-article">Edit this article</a>
 ```
 
 Super simple. Just that one little attribute. Now we can write a step to match:
