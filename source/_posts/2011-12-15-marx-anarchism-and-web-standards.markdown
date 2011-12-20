@@ -247,7 +247,7 @@ that private property rights are something that has always existed. However,
 as this alludes to, there are many different kinds of property rights that have
 existed at different places and times.
 
-So in 'property is theft,' Proudhorn is referring to private ownership of the
+So in 'property is theft,' Proudhon is referring to private ownership of the
 'means of production.' Let's expand that. Again, [Wikipedia](http://en.wikipedia.org/wiki/Means_of_production):
 
 > Means of production refers to physical, non-human inputs used in production—the
@@ -268,7 +268,7 @@ We could continue to discuss how to distinguish between this 'private property'
 and 'possessions,' which anarchists are _not_ against, but I'm just trying to
 demonstrate that this word 'property' is incredibly complex.
 
-Okay, so Proudhorn claims that 'owning the physical inputs used in factories used
+Okay, so Proudhon claims that 'owning the physical inputs used in factories used
 to produce wealth is theft.' I could expand on 'theft,' but really, I think my
 point about density is made.  For more on this, see
 [Why are anarchists against private property?](http://anarchism.pageabode.com/afaq/secB3.html).
