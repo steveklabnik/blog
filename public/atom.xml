@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-20T10:29:21-05:00</updated>
+  <updated>2011-12-20T11:14:22-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -152,11 +152,11 @@ class for this purpose might work, but feels kinda wrong.&lt;/p&gt;
 &lt;h3&gt;What about the text?&lt;/h3&gt;
 
 &lt;p&gt;We could match on the text of the link. After all, that&amp;#8217;s what people use to
-determine what links to click on. The link with the text &amp;#8220;Edit this post&amp;#8221; lets
-us know that that link will let us edit a post.&lt;/p&gt;
+determine what links to click on. The link with the text &amp;#8220;Edit this article&amp;#8221;
+lets us know that that link will let us edit a article.&lt;/p&gt;
 
 &lt;p&gt;Matching on the text is brittle, though. What happens when marketing comes
-through and changes the text to read &amp;#8220;Edit my post&amp;#8221;? Our tests break. Ugh.&lt;/p&gt;
+through and changes the text to read &amp;#8220;Edit my article&amp;#8221;? Our tests break. Ugh.&lt;/p&gt;
 
 &lt;p&gt;There&amp;#8217;s got to be a better way. Otherwise, I wouldn&amp;#8217;t be writing this blog post.&lt;/p&gt;
 
@@ -205,7 +205,7 @@ that documents the relation&amp;#8217;s semantics.&lt;/li&gt;
 &lt;p&gt;Here&amp;#8217;s what a link with our newly minted relation looks like:&lt;/p&gt;
 
 &lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;html&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/posts/1/edit&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;edit-post&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Edit this post&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;html&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/articles/1/edit&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;edit-article&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Edit this article&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
 &lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
 
 

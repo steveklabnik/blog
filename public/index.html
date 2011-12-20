@@ -217,11 +217,11 @@ class for this purpose might work, but feels kinda wrong.</p>
 <h3>What about the text?</h3>
 
 <p>We could match on the text of the link. After all, that&#8217;s what people use to
-determine what links to click on. The link with the text &#8220;Edit this post&#8221; lets
-us know that that link will let us edit a post.</p>
+determine what links to click on. The link with the text &#8220;Edit this article&#8221;
+lets us know that that link will let us edit a article.</p>
 
 <p>Matching on the text is brittle, though. What happens when marketing comes
-through and changes the text to read &#8220;Edit my post&#8221;? Our tests break. Ugh.</p>
+through and changes the text to read &#8220;Edit my article&#8221;? Our tests break. Ugh.</p>
 
 <p>There&#8217;s got to be a better way. Otherwise, I wouldn&#8217;t be writing this blog post.</p>
 
@@ -270,7 +270,7 @@ that documents the relation&#8217;s semantics.</li>
 <p>Here&#8217;s what a link with our newly minted relation looks like:</p>
 
 <figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-</pre></td><td class='code' width='100%'><pre><code class='html'><div class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/posts/1/edit&quot;</span> <span class="na">rel=</span><span class="s">&quot;edit-post&quot;</span><span class="nt">&gt;</span>Edit this post<span class="nt">&lt;/a&gt;</span>
+</pre></td><td class='code' width='100%'><pre><code class='html'><div class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/articles/1/edit&quot;</span> <span class="na">rel=</span><span class="s">&quot;edit-article&quot;</span><span class="nt">&gt;</span>Edit this article<span class="nt">&lt;/a&gt;</span>
 </div></code></pre></td></tr></table></div></figure>
 
 
