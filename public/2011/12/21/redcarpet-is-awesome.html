@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Redcarpet Is _awesome_! - Literate Programming</title>
+  <meta name="author" content="Steve Klabnik">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://blog.steveklabnik.com/2011/12/21/redcarpet-is-awesome.html"/>
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Literate Programming</a></h1>
+  
+    <h2>Code is data, data is code. s/data/language/g;</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/steveklabnik" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:blog.steveklabnik.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">Redcarpet Is _awesome_!</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-21T11:00:00-05:00" pubdate  data-updated="true" >Dec 21<span>st</span>, 2011</time></p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It&#8217;s true.</p>
+
+<p>If you haven&#8217;t used it yet, <a href="https://github.com/tanoku/redcarpet">Redcarpet</a> is
+the Markdown parser that <a href="https://github.com/blog/832-rolling-out-the-redcarpet">GitHub uses</a>
+to work all that magic on their site. So of course, it&#8217;s awesome.</p>
+
+<h2>You can use it and abuse it</h2>
+
+<p>What makes it <em>really</em> awesome is the custom renderers feature. Here&#8217;s the one
+from the documentation:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># create a custom renderer that allows highlighting of code blocks</span>
+</div><div class='line'><span class="k">class</span> <span class="nc">HTMLwithAlbino</span> <span class="o">&lt;</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Render</span><span class="o">::</span><span class="no">HTML</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">block_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Albino</span><span class="o">.</span><span class="n">safe_colorize</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">markdown</span> <span class="o">=</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Markdown</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">HTMLwithAlbino</span><span class="p">)</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>You can guess what that does: uses some library called Albino to render code
+blocks. There are a whole bunch of hooks you can use to make a custom renderer.
+They make it super easy to do something neat with markdown.</p>
+
+<p>So I did.</p>
+
+<h2>Check it: outline generation</h2>
+
+<p>I&#8217;m working on&#8230; this project. And it needs to render a bunch of articles that
+are Markdown files. There will be a sidebar. I want to have links to each
+section. But I&#8217;m a good programmer, which means I&#8217;m lazy. So why bother making
+my own sidebar? Especially when I can abuse Redcarpet to do it.</p>
+
+<p>Oh, and disclaimer: normally, I&#8217;m all about super clean code. Last night, that
+wasn&#8217;t the mood I was in. This code is probably terrible. That&#8217;s part of the
+fun! Please feel free to {clean up,obfuscate,golf,unit test} this code,
+<a href="mailto:steve@steveklabnik.com">email me</a>, and tell me how awesome
+you are.</p>
+
+<p>With that disclaimer out of the way, round one:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">OutlineRenderer</span> <span class="o">&lt;</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Render</span><span class="o">::</span><span class="no">HTML</span>
+</div><div class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:outline</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</div><div class='line'>    <span class="vi">@outline</span> <span class="o">=</span> <span class="o">[]</span>
+</div><div class='line'>    <span class="k">super</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">header_level</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">text_slug</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\W/</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">downcase</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">outline</span> <span class="o">&lt;&lt;</span> <span class="o">[</span><span class="n">header_level</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;#</span><span class="si">#{</span><span class="n">text_slug</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">#{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span><span class="o">]</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;&lt;h</span><span class="si">#{</span><span class="n">header_level</span><span class="si">}</span><span class="s2"> id=&#39;</span><span class="si">#{</span><span class="n">text_slug</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">#{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/h</span><span class="si">#{</span><span class="n">header_level</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Every time we hit a header, Redcarpet gives us the text and the header level.
+We grab the text, turn it into a slug, and then append a two-element array to
+our outline. It keeps track of the level of this header, and makes a link from
+the slug. Then, we spit out a header tag, adding on an <code>id</code> element that we
+linked to in our link.</p>
+
+<p>Next up, rendering:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">renderer</span> <span class="o">=</span> <span class="no">OutlineRenderer</span><span class="o">.</span><span class="n">new</span>
+</div><div class='line'><span class="n">r</span> <span class="o">=</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Markdown</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+</div><div class='line'><span class="n">content</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">some_content</span><span class="p">)</span>
+</div><div class='line'><span class="n">outline</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">outline</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This instantiates our Renderer, creates our Markdown parser, and renders the
+content. We also grab the outline we made. Sweet.</p>
+
+<p>Finally, rendering the outline:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">format_outline</span><span class="p">(</span><span class="n">outline</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">prev_level</span> <span class="o">=</span> <span class="mi">2</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="s2">&quot;&lt;ul&gt;&quot;</span> <span class="o">+</span> <span class="n">outline</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">html</span><span class="p">,</span> <span class="n">data</span><span class="o">|</span>
+</div><div class='line'>    <span class="n">level</span><span class="p">,</span> <span class="n">link</span> <span class="o">=</span> <span class="n">data</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">prev_level</span> <span class="o">&lt;</span> <span class="n">level</span>
+</div><div class='line'>      <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;ul&gt;&quot;</span>
+</div><div class='line'>    <span class="k">elsif</span> <span class="n">prev_level</span> <span class="o">&gt;</span> <span class="n">level</span>
+</div><div class='line'>      <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/ul&gt;&quot;</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">prev_level</span> <span class="o">=</span> <span class="n">level</span>
+</div><div class='line'>    <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;li&gt;</span><span class="si">#{</span><span class="n">link</span><span class="si">}</span><span class="s2">&lt;/li&gt;&quot;</span>
+</div><div class='line'>    <span class="n">html</span>
+</div><div class='line'>  <span class="k">end</span> <span class="o">+</span> <span class="s2">&quot;&lt;/ul&gt;&quot;</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This&#8230; is amazing. And terrible. Don&#8217;t drink scotch and code, kids. Or do,
+whatever. This takes our <code>Array</code> of <code>Array</code>s that we made with our renderer
+and runs <code>inject</code> over it. If our previous level is less than the new level,
+we indent with a <code>&lt;ul&gt;</code>, and if it&#8217;s greater, we outdent with a <code>&lt;/ul&gt;</code>.
+Then we render our link, and wrap the whole thing in its own set of <code>&lt;ul&gt;</code>s.
+Done!</p>
+
+<p>We can call this helper method in our layout, and bam! We get automatic
+outlines generated for our Markdown files. Like I said, this is quick and
+dirty, but for a first pass, I don&#8217;t feel too bad about it. Get it done, and
+then get it done right.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Steve Klabnik</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-21T11:00:00-05:00" pubdate  data-updated="true" >Dec 21<span>st</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.steveklabnik.com/2011/12/21/redcarpet-is-awesome.html" data-via="steveklabnik" data-counturl="http://blog.steveklabnik.com/2011/12/21/redcarpet-is-awesome.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <aside>
+<img src='http://en.gravatar.com/userimage/5335489/ee56a7574df33ed8748160494c930b98.jpg?size=190' />
+<h4>Hi there, I'm Steve.</h4>
+<p>
+I write both code and prose. Here's some of my thoughts about software,
+literature, art and code, with some politics thrown in on occasion.
+You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
+</p>
+</aside>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/12/21/redcarpet-is-awesome.html">Redcarpet Is _awesome_!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/20/write-better-cukes-with-the-rel-attribute.html">Write Better Cukes With the Rel Attribute</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/15/marx-anarchism-and-web-standards.html">Marx, Anarchism, and Web Standards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/12/fast-rails-tests-with-cancan.html">Fast Rails Tests With CanCan.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/steveklabnik">@steveklabnik</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'steveklabnik',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("steveklabnik", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/steveklabnik" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @steveklabnik</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Steve Klabnik -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10289851-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>

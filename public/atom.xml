@@ -4,13 +4,175 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-20T13:51:26-05:00</updated>
+  <updated>2011-12-21T00:02:22-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
     
   </author>
 
+  
+  <entry>
+    <title>Redcarpet Is _awesome_!</title>
+    <link href="http://blog.steveklabnik.com/2011/12/21/redcarpet-is-awesome.html"/>
+    <updated>2011-12-21T11:00:00-05:00</updated>
+    <id>http://blog.steveklabnik.com/2011/12/21/redcarpet-is-awesome</id>
+    <content type="html">&lt;p&gt;It&amp;#8217;s true.&lt;/p&gt;
+
+&lt;p&gt;If you haven&amp;#8217;t used it yet, &lt;a href=&quot;https://github.com/tanoku/redcarpet&quot;&gt;Redcarpet&lt;/a&gt; is
+the Markdown parser that &lt;a href=&quot;https://github.com/blog/832-rolling-out-the-redcarpet&quot;&gt;GitHub uses&lt;/a&gt;
+to work all that magic on their site. So of course, it&amp;#8217;s awesome.&lt;/p&gt;
+
+&lt;h2&gt;You can use it and abuse it&lt;/h2&gt;
+
+&lt;p&gt;What makes it &lt;em&gt;really&lt;/em&gt; awesome is the custom renderers feature. Here&amp;#8217;s the one
+from the documentation:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;c1&quot;&gt;# create a custom renderer that allows highlighting of code blocks&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HTMLwithAlbino&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redcarpet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Render&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTML&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;block_code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;no&quot;&gt;Albino&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;safe_colorize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;markdown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redcarpet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Markdown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTMLwithAlbino&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;You can guess what that does: uses some library called Albino to render code
+blocks. There are a whole bunch of hooks you can use to make a custom renderer.
+They make it super easy to do something neat with markdown.&lt;/p&gt;
+
+&lt;p&gt;So I did.&lt;/p&gt;
+
+&lt;h2&gt;Check it: outline generation&lt;/h2&gt;
+
+&lt;p&gt;I&amp;#8217;m working on&amp;#8230; this project. And it needs to render a bunch of articles that
+are Markdown files. There will be a sidebar. I want to have links to each
+section. But I&amp;#8217;m a good programmer, which means I&amp;#8217;m lazy. So why bother making
+my own sidebar? Especially when I can abuse Redcarpet to do it.&lt;/p&gt;
+
+&lt;p&gt;Oh, and disclaimer: normally, I&amp;#8217;m all about super clean code. Last night, that
+wasn&amp;#8217;t the mood I was in. This code is probably terrible. That&amp;#8217;s part of the
+fun! Please feel free to {clean up,obfuscate,golf,unit test} this code,
+&lt;a href=&quot;mailto:steve@steveklabnik.com&quot;&gt;email me&lt;/a&gt;, and tell me how awesome
+you are.&lt;/p&gt;
+
+&lt;p&gt;With that disclaimer out of the way, round one:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;16&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OutlineRenderer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redcarpet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Render&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTML&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;kp&quot;&gt;attr_accessor&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:outline&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;vi&quot;&gt;@outline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;header_level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;text_slug&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\W/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;_&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;downcase&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header_level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;a href=&amp;#39;#&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text_slug&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;#39;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;lt;/a&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;h&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header_level&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; id=&amp;#39;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text_slug&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;#39;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;lt;/h&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;header_level&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;Every time we hit a header, Redcarpet gives us the text and the header level.
+We grab the text, turn it into a slug, and then append a two-element array to
+our outline. It keeps track of the level of this header, and makes a link from
+the slug. Then, we spit out a header tag, adding on an &lt;code&gt;id&lt;/code&gt; element that we
+linked to in our link.&lt;/p&gt;
+
+&lt;p&gt;Next up, rendering:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;OutlineRenderer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redcarpet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Markdown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;some_content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;n&quot;&gt;outline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outline&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;This instantiates our Renderer, creates our Markdown parser, and renders the
+content. We also grab the outline we made. Sweet.&lt;/p&gt;
+
+&lt;p&gt;Finally, rendering the outline:&lt;/p&gt;
+
+&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;/figcaption&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&#8217;line&#8217;&gt;1&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;2&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;3&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;4&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;5&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;6&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;7&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;8&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;9&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;10&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;11&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;12&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;13&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;14&lt;/span&gt;
+&lt;span class=&#8217;line&#8217;&gt;15&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217; width=&#8217;100%&#8217;&gt;&lt;pre&gt;&lt;code class=&#8217;ruby&#8217;&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;format_outline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;n&quot;&gt;prev_level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;ul&amp;gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outline&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev_level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;ul&amp;gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev_level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;      &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;prev_level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;li&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;lt;/li&amp;gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;    &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;&lt;/span&gt;
+&lt;/div&gt;&lt;div class=&#8217;line&#8217;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;
+
+
+&lt;p&gt;This&amp;#8230; is amazing. And terrible. Don&amp;#8217;t drink scotch and code, kids. Or do,
+whatever. This takes our &lt;code&gt;Array&lt;/code&gt; of &lt;code&gt;Array&lt;/code&gt;s that we made with our renderer
+and runs &lt;code&gt;inject&lt;/code&gt; over it. If our previous level is less than the new level,
+we indent with a &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt;, and if it&amp;#8217;s greater, we outdent with a &lt;code&gt;&amp;lt;/ul&amp;gt;&lt;/code&gt;.
+Then we render our link, and wrap the whole thing in its own set of &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt;s.
+Done!&lt;/p&gt;
+
+&lt;p&gt;We can call this helper method in our layout, and bam! We get automatic
+outlines generated for our Markdown files. Like I said, this is quick and
+dirty, but for a first pass, I don&amp;#8217;t feel too bad about it. Get it done, and
+then get it done right.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Write Better Cukes With the Rel Attribute</title>
@@ -4120,142 +4282,6 @@ an asshole&amp;#8221; and &amp;#8220;I think that that situation could have been
 better.&amp;#8221;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;#8217;s all build lots of cool software together.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>We Forget That Open Source is Made of People</title>
-    <link href="http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people.html"/>
-    <updated>2011-08-12T00:00:00-04:00</updated>
-    <id>http://blog.steveklabnik.com/2011/08/12/we-forget-that-open-source-is-made-of-people</id>
-    <content type="html">&lt;p&gt;Programmers like to think that software is the purest form of
-meritocracy. We like to consider ourselves scientists; what we do is
-entirely impersonal. I&amp;#8217;m at Lone Star Ruby right now, and the first two
-talks are entirely about software as a science.&lt;/p&gt;
-
-&lt;p&gt;But this is a fallacy. There&amp;#8217;s a human element to open source that&amp;#8217;s
-often totally forgotten, and it drives people away.&lt;/p&gt;
-
-&lt;h2&gt;Software Celebrity and Hero Worship&lt;/h2&gt;
-
-&lt;p&gt;We sort of acknowledge this, in a way. There are most certainly software
-celebrities, even if their celebrity is localized to the community in
-which they operate. I heard someone say this today:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;If I can go to one Ruby conference and not hear anyone mention Zed
-Shaw or _why, I can die happy.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;If I say &amp;#8220;jnicklas&amp;#8221; you say &amp;#8220;Capybara.&amp;#8221; If I say &amp;#8220;DHH&amp;#8221; you say &amp;#8220;Rails.&amp;#8221;
-If I say &amp;#8220;matz&amp;#8221; you say &amp;#8220;Ruby.&amp;#8221; We have our heroes, villains, and foils,
-just like anybody else. But we forget that in every celebrity, there is
-a real person in there. Actual people, who have real thoughts, feelings,
-ideas, emotions, and that spend all of their time working for free just
-to make your lives better out of the goodness of their heart. Often
-&lt;em&gt;after&lt;/em&gt; working at day jobs, often &lt;em&gt;at the expense&lt;/em&gt; of a personal life,
-often &lt;em&gt;straining relationships&lt;/em&gt; with people they care about.&lt;/p&gt;
-
-&lt;h2&gt;Competition Means Somebody Loses&lt;/h2&gt;
-
-&lt;p&gt;I used to think that Git was great because it made forks trivial. It
-changed what we mean by &amp;#8216;fork.&amp;#8217; This is largely a good thing. But &amp;#8216;the
-eff word&amp;#8217; used to be a last resort. The nuclear option. You&amp;#8217;re fed up,
-can&amp;#8217;t take it anymore, and so this is what they&amp;#8217;ve driven you to do.
-Forking was Serious Business.&lt;/p&gt;
-
-&lt;p&gt;Now, GitHub has made it so easy to fork a project and distribute it to
-tons of people, people just fork things willy-nilly. And, from the
-outside, competition is good: in theory, it means that the good ideas
-work and the bad ideas don&amp;#8217;t.&lt;/p&gt;
-
-&lt;p&gt;(A small aside: forking in git is different than &amp;#8216;forking&amp;#8217; in svn. This
-overloading of terminology is unfortunate. The fork button is actually
-one of my favorite features of GitHub, because it makes contribution
-easier. But as it&amp;#8217;s easier to publish new software, it&amp;#8217;s easier to
-&amp;#8216;fork&amp;#8217; in the svn sense. It used to be a pain to start a new project,
-and GitHub&amp;#8217;s made that so easy that it happens more often than I think
-it should.)&lt;/p&gt;
-
-&lt;p&gt;But guess what: competition sucks. Cooperation is much better. One of
-the biggest problems with competition is that it means that somebody has
-to lose. For every winner, someone is a loser. That person is going to
-be hurting. In the case of open source, someone has spent (possibly)
-years of their life working on something, and now, all of that is gone.
-That shit stings.&lt;/p&gt;
-
-&lt;p&gt;Sometimes, forks are necessary. Sometimes, there are approaches that are
-fundamentally different. Forking is still an option, even if it&amp;#8217;s a last
-resort. I&amp;#8217;m also not saying that feelings should totally trump technical
-merit. All I&amp;#8217;m saying is this: consider the blood, sweat, and tears of
-others before you act. Just in general.&lt;/p&gt;
-
-&lt;p&gt;It&amp;#8217;s also not a zero-sum game, either. The pie can be grown. But that
-also doesn&amp;#8217;t mean that it&amp;#8217;s grown in a way that makes anyone feel good
-about it. There&amp;#8217;s a difference between &amp;#8220;We represent two sides of some
-coin&amp;#8221; and &amp;#8220;Those fuckers make shitty software.&amp;#8221; Both approaches can grow
-the pie. One is far better than the other.&lt;/p&gt;
-
-&lt;p&gt;What&amp;#8217;s the human cost of rapid competition between software projects? Is
-this cost worth it?&lt;/p&gt;
-
-&lt;h2&gt;Open Source: All take, no give&lt;/h2&gt;
-
-&lt;p&gt;The Pareto Principle: 80% of the effects come from 20% of the causes.
-This is absolutely true in OSS, and it might be more imbalanced. A few
-people contribute, and lots of people use. Sometimes, this is a good
-thing: it&amp;#8217;s actually what draws me to open source. I can help people in
-a scalable way. My code is currently being used by tens of thousands of
-people. This is awesome. Some documentation that I&amp;#8217;ve written is being
-read by millions of people. This is way more awesome.&lt;/p&gt;
-
-&lt;p&gt;But I rarely get any help with my projects. It&amp;#8217;s really easy to let that
-get to a person.&lt;/p&gt;
-
-&lt;p&gt;Do you know how many people have told me that what I do is important? I
-got given a Ruby Hero award for my work on Hackety and Shoes. Do you
-know how many commits I have in on them? Probably less than 200. Do you
-know why? I&amp;#8217;ve spent weeks of my life trying to track down bugs, but some
-of them are too hard for me, at my current stage of programming-fu. And
-it gets depressing. And everyone that&amp;#8217;s ever offered to help has flaked
-on me. And all the recognition for something that was largely done by
-someone else gets to me, really deeply. And I get tons of people
-screaming about Lion support, and &amp;#8216;this doesn&amp;#8217;t work,&amp;#8217; and all sorts of
-things&amp;#8230; and no patches. It&amp;#8217;s why the &amp;#8216;patches accepted&amp;#8217; saying was
-coined: this shit grinds on you after a while.&lt;/p&gt;
-
-&lt;h2&gt;All of my Heroes are Dying&lt;/h2&gt;
-
-&lt;p&gt;Today, this situation with rbenv and rvm made me realize something:
-everyone that I truly, deeply respect in open source has either burned
-out or left. I&amp;#8217;ve said once before that there are four people that I
-truly respect in software: Zed Shaw, _why, Yehuda Katz, and (more
-recently) Wayne Seguin (and also Aaron Patterson. Dammit. This list is
-getting long). All of these developers are brilliant, work hard, and are
-tirelessly supporting their communities. That is, until they were driven
-away. This isn&amp;#8217;t totally applicable to Yehuda, but it happened to Zed.
-It happened to _why. And I can see it happening, right now, to Aaron
-and Wayne. And Yehuda isn&amp;#8217;t really doing Ruby&amp;#8230;&lt;/p&gt;
-
-&lt;p&gt;But seeing this happen makes me deeply sad. For them personally, for my
-own selfish reasons, and that that&amp;#8217;s the state of our communities.&lt;/p&gt;
-
-&lt;h2&gt;Where Does This Leave Us?&lt;/h2&gt;
-
-&lt;p&gt;I don&amp;#8217;t have any answers. I only have a bunch of questions:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Why do we drive people away from Open Source?&lt;/li&gt;
-&lt;li&gt;Can we learn to work together, instead of competing?&lt;/li&gt;
-&lt;li&gt;How can we better recognize this human element?&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;If you don&amp;#8217;t contribute to Open Source: please consider thanking someone
-that does open source, in a project that you love. Consider helping out,
-in even the smallest of ways.&lt;/p&gt;
-
-&lt;p&gt;Thanks.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.steveklabnik.com/2011/08/19/matz-is-nice-so-we-are-nice.html&quot;&gt;My next post is a bit of a follow-up to this&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   

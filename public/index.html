@@ -64,6 +64,190 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/12/21/redcarpet-is-awesome.html">Redcarpet Is _awesome_!</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-12-21T11:00:00-05:00" pubdate  data-updated="true" >Dec 21<span>st</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&#8217;s true.</p>
+
+<p>If you haven&#8217;t used it yet, <a href="https://github.com/tanoku/redcarpet">Redcarpet</a> is
+the Markdown parser that <a href="https://github.com/blog/832-rolling-out-the-redcarpet">GitHub uses</a>
+to work all that magic on their site. So of course, it&#8217;s awesome.</p>
+
+<h2>You can use it and abuse it</h2>
+
+<p>What makes it <em>really</em> awesome is the custom renderers feature. Here&#8217;s the one
+from the documentation:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># create a custom renderer that allows highlighting of code blocks</span>
+</div><div class='line'><span class="k">class</span> <span class="nc">HTMLwithAlbino</span> <span class="o">&lt;</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Render</span><span class="o">::</span><span class="no">HTML</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">block_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+</div><div class='line'>    <span class="no">Albino</span><span class="o">.</span><span class="n">safe_colorize</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">markdown</span> <span class="o">=</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Markdown</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">HTMLwithAlbino</span><span class="p">)</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>You can guess what that does: uses some library called Albino to render code
+blocks. There are a whole bunch of hooks you can use to make a custom renderer.
+They make it super easy to do something neat with markdown.</p>
+
+<p>So I did.</p>
+
+<h2>Check it: outline generation</h2>
+
+<p>I&#8217;m working on&#8230; this project. And it needs to render a bunch of articles that
+are Markdown files. There will be a sidebar. I want to have links to each
+section. But I&#8217;m a good programmer, which means I&#8217;m lazy. So why bother making
+my own sidebar? Especially when I can abuse Redcarpet to do it.</p>
+
+<p>Oh, and disclaimer: normally, I&#8217;m all about super clean code. Last night, that
+wasn&#8217;t the mood I was in. This code is probably terrible. That&#8217;s part of the
+fun! Please feel free to {clean up,obfuscate,golf,unit test} this code,
+<a href="mailto:steve@steveklabnik.com">email me</a>, and tell me how awesome
+you are.</p>
+
+<p>With that disclaimer out of the way, round one:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">class</span> <span class="nc">OutlineRenderer</span> <span class="o">&lt;</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Render</span><span class="o">::</span><span class="no">HTML</span>
+</div><div class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:outline</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</div><div class='line'>    <span class="vi">@outline</span> <span class="o">=</span> <span class="o">[]</span>
+</div><div class='line'>    <span class="k">super</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">header_level</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">text_slug</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\W/</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">downcase</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">outline</span> <span class="o">&lt;&lt;</span> <span class="o">[</span><span class="n">header_level</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;#</span><span class="si">#{</span><span class="n">text_slug</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">#{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span><span class="o">]</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="s2">&quot;&lt;h</span><span class="si">#{</span><span class="n">header_level</span><span class="si">}</span><span class="s2"> id=&#39;</span><span class="si">#{</span><span class="n">text_slug</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">#{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/h</span><span class="si">#{</span><span class="n">header_level</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>Every time we hit a header, Redcarpet gives us the text and the header level.
+We grab the text, turn it into a slug, and then append a two-element array to
+our outline. It keeps track of the level of this header, and makes a link from
+the slug. Then, we spit out a header tag, adding on an <code>id</code> element that we
+linked to in our link.</p>
+
+<p>Next up, rendering:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="n">renderer</span> <span class="o">=</span> <span class="no">OutlineRenderer</span><span class="o">.</span><span class="n">new</span>
+</div><div class='line'><span class="n">r</span> <span class="o">=</span> <span class="no">Redcarpet</span><span class="o">::</span><span class="no">Markdown</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+</div><div class='line'><span class="n">content</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">some_content</span><span class="p">)</span>
+</div><div class='line'><span class="n">outline</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">outline</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This instantiates our Renderer, creates our Markdown parser, and renders the
+content. We also grab the outline we made. Sweet.</p>
+
+<p>Finally, rendering the outline:</p>
+
+<figure role=code><figcaption><span></span></figcaption><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="k">def</span> <span class="nf">format_outline</span><span class="p">(</span><span class="n">outline</span><span class="p">)</span>
+</div><div class='line'>  <span class="n">prev_level</span> <span class="o">=</span> <span class="mi">2</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="s2">&quot;&lt;ul&gt;&quot;</span> <span class="o">+</span> <span class="n">outline</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">html</span><span class="p">,</span> <span class="n">data</span><span class="o">|</span>
+</div><div class='line'>    <span class="n">level</span><span class="p">,</span> <span class="n">link</span> <span class="o">=</span> <span class="n">data</span>
+</div><div class='line'>    <span class="k">if</span> <span class="n">prev_level</span> <span class="o">&lt;</span> <span class="n">level</span>
+</div><div class='line'>      <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;ul&gt;&quot;</span>
+</div><div class='line'>    <span class="k">elsif</span> <span class="n">prev_level</span> <span class="o">&gt;</span> <span class="n">level</span>
+</div><div class='line'>      <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/ul&gt;&quot;</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>    <span class="n">prev_level</span> <span class="o">=</span> <span class="n">level</span>
+</div><div class='line'>    <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;&lt;li&gt;</span><span class="si">#{</span><span class="n">link</span><span class="si">}</span><span class="s2">&lt;/li&gt;&quot;</span>
+</div><div class='line'>    <span class="n">html</span>
+</div><div class='line'>  <span class="k">end</span> <span class="o">+</span> <span class="s2">&quot;&lt;/ul&gt;&quot;</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+
+<p>This&#8230; is amazing. And terrible. Don&#8217;t drink scotch and code, kids. Or do,
+whatever. This takes our <code>Array</code> of <code>Array</code>s that we made with our renderer
+and runs <code>inject</code> over it. If our previous level is less than the new level,
+we indent with a <code>&lt;ul&gt;</code>, and if it&#8217;s greater, we outdent with a <code>&lt;/ul&gt;</code>.
+Then we render our link, and wrap the whole thing in its own set of <code>&lt;ul&gt;</code>s.
+Done!</p>
+
+<p>We can call this helper method in our layout, and bam! We get automatic
+outlines generated for our Markdown files. Like I said, this is quick and
+dirty, but for a first pass, I don&#8217;t feel too bad about it. Get it done, and
+then get it done right.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/12/20/write-better-cukes-with-the-rel-attribute.html">Write Better Cukes With the Rel Attribute</a></h1>
     
     
@@ -1761,164 +1945,6 @@ people with 10 commits or more!</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/01/github-is-anarchy-for-programmers.html">GitHub Is Anarchy for Programmers</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-10-01T13:01:00-04:00" pubdate  data-updated="true" >Oct 1<span>st</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I finally got to see Zach Holman give his talk, <a href="http://speakerdeck.com/u/holman/p/how-github-uses-github-to-build-github">How GitHub Uses GitHub to Build GitHub</a>.
-It was awesome. Zach is a great speaker, and the slides don&#8217;t do it justice. I
-highly recommend catching it on video or in person sometime.</p>
-
-<p>Anyway, there&#8217;s something that I found really interesting about GitHub&#8217;s
-&#8216;process&#8217;: it&#8217;s basically anarchism, applied to software development.</p>
-
-<p>If you&#8217;re not familliar with anarchism, check out <a href="http://truth-reason-liberty.blogspot.com/p/what-i-believe-in.html">&#8220;What I believe in&#8221;</a>.
-It&#8217;s a pretty decent introduction to a complicated topic. Ultimately, anarchism
-is fairly simple, but it requires dismantling a <em>lot</em> of beliefs that Americans
-in particular hold about society, power, and control. We&#8217;re quite happy in this
-country to be slaves to the rich, but that&#8217;s another blog post. ;)</p>
-
-<p>Another excellent post on that blog is <a href="http://truth-reason-liberty.blogspot.com/2010/11/digression-on-what-it-means-to-be.html">&#8220;A Digression On What It Means to Be An Anarchist</a>.
-I&#8217;m going to use it as a framework to point out my comparison to GitHub. The
-first sentence is stolen from TFA, but the second sentence is my GitHub
-comparison.</p>
-
-<h2>What anarchists oppose</h2>
-
-<ul>
-<li><p>Hierarchy – anarchists oppose domination of one person or group of people by
-another as detrimental to human society. GitHub has built a very flat process,
-where &#8220;some days the CEO ships more code than I do.&#8221;</p></li>
-<li><p>Authority – all forms of authority must bear a heavy burden of proof in order
-to demonstrate their legitimacy and necessity. GitHub has hired people that have
-built awesome things, and have shown themselves to be a trusted authority in
-whatever kind of software that they build. Nobody needs to question if anyone
-is in the position to deploy or review some code.</p></li>
-<li><p>The state – centralised rule of a set geographical area (country) or people
-(nation) by a government of elites is inherently illegitimate. Okay, this has
-nothing to do with GitHub all together. All abstractions are leaky here. :)
-The same goes for Capitalism and State Socialism too.</p></li>
-<li><p>Nationalism and fascism – these are but the worst forms of the state, gaining
-the loyalty of the people with strong, often brutal discipline and by developing
-an almost religious, fevered love of the state and the rulers in the form of
-patriotism. GitHub actively uses multiple programming languages in production,
-and while it came out of the Ruby world, they don&#8217;t really run around pitching
-&#8220;Ruby is awesome and the only thing you should ever use.&#8221;</p></li>
-<li><p>Discrimination – nobody should be excluded or discriminated against based on
-nothing more than their gender, ethnicity, sexuality, background, or beliefs. I
-don&#8217;t know everyone at GitHub, but it&#8217;s a pretty diverse crew overall. This is
-hard for any tech company, but they&#8217;re doing pretty well on the race/sex thing.</p></li>
-</ul>
-
-
-<h2>What anarchists stand for</h2>
-
-<ul>
-<li><p>Liberty – all people should be free to live their life as they see fit,
-without rules and laws passed from above that serve no purpose other than
-control and domination, as long as they are not infringing the right of anybody
-else to the same. See Homan&#8217;s talk. That&#8217;s pretty much how they work.</p></li>
-<li><p>Equality – as stated above, nobody should face discrimination because of their
-gender, ethnicity, sexuality, background, or beliefs. See above comment about
-GitHub&#8217;s varied devs.</p></li>
-<li><p>Community – human civilisation evolved, from its primitive roots, through the
-priciple of Mutual Aid. GitHub has a lot of elements of mutal aid in their
-process, where they mention some people in some pull requests, work together
-on features, and generally high five until the code is running in production.</p></li>
-<li><p>Solidarity – humanity is divided only between the rulers and the ruled. Other
-divisions, those which bring about sexism, racism, heterosexism, and other
-bigotries, are promoted by the ruling class in order to divide their subjects
-and keep them under control. GitHub holds tons of events, buys everyone lots of
-beer, and just generally encourages lots of friendly interactions between
-everyone. CodeConf was a great group of diverse people hanging out and having
-a good time.</p></li>
-</ul>
-
-
-<h2>How anarchy would work</h2>
-
-<ul>
-<li><p>Self-management – groups, such as workforces or local communities, would be
-free to operate and govern themselves free of any higher authority. GitHub has
-no deadlines, no prioritization meetings, and 100% &#8220;do what you want&#8221; time.</p></li>
-<li><p>Free association – all individuals would be free to live where they wanted and
-associate with who they chose. Zach mentioned in his talk that different people
-work on different parts of the site, and it&#8217;s really based on what people are
-interested in and what they&#8217;ve done in the past.</p></li>
-<li><p>Voluntary federation – instead of the state, where indivudal communities and
-groups of people are bound together by the coercive force of a central
-authority, local communities and workers collectives can choose for themselves
-which other communities or collectives to associate with. Sort of like the free
-association comment, people get together and work on what they want to, and
-these groups are organic.</p></li>
-<li><p>Direct democracy – unlike in parliamentary democracy, these spokespeople would
-be just that, elected not to a position of authority but to voice decisions that
-remain in the hands of the people, as in trade union and workers council
-structures. Anybody can comment on a pull request, add some commits, put in
-their two cents, and be heard.</p></li>
-<li><p>Mutual Aid – in participatory communities and workers collectives, Mutual Aid
-is a central principle. Easily summed up with the phrase “from each according to
-his ability, to each according to his need,” this boils down to voluntary
-cooperation, fair distribution of resources, and help and support to those who
-need it within a local community. As mentioned before, everybody helps each
-other out at GitHub to get things done.</p></li>
-<li><p>Free, fair trade – for the sharing of resources between different communities
-and individuals who opt out of Mutual Aid, anarchy would see the emergence of a
-truly free market. This doesn&#8217;t really fit with software, I think. Same with
-&#8216;individual liberty.&#8217;</p></li>
-<li><p>Collective defence – this is not to say that anarchist society will contain
-“perfect people,” and there will certainly be acts of aggression, oppression,
-and violence – albeit on a lesser scale than is commonplace in today’s world.
-I&#8217;d liken this to things like &#8220;the site is down.&#8221; Everyone at GitHub cares about
-GitHub being up, and so they don&#8217;t need someone who&#8217;s responsible for &#8216;defense,&#8217;
-as if shit hits the fan, everyone chips in and takes care of it.</p></li>
-<li><p>Justice, not vengeance – courts would be elected for each individual case,
-rather than appointed and given unnecessary authority, with the aim to establish
-guilt or innocence, negotiate reparations, and organise rehabilitation rather
-than to support the oppressive prison systems which only make matters worse by
-serving as little more than universities of crime. I&#8217;m not sure this fits well
-here.</p></li>
-</ul>
-
-
-<h2>All abstractions are leaky</h2>
-
-<p>Just like when &#8216;lean&#8217; was a concept that applied manufacturing techniques to
-software development, I don&#8217;t think that &#8216;anarchism&#8217; is a 100% fit with GitHub&#8217;s
-process. I do think that it&#8217;s close enough to hold a lot of value, however,
-even to the point that Zach had to write a blog post about <a href="http://zachholman.com/posts/scaling-github-employees/">scaling</a>,
-which is something that <em>always</em> gets leveled at people talking about anarchism.
-I see GitHub in the same way that I see <a href="http://en.wikipedia.org/wiki/Anarchism_in_Spain">anarchist Catalonia</a> or the <a href="http://en.wikipedia.org/wiki/Free_Territory">Free Territory</a> in the Ukraine.
-It&#8217;s a place where ideals are actually working in practice. Let&#8217;s just hope that
-the <a href="http://en.wikipedia.org/wiki/Anarchist_Catalonia#Clashes_with_the_Communists">communists don&#8217;t betray them when the fascists show up</a>.</p>
-
-<p>Damn leaky abstractions.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -1947,6 +1973,10 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/12/21/redcarpet-is-awesome.html">Redcarpet Is _awesome_!</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/12/20/write-better-cukes-with-the-rel-attribute.html">Write Better Cukes With the Rel Attribute</a>
       </li>
     
@@ -1960,10 +1990,6 @@ You might also enjoy <a href="http://steveklabnik.com/">my website</a>.
     
       <li class="post">
         <a href="/2011/12/11/devise-actioncontroller-routingerror-no-route-matches-get-slash-users-slash-sign-out.html">Devise: ActionController::RoutingError (No Route Matches [GET] /users/sign_out)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/11/28/book-review-new-programmers-survival-manual.html">Book Review: New Programmer&#8217;s Survival Manual</a>
       </li>
     
   </ul>
