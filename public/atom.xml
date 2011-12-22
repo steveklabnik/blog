@@ -4,7 +4,7 @@
   <title>Literate Programming</title>
   <link href="http://blog.steveklabnik.com/atom.xml" rel="self"/>
   <link href="http://blog.steveklabnik.com/"/>
-  <updated>2011-12-21T00:02:22-05:00</updated>
+  <updated>2011-12-22T11:37:26-05:00</updated>
   <id>http://blog.steveklabnik.com/</id>
   <author>
     <name>Steve Klabnik</name>
@@ -392,6 +392,13 @@ edits an article, and click on it.&amp;#8221; We&amp;#8217;ve not only made the 
 match our idea of what a person would do, but the code has followed suit.
 Awesome. We can move this link anywhere on the page, our test doesn&amp;#8217;t break.
 We can change the text of the link, and our test doesn&amp;#8217;t break. So cool.&lt;/p&gt;
+
+&lt;h2&gt;What about stuff that&amp;#8217;s not links? What about data attributes?&lt;/h2&gt;
+
+&lt;p&gt;That&amp;#8217;s what &lt;a href=&quot;http://getsomere.st&quot;&gt;my book&lt;/a&gt; is going to talk about, sorry.
+These kinds of practical examples are one of the reasons I decided to write
+it in the first place, and I don&amp;#8217;t want to publish all the content on my
+blog&amp;#8230;&lt;/p&gt;
 
 &lt;h2&gt;Better tests through web standards&lt;/h2&gt;
 

@@ -215,6 +215,13 @@ match our idea of what a person would do, but the code has followed suit.
 Awesome. We can move this link anywhere on the page, our test doesn't break.
 We can change the text of the link, and our test doesn't break. So cool.
 
+## What about stuff that's not links? What about data attributes?
+
+That's what [my book](http://getsomere.st) is going to talk about, sorry.
+These kinds of practical examples are one of the reasons I decided to write
+it in the first place, and I don't want to publish all the content on my
+blog...
+
 ## Better tests through web standards
 
 Turns out that diving around in standards has some practical benefits after all,
