@@ -31,78 +31,70 @@ and log out. Bummer. But why?
 
 As I've been doing my research for [my book on REST](http://getsomere.st/), I've
 been doing a lot of reading about HTTP. And I kept coming across these kinds of
-curious comments in the spec. For example:
+curious comments in the spec. For example, [sec 9.6: PUT](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6):
 
-{% blockquote HTTP sec 9.6: PUT http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6 %}
-HTTP/1.1 does not define how a PUT method affects the state of an origin server.
-{% endblockquote %}
+> HTTP/1.1 does not define how a PUT method affects the state of an origin server.
 
 Uhhh... what? Don't we all know that PUT means that we should be updating a
 resource? And that we have to send the whole representation?
 
-When trying to get to the bottom of this, I came across this:
- comment from Fielding:
+When trying to get to the bottom of this, I came across [this comment from Fielding](http://www.imc.org/atom-protocol/mail-archive/msg05425.html ):
 
-{% blockquote Roy Fielding http://www.imc.org/atom-protocol/mail-archive/msg05425.html Re: Meaning of PUT, with (gasp) evidence %}
-FWIW, PUT does not mean store.  I must have repeated that a million
-times in webdav and related lists.  HTTP defines the intended
-semantics of the communication -- the expectations of each party.
-The protocol does not define how either side fulfills those expectations,
-and it makes damn sure it doesn't prevent a server from having
-absolute authority over its own resources.  Also, resources are
-known to change over time, so if a server accepts an invalid Atom
-entry via PUT one second and then immediately thereafter decides
-to change it to a valid entry for later GETs, life is grand.
-{% endblockquote %}
+> FWIW, PUT does not mean store.  I must have repeated that a million
+> times in webdav and related lists.  HTTP defines the intended
+> semantics of the communication -- the expectations of each party.
+> The protocol does not define how either side fulfills those expectations,
+> and it makes damn sure it doesn't prevent a server from having
+> absolute authority over its own resources.  Also, resources are
+> known to change over time, so if a server accepts an invalid Atom
+> entry via PUT one second and then immediately thereafter decides
+> to change it to a valid entry for later GETs, life is grand.
 
 Soooooooo wtf?
 
 Let's take a look again at what `PUT` does:
 
-{% blockquote %}
-The PUT method requests that the enclosed entity be stored under the supplied Request-URI. If the Request-URI refers to an already existing resource, the enclosed entity SHOULD be considered as a modified version of the one residing on the origin server. If the Request-URI does not point to an existing resource, and that URI is capable of being defined as a new resource by the requesting user agent, the origin server can create the resource with that URI.
-{% endblockquote %}
+> The PUT method requests that the enclosed entity be stored under the supplied
+> Request-URI. If the Request-URI refers to an already existing resource, the
+> enclosed entity SHOULD be considered as a modified version of the one residing
+> on the origin server. If the Request-URI does not point to an existing
+> resource, and that URI is capable of being defined as a new resource by the
+> requesting user agent, the origin server can create the resource with that URI.
 
 It says "store," Roy says "I don't mean store." Uhhhh...
 
 Here's my 'translated for the laymen' version of that quote:
 
-{% blockquote %}
-PUT means 'I'd like to later GET something at this URI.' If something is already
-there, update it. If there isn't anything there, then create it.
-{% endblockquote %}
+> PUT means 'I'd like to later GET something at this URI.' If something is already
+> there, update it. If there isn't anything there, then create it.
 
 That's it. It's talking about the semantics of what goes on: create or update.
 It doesn't actually say anything about how this is implemented. But if you PUT
-something to a URI, a GET needs to 200 afterwards. So what's the difference between PUT and POST?
+something to a URI, a GET needs to 200 afterwards. So what's the difference
+between PUT and POST? [HTTP sec 9.5: POST](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5 ):
 
-{% blockquote HTTP sec 9.5: POST http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5 %}
-The POST method is used to request that the origin server accept the entity
-enclosed in the request as a new subordinate of the resource identified by the
-Request-URI in the Request-Line.
-
-The actual function performed by the POST method is determined by the server and
-is usually dependent on the Request-URI. The posted entity is subordinate to
-that URI in the same way that a file is subordinate to a directory containing
-it, a news article is subordinate to a newsgroup to which it is posted, or a
-record is subordinate to a database.
-
-The action performed by the POST method might not result in a resource that can
-be identified by a URI.
-{% endblockquote %}
+> The POST method is used to request that the origin server accept the entity
+> enclosed in the request as a new subordinate of the resource identified by the
+> Request-URI in the Request-Line.
+> 
+> The actual function performed by the POST method is determined by the server and
+> is usually dependent on the Request-URI. The posted entity is subordinate to
+> that URI in the same way that a file is subordinate to a directory containing
+> it, a news article is subordinate to a newsgroup to which it is posted, or a
+> record is subordinate to a database.
+> 
+> The action performed by the POST method might not result in a resource that can
+> be identified by a URI.
 
 Again, it's really vague about what it _does_. With POST, it basically says "You
 have no idea what a POST does." What you _do_ know is the semantics of the
 action, POST 'requests a new subordinate, but it might not create something.'
 
-The _main_ difference is actually mentioned here:
+The _main_ difference is actually mentioned [here](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2 ):
 
-
-{% blockquote HTTP sec 9.1.2: Idempotent Methods http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2 %}
-Methods can also have the property of "idempotence" in that (aside from error or
-expiration issues) the side-effects of N > 0 identical requests is the same as
-for a single request. The methods GET, HEAD, PUT and DELETE share this property.
-{% endblockquote %}
+> Methods can also have the property of "idempotence" in that (aside from error or
+> expiration issues) the side-effects of N > 0 identical requests is the same as
+> for a single request. The methods GET, HEAD, PUT and DELETE share this property.
 
 Semantics again. PUT is _idempotent_, and POST is not. They could both be used
 for creation, they could both be used for updating. With POST, you don't need a
@@ -113,13 +105,12 @@ these semantics are up to you, but the semantics are what's important.
 
 ## So wtf does this have to do with Devise?
 
-The issue is that Devise's old semantics were wrong. A GET to `/users/sign_out` shouldn't modify state:
+The issue is that Devise's old semantics were wrong. A GET to `/users/sign_out`
+shouldn't modify state: [HTTP sec 9.1.1: Safe Methods](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.1 ):
 
-{% blockquote HTTP sec 9.1.1: Safe Methods http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.1 %}
-In particular, the convention has been established that the GET and HEAD methods
-SHOULD NOT have the significance of taking an action other than retrieval. These
-methods ought to be considered "safe".
-{% endblockquote %}
+> In particular, the convention has been established that the GET and HEAD methods
+> SHOULD NOT have the significance of taking an action other than retrieval. These
+> methods ought to be considered "safe".
 
 When Devise used GETs to log you out, that was a violation of the semantics of
 GET. Here's the interesting part, though: Since POST is a super generic 'unsafe

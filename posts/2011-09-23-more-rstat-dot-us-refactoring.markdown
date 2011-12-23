@@ -54,24 +54,22 @@ end
 This follows a more OO style, and is a bit more well-factored. Here's his
 description of what he did:
 
-{% blockquote %}
-1. Switched to a class and gave it a name that is a noun (maybe name
-should be different though).
-2. Moved common method params into instance variables.
-3. This simplified the mention/follow/unfollow methods enough to be on one line.
-4. Renamed "send_to_salmon_endpoint" to "deliver" because it feels
-nicer, the "salmon endpoint" can be assumed due to the name of the
-class. I generally don't like to put the class name in the method
-name.
-5. Extracted commented out into its own method with the same name. I
-don't know if this is really necessary though (same reason as above).
-
-The only thing that bothers me now is the constant access of
-@user.author and @feed.author. This makes me think it should be
-interacting directly with authors. However you still need access to
-@user.to_rsa_keypair but maybe that method could be moved elsewhere
-more accessible.
-{% endblockquote %}
+> 1. Switched to a class and gave it a name that is a noun (maybe name
+> should be different though).
+> 2. Moved common method params into instance variables.
+> 3. This simplified the mention/follow/unfollow methods enough to be on one line.
+> 4. Renamed "send_to_salmon_endpoint" to "deliver" because it feels
+> nicer, the "salmon endpoint" can be assumed due to the name of the
+> class. I generally don't like to put the class name in the method
+> name.
+> 5. Extracted commented out into its own method with the same name. I
+> don't know if this is really necessary though (same reason as above).
+> 
+> The only thing that bothers me now is the constant access of
+> @user.author and @feed.author. This makes me think it should be
+> interacting directly with authors. However you still need access to
+> @user.to_rsa_keypair but maybe that method could be moved elsewhere
+> more accessible.
 
 All of these changes are pretty good. Ryan's suggestions for moving forward are
 pretty good, as well, but I'd add one more thing: we're starting to collect a

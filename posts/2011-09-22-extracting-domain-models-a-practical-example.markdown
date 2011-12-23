@@ -114,11 +114,10 @@ describe "salmon update" do
 end
 ```
 
-Holy. Fuck. Seriously. Let me just quote [Avdi Grimm](http://avdi.org):
+Holy. Fuck. Seriously. Let me just quote [Avdi Grimm](http://avdi.org/devblog/2011/04/07/rspec-is-for-the-literate/ ):
 
-{% blockquote Avdi Grimm, http://avdi.org/devblog/2011/04/07/rspec-is-for-the-literate/ "Rspec is for the Literate" %}
-Mocks, and to some degree RSpec, are like the Hydrogen Peroxide of programming: they fizz up where they encounter subtle technical debt.
-{% endblockquote %}
+> Mocks, and to some degree RSpec, are like the Hydrogen Peroxide of programming:
+> they fizz up where they encounter subtle technical debt.
 
 This test class is insane. It runs faster than many people's integration tests,
 clocking in at about 0.4 seconds. But that's still an order of magnitude slower

@@ -11,9 +11,8 @@ on a few things. So here we go. Let's rap about the Presenter pattern, shall we?
 
 ## No seriously, helpers suck
 
-{% blockquote ruby-lang: about http://www.ruby-lang.org/en/about/ %}
-In Ruby, everything is an object. Every bit of information and code can be given their own properties and actions.
-{% endblockquote %}
+> In Ruby, everything is an object. Every bit of information and code can be
+given their own properties and actions. - ruby-lang.org/about
 
 ... except helpers. Why is it in Ruby that everything is an object, even
 integers, yet as soon as we need to format a date, we all turn into Dijkstra and
@@ -256,11 +255,13 @@ directory in app for your presenters. In this case, I'd be running
 `touch app/presenters/dictionary.rb` pretty quick. The other case is to
 put things in lib. This whole debacle uncovers something that @avdi went
 on a rant about over the last few days: models don't have to inherit from
-anything. Here's what Wikipedia says about models:
+anything. Here's [what Wikipedia says about models](http://en.wikipedia.org/wiki/Model–view–controller#Concepts ):
 
-{% blockquote MVC http://en.wikipedia.org/wiki/Model–view–controller#Concepts %}
-The model manages the behaviour and data of the application domain, responds to requests for information about its state (usually from the view), and responds to instructions to change state (usually from the controller). In event-driven systems, the model notifies observers (usually views) when the information changes so that they can react.
-{% endblockquote %}
+> The model manages the behaviour and data of the application domain, responds
+> to requests for information about its state (usually from the view), and
+> responds to instructions to change state (usually from the controller). In
+> event-driven systems, the model notifies observers (usually views) when the
+> information changes so that they can react.
 
 See anything about "saves stuff to the database?" Okay, 'manages... data' could
 be, but the point is, it's not _required_. Models are the reification of a

@@ -12,11 +12,9 @@ discovered a neat technique that helps you to write better Cucumber steps.
 Nobody wants to be [cuking it wrong](http://elabs.se/blog/15-you-re-cuking-it-wrong),
 but what does that really mean? Here's Jonas' prescription:
 
-{% blockquote %}
-A step description should never contain regexen, CSS or XPath selectors, any
-kind of code or data structure. It should be easily understood just by reading
-the description.
-{% endblockquote %}
+> A step description should never contain regexen, CSS or XPath selectors, any
+> kind of code or data structure. It should be easily understood just by reading
+> the description.
 
 Great. Let's [pop the why stack](http://www.theregister.co.uk/2007/06/25/thoughtworks_req_manage/)
 a few times, shall we?
@@ -109,9 +107,7 @@ a problem, but it's certainly not a general solution. So that's out.
 "Okay, then just use a class. Your blog sucks." Well, let's check out what
 [the HTML5 spec says about classes](http://www.w3.org/TR/html5/elements.html#classes).
 
-{% blockquote %}
-Basically nothing about semantics.
-{% endblockquote %}
+> Basically nothing about semantics.
 
 Okay, so that's paraphrased. But still, the spec basically says some stuff
 about the details of implementing classes, but absolutely nothing about the
@@ -137,41 +133,35 @@ a lot of digging into various standards documents. And one of the most important
 attributes from a REST perspective is one that nobody ever talks about or uses:
 the `rel` attribute. From [the HTML5 spec](http://www.w3.org/TR/html5/links.html#attr-hyperlink-rel):
 
-{% blockquote %}
-The rel attribute on a and area elements controls what kinds of links the
-elements create. The attribue's value must be a set of space-separated tokens.
-The allowed keywords and their meanings are defined below.
-{% endblockquote %}
+> The rel attribute on a and area elements controls what kinds of links the
+> elements create. The attribue's value must be a set of space-separated tokens.
+> The allowed keywords and their meanings are defined below.
 
 Below? That's [here](http://www.w3.org/TR/html5/links.html#linkTypes):
 
 
-{% blockquote %}
-The following table summarizes the link types that are defined by this
-specification. This table is non-normative; the actual definitions for the link
-types are given in the next few sections.
-
-alternate: Gives alternate representations of the current document.
-author: Gives a link to the current document's author.
-bookmark: Gives the permalink for the nearest ancestor section.
-{% endblockquote %}
+> The following table summarizes the link types that are defined by this
+> specification. This table is non-normative; the actual definitions for the link
+> types are given in the next few sections.
+> 
+> alternate: Gives alternate representations of the current document.
+> author: Gives a link to the current document's author.
+> bookmark: Gives the permalink for the nearest ancestor section.
 
 Hey now! Seems like we're on to something. There's also [RFC 5988](http://tools.ietf.org/html/rfc5988),
 "Web Linking". [Section four](http://tools.ietf.org/html/rfc5988#section-4)
 talks about Link Relation Types:
 
-{% blockquote %}
-In the simplest case, a link relation type identifies the semantics
-of a link.  For example, a link with the relation type "copyright"
-indicates that the resource identified by the target IRI is a
-statement of the copyright terms applying to the current context IRI.
-
-Link relation types can also be used to indicate that the target
-resource has particular attributes, or exhibits particular
-behaviours; for example, a "service" link implies that the identified
-resource is part of a defined protocol (in this case, a service
- description).
-{% endblockquote %}
+> In the simplest case, a link relation type identifies the semantics
+> of a link.  For example, a link with the relation type "copyright"
+> indicates that the resource identified by the target IRI is a
+> statement of the copyright terms applying to the current context IRI.
+> 
+> Link relation types can also be used to indicate that the target
+> resource has particular attributes, or exhibits particular
+> behaviours; for example, a "service" link implies that the identified
+> resource is part of a defined protocol (in this case, a service
+> description).
 
 Bam! Awesome! This is exactly what we want!
 
