@@ -29,3 +29,4 @@ REDIRECTS = [
   { :from => "/about-crows", :to => "/2009/12/02/about-crows.html" },
   { :from => "/2011/09/23/more-rstat-dot-us-refatoring.html", :to => "/2011/09/23/more-rstat-dot-us-refactoring.html" },
 ]
+

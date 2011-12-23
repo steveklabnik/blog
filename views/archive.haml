@@ -1,0 +1,8 @@
+%h1 Archive
+
+Here are all of the posts I've made:
+
+%ul
+  - @archives.each do |title, link|
+    %li
+      %a{:href => link}= title

@@ -1,0 +1,76 @@
+!!! 5
+/[if lt IE 7 ] <html class="ie ie6" lang="en">
+/[if IE 7 ] <html class="ie ie7" lang="en">
+/[if IE 8 ] <html class="ie ie8" lang="en">
+/ [if (gte IE 9)|!(IE)]><!
+%html{:lang => "en"}
+  / <![endif]
+  %head
+    /
+      Basic Page Needs
+      \==================================================
+    %meta{:charset => "utf-8"}/
+    %title= title
+    <link href="http://feeds.feedburner.com/steveklabnik" rel="alternate" title="Literate Programming" type="application/atom+xml"/>
+    
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    /
+      Mobile Specific Metas
+      \==================================================
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1", :name => "viewport"}/
+    /
+      CSS
+      \==================================================
+    %link{:href => "/stylesheets/base.css", :rel => "stylesheet"}/
+    %link{:href => "/stylesheets/skeleton.css", :rel => "stylesheet"}/
+    %link{:href => "/stylesheets/layout.css", :rel => "stylesheet"}/
+    %link{:href => "/stylesheets/prettyify.css", :rel => "stylesheet"}/
+    
+    /
+      Favicons
+      \==================================================
+    %link{:href => "/images/favicon.ico", :rel => "shortcut icon"}/
+    %link{:href => "/images/apple-touch-icon.png", :rel => "apple-touch-icon"}/
+    %link{:href => "/images/apple-touch-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}/
+    %link{:href => "/images/apple-touch-icon-114x114.png", :rel => "apple-touch-icon", :sizes => "114x114"}/
+  %body
+    /
+      Primary Page Layout
+      \==================================================
+    .container
+      .three.columns.sidebar
+        %nav
+          %h3#logo Literate Programming
+          %p by <a href="http://steveklabnik.com/">Steve Klabnik</a>
+          %hr.remove-bottom/
+          %h5 Meta
+          %ul
+            %li <a href="/archive">All Posts</a>
+            %li <a href="http://feeds.feedburner.com/steveklabnik">Feed</a>
+          %hr.remove-bottom/
+          = yield_content :sidebar
+      .twelve.columns.offset-by-one.content
+        = yield
+    / container
+    /
+      JS
+      \==================================================
+    %script{:src => "http://code.jquery.com/jquery-1.6.4.min.js"}
+    %script{:src => "/javascripts/tabs.js"}
+    %script{:src => "/javascripts/app.js"}
+    :javascript
+       var _gaq = _gaq || [];
+       _gaq.push(['_setAccount', 'UA-10289851-1']);
+       _gaq.push(['_trackPageview']);
+
+       (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+    
+    
+    /
+      End Document
+      \==================================================

@@ -1,0 +1,5 @@
+%h1= @title
+= @content
+- content_for :sidebar do
+  %h5 Table of Contents
+  = format_outline(@outline)

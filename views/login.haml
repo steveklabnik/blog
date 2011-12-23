@@ -1,0 +1,11 @@
+.sixteen.columns
+  %h2 Log in
+
+  %form{:method => "post", :action => "/login"}
+    %label{:for => "user_email"} Email
+    %input{:type => "text", :id => "user_email", :name => "user[email]"}
+    %label{:for => "user_password"} Password
+    %input{:type => "text", :id => "user_password", :name => "user[password]"}
+    %input{:type => "submit"}
+    or
+    %a{:href => "/signup"} sign up

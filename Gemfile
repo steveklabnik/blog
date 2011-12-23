@@ -1,17 +1,21 @@
-source "http://rubygems.org"
+source :rubygems
 
-group :development do
-  gem 'rake'
-  gem 'rack'
-  gem 'jekyll'
-  gem 'rdiscount'
-  gem 'pygments.rb'
-  gem 'RedCloth'
-  gem 'haml', '>= 3.1'
-  gem 'compass', '>= 0.11'
-  gem 'rubypants'
-  gem 'rb-fsevent'
-  gem 'stringex'
+gem 'sinatra'
+gem 'sinatra_warden'
+gem 'sinatra-subdomain'
+gem 'thin'
+gem 'rake'
+gem 'haml'
+gem 'redcarpet'
+gem 'sinatra-content-for', :require => 'sinatra/content_for'
+gem 'rack-flash'
+gem 'bcrypt-ruby'
+gem 'data_mapper'
+
+group :production do
+  gem "dm-postgres-adapter"
 end
 
-gem 'sinatra', '1.2.6'
+group :development do
+  gem "dm-sqlite-adapter"
+end
