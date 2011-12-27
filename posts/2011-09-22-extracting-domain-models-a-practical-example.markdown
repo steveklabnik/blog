@@ -20,9 +20,9 @@ much easier to test. They have less dependencies, less code, and are much
 simpler than the Mega Models that happen if you have a 1-1 model to table
 ratio.
 
-Let's check out the code. It's in our User model:
+Let's check out the code. It's in our [User model](https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L209):
 
-```ruby app/models/user.rb https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L209
+``` ruby
 # Send an update to a remote user as a Salmon notification
 def send_mention_notification update_id, to_feed_id
   f = Feed.first :id => to_feed_id
@@ -49,7 +49,7 @@ some tests in place so we know _everything_ isn't broken. Examining this method,
 we need two things: an `update_id` and a `feed_id`. Here's my first stab at an
 integration test:
 
-```ruby test/models/notify_via_salmon_test.rb
+``` ruby
 describe "salmon update" do
   it "integration regression test" do
     feed = Feed.create
@@ -71,7 +71,7 @@ This is an integration test, we're obviously testing stuff with a ton of models.
 After running `ruby test/models/notify_via_salmon.rb` about a zillion times, I
 ended up with this running test:
 
-```ruby test/models/notify_via_salmon.rb
+``` ruby
 require 'minitest/autorun'
 require 'rspec/mocks'
 
@@ -132,14 +132,14 @@ code by eliminating all of this junk.
 
 First, let's extract this out to a domain model. Here's the new code:
 
-```ruby app/models/user.rb
+``` ruby
 # Send an update to a remote user as a Salmon notification
 def send_mention_notification update_id, to_feed_id
   NotifyViaSalmon.mention(update_id, to_feed_id)
 end
 ```
 
-```ruby app/models/notify_via_salmon.rb
+``` ruby
 module NotifyViaSalmon
   extend self
 
@@ -174,14 +174,14 @@ This is a form of Lean On The Compiler. This test is now failing because it's
 relying on stuff that used to be internal to the User, and we don't have that
 stuff now. After doing this a few times, we're left with this:
 
-```ruby app/models/user.rb
+``` ruby
 # Send an update to a remote user as a Salmon notification
 def send_mention_notification update_id, to_feed_id
   NotifyViaSalmon.mention(self, update_id, to_feed_id)
 end
 ```
 
-```ruby app/models/notify_via_salmon.rb
+``` ruby
 module NotifyViaSalmon
   extend self
 
@@ -211,7 +211,7 @@ Next step: let's break the hard dependency this method has on both Feed and
 Update. We can do this by moving the finds up into the User method instead of
 keeping them in the mention method:
 
-```ruby app/models/user.rb
+``` ruby
 # Send an update to a remote user as a Salmon notification
 def send_mention_notification update_id, to_feed_id
   feed = Feed.first :id => to_feed_id
@@ -221,7 +221,7 @@ def send_mention_notification update_id, to_feed_id
 end
 ```
 
-```ruby app/models/notify_via_salmon.rb
+``` ruby
 module NotifyViaSalmon
   extend self
 
@@ -242,7 +242,7 @@ end
 Okay. Tests passing. Sweet. Now we can try testing _just_ the mention method.
 Let's try it by killing most of that crap that was in our test:
 
-```ruby test/models/notify_via_salmon_test.rb
+``` ruby
 require 'minitest/autorun'
 require 'rspec/mocks'
 
@@ -276,7 +276,7 @@ RSpec::Mocks::MockExpectationError: Stub received unexpected message :author wit
 First of all, daaaaamn. 0.001 seconds. Nice. Secondly, okay, we are getting some
 messages sent to our stubs. Let's flesh them out to make things pass:
 
-```ruby test/models/notify_via_salmon_test.rb
+``` ruby
 require 'minitest/autorun'
 require 'rspec/mocks'
 require 'ostatus'
@@ -315,9 +315,9 @@ We could do some more work on this method. There are a few things that are
 a bit smelly: the nested stub of User is not great. The fact that we're stubbing
 out three external dependencies isn't great. But before we get to that, let's
 check out another method that looks similar:
-`send_{follow,unfollow}_notification`. Here's some code:
+`send_{follow,unfollow}_notification`. Here's [some code](https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L167):
 
-```ruby app/models/user.rb https://github.com/hotsh/rstat.us/blob/362cb38031/app/models/user.rb#L167
+``` ruby
 # Send Salmon notification so that the remote user
 # knows this user is following them
 def send_follow_notification to_feed_id
@@ -352,7 +352,7 @@ end
 Look familliar? Yep! 90% the same code! We'll do the same process to these
 methods, just like the other one. Check out this code and test:
 
-```ruby app/models/user.rb
+``` ruby
 # Send Salmon notification so that the remote user
 # knows this user is following them
 def send_follow_notification to_feed_id
@@ -378,7 +378,7 @@ def send_mention_notification update_id, to_feed_id
 end
 ```
 
-```ruby app/models/notify_via_salmon.rb
+``` ruby
 module NotifyViaSalmon
   extend self
 
@@ -418,7 +418,7 @@ module NotifyViaSalmon
 end
 ```
 
-```ruby test/models/notify_via_salmon_test.rb
+``` ruby
 require 'minitest/autorun'
 require 'rspec/mocks'
 require 'ostatus'
@@ -479,7 +479,7 @@ Now we can see some of these patterns start to emerge, eh? All of this stuff is
 starting to come together. Let's get rid of the URI and Net::HTTP stuff, as it's
 just straight up identical in all three. Pretty basic Extract Method:
 
-```ruby app/models/notify_via_salmon.rb
+``` ruby
 module NotifyViaSalmon
   extend self
 
@@ -518,7 +518,7 @@ end
 We run our tests, it still all works. Now we can just mock out the endpoint
 method, and all of our tests on the individual methods become much, much simpler:
 
-```ruby test/models/notify_via_salmon_test.rb
+``` ruby
 require 'minitest/autorun'
 require 'rspec/mocks'
 require 'ostatus'
