@@ -18,7 +18,7 @@ against modules. The answer was, 'because it's simpler, and the first thing
 I thought of.' He shared with me an alternate implementation that I like too,
 and I wanted to share with you. Check it:
 
-```ruby app/models/salmon_notifier.rb
+``` ruby app/models/salmon_notifier.rb
 class SalmonNotifier
   def initialize(user, feed)
     @user = user

@@ -31,7 +31,7 @@ it hides in plain sight. Loved by those who've mastered Rails, Plain Old Ruby
 Objects, or "POROs" as some like to call them, are a hidden weapon against
 complexity. Here's what I mean. Examine this 'simple' model:
 
-{% codeblock lang:ruby %}
+``` ruby
 class Post < ActiveRecord::Base
   def self.as_dictionary
     dictionary = ('A'..'Z').inject({}) {|h, l| h[l] = []; h}
@@ -43,26 +43,26 @@ class Post < ActiveRecord::Base
     dictionary
   end
 end
-{% endcodeblock %}
+```
 
 We want to display an index page of all our posts, and do it by first letter.
 So we build up a dictionary, and then put our posts in it. I'm assuming we're
 not paginating this, so don't get caught up in querying for all Posts. The
 important thing is the idea: we can now display our posts by title:
 
-{% codeblock lang:haml %}
+``` ruby
 - Post.as_dictionary do |letter, list|
   %p= letter
   %ul
   - list.each do |post|
     %li= link_to post
-{% endcodeblock %}
+```
 
 Sure. And in one way, this code isn't _bad_. It's also not good: We've mixed a
 presentational concern into our model, which is supposed to represent buisness
 logic. So let's fix that, via a Presenter:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   def initialize(collection)
     @collection = collection
@@ -78,7 +78,7 @@ class DictionaryPresenter
     dictionary
   end
 end
-{% endcodeblock %}
+```
 
 We can use it via `DictionaryPresenter.new(Post.all).as_dictionary`. This has
 tons of benefits: we've moved presentation logic out of the model. We've
@@ -100,7 +100,7 @@ again. You guessed it: POROs to the rescue!
 Let's change our presenter slightly, to also accept an organizational policy
 object:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   def initialize(policy, collection)
     @policy = policy
@@ -117,11 +117,11 @@ class DictionaryPresenter
     dictionary
   end
 end
-{% endcodeblock %}
+```
 
 Now, we can inject a policy, and have them be different:
 
-{% codeblock lang:ruby %}
+``` ruby
 class UserCategorizationPolicy
   def self.category_for(user)
     user.username[0]
@@ -137,13 +137,13 @@ class PostCategorizationPolicy
     end
   end
 end
-{% endcodeblock %}
+```
 
 Bam!
 
-{% codeblock lang:ruby %}
+``` ruby
 DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary
-{% endcodeblock %}
+```
 
 Yeah, so that's getting a bit long. It happens. :) You can see that now each
 concept has one representation in our system. The presenter doesn't care how
@@ -156,7 +156,7 @@ Ruby with one of my favorite patterns from "Working Effectively with Legacy
 Code," we can take complex computations and turn them into objects. Look at this
 code:
 
-{% codeblock lang:ruby %}
+``` ruby
 class Quote < ActiveRecord::Base
   #<snip>
   def pretty_turnaround
@@ -178,7 +178,7 @@ class Quote < ActiveRecord::Base
     "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
   end
 end
-{% endcodeblock %}
+```
 
 Yikes! This method prints a turnaround time, but as you can see, it's a complex
 calculation. We'd be able to understand this much more easily of we used Extract
@@ -202,7 +202,7 @@ I've changed this slightly for Ruby, since we can't Lean On The Compiler, and a
 few of Feathers' steps are about doing this. Anyway, let's try this on that
 code. Step 1:
 
-{% codeblock lang:ruby %}
+``` ruby
 class Quote < ActiveRecord::Base
   def pretty_turnaround
     #snip
@@ -211,20 +211,20 @@ class Quote < ActiveRecord::Base
   class TurnaroundCalculator
   end
 end
-{% endcodeblock %}
+```
 
 Two:
 
-{% codeblock lang:ruby %}
+``` ruby
 class TurnaroundCalculator
   def calculate
   end
 end
-{% endcodeblock %}
+```
 
 Three:
 
-{% codeblock lang:ruby %}
+``` ruby
 class TurnaroundCalculator
   def calculate
     return "" if @turnaround.nil?
@@ -245,7 +245,7 @@ class TurnaroundCalculator
     "#{time.strftime("%A %d %B")} (#{days_from_today} business days from today)"
   end
 end
-{% endcodeblock %}
+```
 
 I like to give it a generic name at first, and then give it a better one in step
 5, after we see what it really does. often our code will inform us of a good
@@ -253,7 +253,7 @@ name.
 
 Four:
 
-{% codeblock lang:ruby %}
+``` ruby
 class TurnaroundCalculator
   def initialize(purchased_at, turnaround)
     @purchased_at = purchased_at
@@ -264,17 +264,17 @@ class TurnaroundCalculator
     #snip
   end
 end
-{% endcodeblock %}
+```
 
 Five:
 
-{% codeblock lang:ruby %}
+``` ruby
 class Quote < ActiveRecord::Base
   def pretty_turnaround
     TurnaroundCalculator.new(purchased_at, turnaround).calculate
   end
 end
-{% endcodeblock %}
+```
 
 Done! We should be able to run our tests and see them pass. Even if 'run our
 tests' consists of manually checking it out...
@@ -286,7 +286,7 @@ for just the Calculator, and we've split out the idea of calculation into one
 place, where it can easily be changed later. Here's our class, a few
 refactorings later:
 
-{% codeblock lang:ruby %}
+``` ruby
 class TurnaroundCalculator
   def calculate
     return "" if @turnaround.nil?
@@ -338,7 +338,7 @@ class TurnaroundCalculator
     end
   end
 end
-{% endcodeblock %}
+```
 
 Wow. This code I wrote three years ago isn't perfect, but it's almost
 understandable now. And each of the bits makes sense. This is after two or three
@@ -350,24 +350,24 @@ is well-factored, you can often get there.
 This idea of extracting domain objects that are pure Ruby is even in Rails
 itself. Check out this route:
 
-{% codeblock lang:ruby %}
+``` ruby
 root :to => 'dashboard#index', :constraints => LoggedInConstraint
-{% endcodeblock %}
+```
 
 Huh? LoggedInConstraint?
 
-{% codeblock lang:ruby %}
+``` ruby
 class LoggedInConstraint
   def self.matches?(request)
     current_user
   end
 end
-{% endcodeblock %}
+```
 
 Whoah. Yep. A domain object that describes our routing policy. Awesome. Also,
 validations, blatantly stolen from [omgbloglol](http://omgbloglol.com/post/392895742/improved-validations-in-rails-3):
 
-{% codeblock lang:ruby %}
+``` ruby
 def SomeClass < ActiveRecord::Base
   validate :category_id, :proper_category => true
 end
@@ -379,7 +379,7 @@ class ProperCategoryValidator < ActiveModel::EachValidator
     end
   end
 end
-{% endcodeblock %}
+```
 
 This isn't a plain Ruby class, but you get the idea.
 

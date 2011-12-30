@@ -38,7 +38,7 @@ post, so just keep that in the back of your brain.
 Well, first of all, [class methods also suck](http://nicksda.apotomo.de/2011/07/are-class-methods-evil/). Here's the
 issue: Can you tell me the difference between these two methods?
 
-{% codeblock lang:ruby %}
+``` ruby
 def foo
   "hello"
 end
@@ -51,7 +51,7 @@ end
 
 foo
 Bar.foo
-{% endcodeblock %}
+```
 
 Yep, that's right. You can see it clearly from the last two lines: class methods
 are functions that happen to be namespaced. That means they're slightly better,
@@ -64,7 +64,7 @@ world example, but...) generally works a little different. Usually, I make
 presenters that actually stand in for the objects they're presenting. Check
 this out. Here's the presenter I showed you:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   def initialize(collection)
     @collection = collection
@@ -80,11 +80,11 @@ class DictionaryPresenter
     dictionary
   end
 end
-{% endcodeblock %}
+```
 
 The real-world presenter that I used this for looked like this:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   include Enumerable
 
@@ -100,20 +100,20 @@ class DictionaryPresenter
     @dictionary.each &blk
   end
 end
-{% endcodeblock %}
+```
 
 ... or close to this. There was an 'other' category, and a few other things...
 but you get the idea. Now, instead of this:
 
-{% codeblock lang:ruby %}
+``` ruby
 @posts = DictionaryPresenter.new(Post.all).as_dictionary
-{% endcodeblock %}
+```
 
 You do this:
 
-{% codeblock lang:ruby %}
+``` ruby
 @posts = DictionaryPresenter.new(Post.all)
-{% endcodeblock %}
+```
 
 And the presenter actually stands in for the hash. A subtle but important
 difference. This gives you more options, because you have a real, live object
@@ -136,7 +136,7 @@ blocks.
 
 For reference, the old code, put into the new code:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   include Enumerable
 
@@ -158,11 +158,11 @@ class UserCategorizationPolicy
     user.username[0]
   end
 end
-{% endcodeblock %}
+```
 
 We could use blocks instead:
 
-{% codeblock lang:ruby %}
+``` ruby
 class DictionaryPresenter
   include Enumerable
 
@@ -182,7 +182,7 @@ end
 DictionaryPresenter.new(Post.all) do |item|
   item.title[0]
 end
-{% endcodeblock %}
+```
 
 While this is shorter, and a bit more Rubyish, it also means that we lose the
 <a href="http://en.wikipedia.org/wiki/Reification_(computer_science)">reification</a> of
@@ -195,7 +195,7 @@ This does get to the root of another thing that will end up being a follow-up:
 What's the difference between closures and objects? If you don't know, maybe
 this will get you thinking:
 
-{% codeblock lang:ruby %}
+``` ruby
 #ugh, this is slightly odd, thanks Ruby!
 def apply(proc=nil, &blk)
   if block_given?
@@ -224,7 +224,7 @@ end
 apply proc
 
 apply my_proc
-{% endcodeblock %}
+```
 
 Chew on that a while.
 
@@ -233,9 +233,9 @@ Chew on that a while.
 Absolutely. `DictionaryPresenter.new(PostCategorizationPolicy, Post.all).as_dictionary`
 is too long. 100% there. Good thing that I'd _actually_ write this:
 
-{% codeblock lang:ruby %}
+``` ruby
 Dictionary.new(Post.all, ByTitle)
-{% endcodeblock %}
+```
 
 I switched the arguments around, because it reads better. When writing blog
 posts, you have to balance writing code samples that explain what you're
@@ -287,7 +287,7 @@ Ruby classes, but if they get slightly more complicated, you need to check out
 [Draper](https://github.com/jcasimir/draper) by my buddy Jeff Casimir. It lets
 you do stuff like this:
 
-{% codeblock lang:ruby %}
+``` ruby
 class ArticleDecorator < ApplicationDecorator
   decorates :article
 
@@ -298,6 +298,6 @@ end
 
 article = ArticleDecorator.find(1)
 article.author_name
-{% endcodeblock %}
+```
 
 There's a lot of features to it, so check it out on GitHub. Totally worthwhile.
