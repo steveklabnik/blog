@@ -109,3 +109,8 @@ straightforward criticism: it's easier to trash something you love. The real iss
 is that changing these things would require some really serious changes. It'd
 involve re-architecting large portions of things that people classically identify
 with Rails, and I'm not sure that Rails wants to or can do that.
+
+This post is light on examples. I want this to be the _starting point_ of a
+discussion, not the end of it. Expect more, in detail, from me in the future.
+What do you think? Are these problems pain points for you? Are they worth
+fixing? Are they actually problems?
