@@ -23,7 +23,7 @@ I fired up a brand new Rails app by doing this:
 ```
 $ rails new hateoas_example
 $ cd hateoas_example
-$ cat > Gemfile
+$ cat >> Gemfile
 gem "draper"
 ^D
 $ bundle
