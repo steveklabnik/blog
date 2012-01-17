@@ -13,20 +13,20 @@ move between the two frameworks.
 ## Step One: Evaluate your test coverage
 
 In <a href="http://www.amazon.com/gp/product/0131177052/ref=as_li_ss_tl?ie=UTF8&tag=stesblo026-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0131177052">Working Effectively with Legacy Code</a><img src="http://www.assoc-amazon.com/e/ir?t=stesblo026-20&l=as2&o=1&a=0131177052" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />(this is an affiliate link. Does this bother you?),
-Michael Feathers introduces a fantastic technique called "Lean on the Compiler." 
+Michael Feathers introduces a fantastic technique called "Lean on the Compiler."
 It's on page 315, for those of you playing along at home.
 
 > The primary purpose of a compiler is to translate source code into some
 > other form, but in statically typed languages, you can do much more with
 > a compiler. You can take advantage of its type checking and use it to identify
 > which changes you need to make. I call this practice _Leaning on the Compiler_.
-> 
+>
 > _Lean on the Compiler_ is a powerful technique, but you have to know what
 > its limits are; if you don't, you can end up making some serious mistakes.
 
 Now, in a language like Ruby, we don't have type checking. We do have something
-that double checks our code correctness: tests. Just like static type checks, 
-tests can not _ensure_ that you've done your transformations, but they sure
+that double checks our code correctness: tests. Just like static type checks,
+tests cannot _ensure_ that you've done your transformations, but they sure
 as hell can help. This becomes step one in the effort to move from one
 framework to another: evaluate your test coverage.
 
@@ -41,11 +41,11 @@ that's _not_ covered by acceptance tests?
 While the happy path is a big deal, when moving to a new framework, we're going
 to introduce a high chance of people encountering issues, so the sad path is
 also important. I personally tend to not write very many sad path acceptance
-tests, and leave that for tests at the lower level. This is a good time to take
+tests and leave that for tests at the lower level. This is a good time to take
 stock of the worst of your worst paths: is there certain functionality that's
 _absolutely_ important to be handled 100% correctly? Then write some new
 acceptance tests. As with any kind of engineering project, there's a tradeoff
-here: You can't get coverage of every possible situation. Tests are supposed to
+here: you can't get coverage of every possible situation. Tests are supposed to
 give you confidence in your code, so liberally add coverage for any situation
 that makes you nervous.
 
@@ -60,7 +60,7 @@ Sinatra, outside of maybe model to model integration tests.
 These kinds of tests are much more of a sanity check than anything else for
 the purposes of this kind of move. It's good that they pass, but really, they
 shouldn't be too reliant on the framework you're using. They're better for
-making sure you've put things in the correct directories, and haven't forgotten
+making sure you've put things in the correct directories and haven't forgotten
 anything in the move.
 
 I'm not even sure what a 'view test' would be in Sinatra, and they tend to be
@@ -80,18 +80,17 @@ interested in the idea of using a [subtree
 merge](http://help.github.com/subtree-merge/) to keep being able to update the
 original Sinatra project while working on the new Rails project.
 
-First step is of course, make a new branch. This transition will probably take
+First step is, of course, make a new branch. This transition will probably take
 some time, and you may want to push hotfixes into production during that period.
 Using master is not advised.
 
 Next, make a copy of everything and shove it in a temp directory. Then delete
 everything in the git repo (except the .git directory, of course) and commit
-that blank slate. Back up a directory, run `rails new myproject` with the
-correct name, and you'll get a blank rails app. `cd myproject` and
-`mkdir sinatra`, then copy the backup your made into the sinatra directory.
-Finally, commit this.
+that blank slate. Back up one directory above your project directory, run
+`rails new myproject` with your project's name, and you'll get a blank rails
+app. `cd myproject` and `mkdir sinatra`, then copy the backup you made from the temp directory into the sinatra directory. Finally, commit this.
 
-Now you've got a new blank Rails app, all your old code in a directory, and
+Now you've got a new blank Rails app with all your old code in a directory, and
 you can start moving things over.
 
 ## Step Three: Set up your test harness
@@ -104,10 +103,10 @@ problems.
 
 As always: red, green, refactor. I'd make a simple test that doesn't test
 anything, `assert true`. Make sure that your `rake test` or `rspec .` or
-whatever you'll use to run the tests works, and then remove the dummy
+whatever you'll use to run the tests works and then remove the dummy
 test.
 
-There are two strategies for moving tests over: You can move a chunk at a time,
+There are two strategies for moving tests over: you can move a chunk at a time
 or move one at a time. Chunks are easier, but then you get commits where the
 build is broken. It's really up to you and your team's tastes: a huge test
 suite with a number of failures can show you how close you are to being done
@@ -129,13 +128,13 @@ incorrect database settings, certain environment variables...
 The idea to begin with the easiest thing comes from [Dave
 Ramsey](http://www.daveramsey.com/home/), oddly enough. My aunt works at a
 bank, and when I went to college, she bought me a few of his books to help
-me learn about personal finances. Dave is a big fan of the 'get rid of all
+me learn about personal finance. Dave is a big fan of the 'get rid of all
 debt' school of thought, and so a large portion of his work is strategies
 for getting out of debt. Dave contends that paying off loans with the
 highest interest, while mathematically the fastest way to pay off your
-obligations, is not actually the best strategy. People like to see progress,
+obligations, is not actually the best strategy. People like to see progress
 and are heartened by seeing it. By paying off the smallest loan first, one
-is much more likely to feel more positive about the headway they're making,
+is much more likely to feel more positive about the headway one is making,
 and so it's a much better strategy in the end.
 
 The same logic applies with this move: why start with the hard stuff? Knock
@@ -162,23 +161,23 @@ class FooController < ApplicationController
 end
 ```
 
-The biggest issue with moving all of this stuff is that Rails and Sinatra
-use `redirect` and `redirect_to`. So you'll have to convert that stuff. However,
-I wouldn't recommend changing things like `redirect "/foos/#{id}"` to
-`redirect_to foo_path(foo)` just yet. When dealing with legacy code, you want
-to change as little as possible with each step, so that you know when you
-have introduced an error. If you try to convert things to a Rails style as well,
-you run the risk of introducing errors. Therefore, in all of these moves, leave
-the hell enough alone as much as possible. Once your code is up and running,
-you can gladly refactor. Just don't do it now.
+The biggest issue with moving all of this stuff is that Sinatra and Rails
+use `redirect` and `redirect_to`, respectively. So you'll have to convert that
+stuff. However, I wouldn't recommend changing things like `redirect
+"/foos/#{id}"` to `redirect_to foo_path(foo)` just yet. When dealing with legacy
+code, you want to change as little as possible with each step so that you know
+when you have introduced an error. If you try to convert things to a Rails style
+as well, you run the risk of introducing errors. Therefore, in all of these
+moves, leave the hell enough alone as much as possible. Once your code is up and
+running, you can gladly refactor. Just don't do it now.
 
 Don't forget to generate your routes, too. Sinatra's DSL is like a combination
 of Rails' routing and controllers. Set those up in this step as well.
 
-Since we don't have tests, this part is very error-prone. Luckily, our acceptance
-tests will catch these issues in step seven. So give it your best shot, but don't
-worry about being 100% perfect. Focus on getting the basic structural changes
-in place.
+Since we don't have tests, this part is very error-prone. Luckily, our
+acceptance tests will catch these issues in step seven. So give it your best
+shot, but don't worry about being 100% perfect. Focus on getting the basic
+structural changes in place.
 
 Having tests is so nice. :/
 
@@ -191,7 +190,7 @@ easy.
 
 ## Step Seven: Listen to your tests
 
-Okay! Those last moves were really awkward, since we didn't have tests to check
+Okay! Those last moves were really awkward since we didn't have tests to check
 our work. This is where the acceptance tests come in. You can move these over
 in batches or one at a time, but the acceptance tests will tell you where
 you forgot a route, if your view is missing, or if you left some little bit of
@@ -215,7 +214,7 @@ Of course, now that you're done developing, it's time to get the app out to
 users. This'll require a comprehensive plan for actually making the jump. A
 little bit of foresight can go a long way here.
 
-My strategy was to roll out the new Rails app under a new domain: 
+My strategy was to roll out the new Rails app under a new domain:
 http://beta.myapp.com/. I then pinged my users with a message along the
 lines of "We've made some infrastructure updates, if you'd like to help us
 test them out, visit the beta site."
@@ -232,7 +231,7 @@ back to the production data store afterwards.
 
 Another approach is to automatically migrate a portion of your users over to the
 new code base. Ideally, nobody notices: your code base shouldn't have changed
-in looks of functionality.
+in looks or functionality.
 
 ## Step Ten: Push to production!
 
