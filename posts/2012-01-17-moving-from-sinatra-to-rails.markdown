@@ -20,7 +20,7 @@ It's on page 315, for those of you playing along at home.
 > other form, but in statically typed languages, you can do much more with
 > a compiler. You can take advantage of its type checking and use it to identify
 > which changes you need to make. I call this practice _Leaning on the Compiler_.
->
+> 
 > _Lean on the Compiler_ is a powerful technique, but you have to know what
 > its limits are; if you don't, you can end up making some serious mistakes.
 
