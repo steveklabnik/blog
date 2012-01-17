@@ -12,7 +12,7 @@ move between the two frameworks.
 
 ## Step One: Evaluate your test coverage
 
-In <a href="http://www.amazon.com/gp/product/0131177052/ref=as_li_ss_tl?ie=UTF8&tag=stesblo026-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0131177052">Working Effectively with Legacy Code</a><img src="http://www.assoc-amazon.com/e/ir?t=stesblo026-20&l=as2&o=1&a=0131177052" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />,
+In <a href="http://www.amazon.com/gp/product/0131177052/ref=as_li_ss_tl?ie=UTF8&tag=stesblo026-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0131177052">Working Effectively with Legacy Code</a><img src="http://www.assoc-amazon.com/e/ir?t=stesblo026-20&l=as2&o=1&a=0131177052" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />(this is an affiliate link. Does this bother you?),
 Michael Feathers introduces a fantastic technique called "Lean on the Compiler." 
 It's on page 315, for those of you playing along at home.
 
