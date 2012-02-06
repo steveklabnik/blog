@@ -37,7 +37,7 @@ This is my story.
 (note: dramatazation. Actual wording made unneccesarily silly to protect the
 innocent. please do try this at home)
 
-```text lol.txt
+``` text
 $ ssh stevessecretserver
 $ tmux attach
 <brings up irssi, I'm already in #rubinius on Freenode>
@@ -54,7 +54,7 @@ run the RubySpecs for it.
 
 Armed with this knowledge, I found where require is defined in rbx:
 
-```ruby kernel/common/kernel.rb https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/kernel.rb#L737
+``` ruby
 def require(name)
   Rubinius::CodeLoader.require name
 end
@@ -63,7 +63,7 @@ module_function :require
 
 Of course, I had to look at CodeLoader:
 
-```ruby kernel/common/codeloader.rb https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader.rb#L30
+``` ruby
 # Searches for and loads Ruby source files and shared library extension
 # files. See CodeLoader.require for the rest of Kernel#require
 # functionality.
@@ -90,7 +90,7 @@ end
 Hmm, see `CodeLoader.require`. There are codeloader18 and codeloader19
 files...
 
-```ruby kernel/common/codeloader19.rb https://github.com/rubinius/rubinius/blob/589f1b08bfece6b86c1332a976704eb792025401/kernel/common/codeloader19.rb
+``` ruby
 module Rubinius
   class CodeLoader
 
@@ -115,7 +115,7 @@ end
 Okay. So we define specific stuff into the 19 file. There's also a
 kernel19. So I worked this up:
 
-```ruby kernel/common/kernel19.rb
+``` ruby
 # Attempt to load the given file, returning true if successful. Works just
 # like Kernel#require, except that it searches relative to the current
 # directory.
@@ -126,7 +126,7 @@ end
 module_function :require_relative
 ```
 
-```ruby kernel/common/codeloader19.rb
+``` ruby
 # requires files relative to the current directory. We do one interesting
 # check to make sure it's not called inside of an eval.
 def self.require_relative(name)
@@ -142,7 +142,7 @@ end
 
 But then... running the specs gives me bunches of errors. What gives?
 
-```text lol.txt
+``` text
 <back in irc>
 #rubinius: steveklabnik: yo, my specs are failing, and I'm a n00b. Halp
 pl0x?
@@ -155,7 +155,7 @@ dumb, File.expand_path that shit!
 
 So then I made this one little change:
 
-```ruby kernel/common/kernel19.rb
+``` ruby
 # Attempt to load the given file, returning true if successful. Works just
 # like Kernel#require, except that it searches relative to the current
 # directory.
@@ -167,7 +167,7 @@ end
 module_function :require_relative
 ```
 
-```ruby kernel/common/codeloader19.rb
+``` ruby
 # requires files relative to the current directory. We do one interesting
 # check to make sure it's not called inside of an eval.
 def self.require_relative(name, scope)
