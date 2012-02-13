@@ -28,9 +28,9 @@ Provide simple data through a simple GET/POST request.
 
 ### Examples:
 
-* (http://placekitten.com/)[http://placekitten.com/]
-* (http://code.google.com/apis/maps/documentation/staticmaps/)[http://code.google.com/apis/maps/documentation/staticmaps/]
-* (http://dicks.heroku.com/)[http://dicks.heroku.com/]
+* [http://placekitten.com/](http://placekitten.com/)
+* [http://code.google.com/apis/maps/documentation/staticmaps/](http://code.google.com/apis/maps/documentation/staticmaps/)
+* [http://dicks.heroku.com/](http://dicks.heroku.com/)
 
 ### Description:
 
@@ -49,9 +49,9 @@ Remote procedure call; call a function over the web.
 
 ### Examples:
 
-* (http://codex.wordpress.org/XML-RPC_Support)[http://codex.wordpress.org/XML-RPC_Support]
-* (http://www.flickr.com/services/api/request.rest.html)[http://www.flickr.com/services/api/request.rest.html]
-* (http://services.sunlightlabs.com/docs/Sunlight_Congress_API/)[http://services.sunlightlabs.com/docs/Sunlight_Congress_API/]
+* [http://codex.wordpress.org/XML-RPC_Support](http://codex.wordpress.org/XML-RPC_Support)
+* [http://www.flickr.com/services/api/request.rest.html](http://www.flickr.com/services/api/request.rest.html)
+* [http://services.sunlightlabs.com/docs/Sunlight_Congress_API/](http://services.sunlightlabs.com/docs/Sunlight_Congress_API/)
 
 ### Description:
 
@@ -74,9 +74,9 @@ Serialize and send objects over the wire.
 
 ### Examples:
 
-* (http://www.flickr.com/services/api/request.soap.html)[http://www.flickr.com/services/api/request.soap.html]
-* (https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_PayPalSOAPAPIArchitecture)[https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_PayPalSOAPAPIArchitecture]
-* (http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_quickstart_intro.htm)[http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_quickstart_intro.htm]
+* [http://www.flickr.com/services/api/request.soap.html](http://www.flickr.com/services/api/request.soap.html)
+* [https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_PayPalSOAPAPIArchitecture](https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_soap_PayPalSOAPAPIArchitecture)
+* [http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_quickstart_intro.htm](http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_quickstart_intro.htm)
 
 ### Description:
 
@@ -101,9 +101,9 @@ RPC, SOAP, and hypermedia API types.
 
 ### Examples:
 
-* (http://developer.github.com/)[http://developer.github.com/]
-* (https://dev.twitter.com/)[https://dev.twitter.com/]
-* (http://developers.facebook.com/docs/reference/api/)[http://developers.facebook.com/docs/reference/api/]
+* [http://developer.github.com/](http://developer.github.com/)
+* [https://dev.twitter.com/](https://dev.twitter.com/)
+* [http://developers.facebook.com/docs/reference/api/](http://developers.facebook.com/docs/reference/api/)
 
 ### Description:
 
@@ -129,9 +129,9 @@ Web.
 
 ### Examples:
 
-* (http://www.twilio.com/docs/api/rest)[http://www.twilio.com/docs/api/rest]
-* (http://www.spire.io/docs/tutorials/rest-api.html)[http://www.spire.io/docs/tutorials/rest-api.html]
-* (http://kenai.com/projects/suncloudapis/pages/Home)[http://kenai.com/projects/suncloudapis/pages/Home]
+* [http://www.twilio.com/docs/api/rest](http://www.twilio.com/docs/api/rest)
+* [http://www.spire.io/docs/tutorials/rest-api.html](http://www.spire.io/docs/tutorials/rest-api.html)
+* [http://kenai.com/projects/suncloudapis/pages/Home](http://kenai.com/projects/suncloudapis/pages/Home)
 
 ### Description:
 
