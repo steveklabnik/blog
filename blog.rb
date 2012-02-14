@@ -82,11 +82,15 @@ class Blog < Sinatra::Base
   end
 
   get '/posts/:id' do
+    begin
     source = SourceFile.new(params[:id])
     @title = source.metadata['title']
     @content = source.content
     @outline = source.outline
     haml :post
+    rescue Errno::ENOENT #lol i suck
+      throw :halt, [404, "Not found"] 
+    end
   end
   
   get '/login/?' do
@@ -119,8 +123,11 @@ class Blog < Sinatra::Base
 
   #lol octopress
   get '/*' do
+    puts "YEAH"
     post = params[:splat].first.gsub("/", "-").gsub(".html", "")
+    puts "YEAH"
     pass if post.nil?
+    puts "YEAH"
     redirect "posts/" + post, 301
   end
 end
