@@ -17,7 +17,11 @@
 /* #Site Styles
 ================================================== */
 div.container {
-		padding-top: 40px; }
+  padding-top: 40px;
+}
+pre.prettyprint {
+  margin-bottom: 2em;
+}
 
 
 /* #Page Styles
