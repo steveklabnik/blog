@@ -30,13 +30,12 @@ Provide simple data through a simple GET/POST request.
 
 * [http://placekitten.com/](http://placekitten.com/)
 * [http://code.google.com/apis/maps/documentation/staticmaps/](http://code.google.com/apis/maps/documentation/staticmaps/)
-* [http://dicks.heroku.com/](http://dicks.heroku.com/)
+* [http://loripsum.net/api](http://loripsum.net/api)
 
 ### Description:
 
 Simple data is made available via an HTTP GET or POST request. The vast majority of
-these services seem to return images, but data is possible as well. I hated to include
-the 'dicks' API, but it was the first I could think of that wasn't image-based.
+these services seem to return images, but data is possible as well.
 
 These API are technically a sub-type of \*-RPC, but I feel that their lack of business
 process makes them feel different. It's basically just one specific remote procedure,
