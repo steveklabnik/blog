@@ -85,6 +85,7 @@ class Blog < Sinatra::Base
     begin
     source = SourceFile.new(params[:id])
     @title = source.metadata['title']
+    @title_hidden = source.metadata['title-hidden']
     @content = source.content
     @outline = source.outline
     haml :post
