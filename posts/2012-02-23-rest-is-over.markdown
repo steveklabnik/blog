@@ -28,7 +28,7 @@ Way back in the day, [COINTELPRO](http://en.wikipedia.org/wiki/COINTELPRO) was
 at the forefront of America's fight against "subersive" organizations and
 individuals. One goal of COINTELPRO was to create tension and division amongst
 radical groups, in order to disrupt their operations. Techniques such as 
-[Concern Trolling](http://en.wikipedia.org/wiki/Troll_(Internet)#Concern\_troll)
+Concern Trolling
 are really effective at this kind of thing.
 
 In 2008, for the Republican National Convention in St. Paul, a document was passed
