@@ -7,6 +7,9 @@ layout: post
 This is a follow-up post to my post [here][1]. You probably want to
 read that first.
 
+UPDATE: Please note that '[REST is over'](/posts/2012-02-23-rest-is-over).
+'Hypermedia API' is the proper term now.
+
 ## A few words on standards versus pragmatism
 
 When I wrote my first post on this topic, I tried to take a stance that

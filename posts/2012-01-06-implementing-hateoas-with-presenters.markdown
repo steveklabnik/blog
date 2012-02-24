@@ -13,6 +13,8 @@ pattern is a great way to create responses that comply with the hypermedia
 constraint, a.k.a. HATEOAS. I wanted to share with you a little bit about
 how to do this.
 
+Please note that '[REST is over'](/posts/2012-02-23-rest-is-over).
+
 Note: We'll be creating HTML5 responses in this example, as HTML is a hypermedia
 format, and is therefore conducive to HATEOAS. JSON and XML don't cut it.
 

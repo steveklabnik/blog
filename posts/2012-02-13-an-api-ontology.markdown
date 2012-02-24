@@ -109,6 +109,7 @@ RPC, SOAP, and hypermedia API types.
 Originally, REST was synonymous with what is now called "Hypermedia APIs."
 However, after large amounts of misunderstanding, REST advocates are
 rebranding REST to "Hypermedia APIs" and leaving REST to the RESTish folks.
+See '[REST is over'](/posts/2012-02-23-rest-is-over) for more.
 
 REST is basically "RPC and/or SOAP that respects HTTP." A large problem with
 RPC and SOAP APIs is that they tunnel everything through one endpoint, which
