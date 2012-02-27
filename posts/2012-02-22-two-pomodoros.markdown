@@ -48,9 +48,9 @@ This isn't the case with this video. It's the real deal. Watch towards the end a
 I stupidly don't realize that the test code I replaced was different than what
 I replaced it with. Heh.
 
-### Everything becomes concious
+### Everything becomes conscious
 
-Knowing you're being watched has a crazy affect on you. I accidnetally checked
+Knowing you're being watched has a crazy effect on you. I accidentally checked
 Twitter once during a test run, and immediately went "ZOMG POMODOROS PEOPLE ARE
 WATCHING ASSHOLE YOU SCREWED UP!!!!1" Whenever I mis-typed something in vim,
 "OMG YOU DON"T KNOW THAT SHORTCUT? EVERYONE ON THE INTERNET THINKS YOU"RE
