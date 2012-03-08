@@ -22,13 +22,13 @@ Without further ado, the article.
 
 <hr/> 
 
-> Kessler's idea was, that besiddes _the law of mutual struggle_ there is in
+> Kessler's idea was, that besides _the law of mutual struggle_ there is in
 > nature _the law of mutual aid_, which, for the success of the struggle for
 > life, and especially for the progressive evolution of the species, is far
 > more important than the law of mutual contest. This suggestion - which was,
 > in reality, nothing but a further development of the ideas expressed by
 > Darwin himself in _The Descent of Man_, seemed to me so correct and of so
-> great an importance, that since I became aquanted with it I began to cllect
+> great an importance, that since I became aquainted with it I began to collect
 > materials for further developing the idea, which Kessler had only cursorily
 > sketched in his lecture, but had not lived to develop. He died in 1881.
 > 
