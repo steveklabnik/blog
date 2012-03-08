@@ -1,0 +1,164 @@
+<!DOCTYPE html>  
+<html lang="en">  
+  <head>  
+    <meta charset="utf-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Type: application/vnd.tekpub.productions+json</title>  
+    <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="/stylesheets/bootstrap-responsive.css">
+    <link rel="stylesheet" href="/stylesheets/media-types.css">  
+  </head>  
+  <body>  
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <h1>Media Type: application/vnd.tekpub.productions+json</h1>
+          <nav>
+            <ul>
+              <li><a href="#description">Description</a></li>
+              <li><a href="#elements">Elements</a></li>
+              <li><a href="#attributes">Attributes</a></li>
+              <li><a href="#link-relations">Link Relations</a></li>
+              <li><a href="#data-types">Data Types</a></li>
+              <li><a href="#example-responses">Example Responses</a></li>
+              <li><a href="#history">History</a></li>
+            </ul>
+          </nav>
+          <aside>
+          <h2>NOTE:</h2>
+          <p>
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="http://tools.ietf.org/html/rfc2119">RFC2119</a>.
+          </p>
+          </aside>
+          <section id="description">
+            <header>
+              <h1>Description</h1>
+              <p>A general description of <code>application/vnd.tekpub.proudctions+json</code>.</p>
+            </header>
+
+            <p>This media type describes a <a href="http://tekpub.com/">Tekpub</a> production. Tekpub is the best place on the web to get concise, professional, top-quality screencasts.</p>
+
+            <p>The Tekpub API makes extensive use of <code>application/vnd.tekpub.productions+json</code>.</p>
+
+            <p>You'll note that this media type is based on JSON, and so all responses MUST be valid JSON. JSON is described in <a href="http://tools.ietf.org/html/rfc4627">RFC4627</a>.</p>
+
+            <p>This media type takes a lot of inspiration from Mike Amundsen's <a href="http://www.amundsen.com/media-types/collection/">Collection+JSON</a> media type. Thanks Mike!</p>
+
+          </section>
+          <section id="elements">
+            <header>
+              <h1>Elements</h1>
+              <p>Here's a list of all valid elements.</p>
+            </header>
+
+            <p>The top level of an <code>application/vnd.tekpub.productions+json</code> document features two objects: <a href="#elements-productions"><code>productions</code></a> and <a href="#elements-filters"><code>filters</code></a>.</p>
+
+            <section id="elements-productions">
+              <h1>Productions</h1>
+              <p>The <code>productions</code> object represents the list of individual productions. A single production will be a list with one item. A <code>application/vnd.tekpub.productions+json</code> document MUST contain one and only one productions object.</p>
+              <p>Productions MUST have a single <code>items</code> child element. This element contains one or more arrays which contain the data for that item. There are no required properties of items elements.</p>
+            </section>
+
+            <section id="elements-filters">
+              <h1>Filters</h1>
+              <p>The <code>filters</code> object is used to filter the general list of productions. A <code>application/vnd.tekpub.productions+json</code> document MAY contain a single <code>filters</code> object.</p>
+
+              <p>It contains one or more anonymous objects, each of which has five properties: href(REQUIRED), rel (REQUIRED), name (OPTIONAL), prompt (OPTIONAL), and a data array (OPTIONAL). If present, the data array represents query parameters for the associated href property of the same object.</p>
+            </section>
+          </section>
+          <section id="attributes">
+            <header>
+              <h1>Attributes</h1>
+              <p>Here's a list of all valid attributes.</p>
+            </header>
+
+            <p>These attributes are all MAY appear in a <a href="#elements-productions">productions</a> object's <code>items</code> object's anonymous children. They are all key/value pairs, and these are the keys.</p>
+
+            <p>A <code>slug</code> element MAY exist. This element is a JSON string.</p>
+            <p>A <code>title</code> element MAY exist. This element is a JSON string.</p>
+            <p>A <code>category</code> element MAY exist. This element is a JSON string.</p>
+            <p>A <code>price</code> element MAY exist. This element is a JSON decimal.</p>
+            <p>A <code>description</code> element MAY exist. This element is a JSON string.</p>
+            <p>A <code>released_at</code> element MAY exist. This element is a JSON string, with a date in <a href="http://tools.ietf.org/html/rfc5322#section-3.3">RFC5322</a> format.</p>
+
+          </section>
+          <section id="link-relations">
+            <header>
+              <h1>Link Relations</h1>
+              <p>Here's a list of all valid link relations.</p>
+            </header>
+
+            <p>All of these relations may exist for the purposes of the <code>rel</code> attribute of the <a href="#elements-filters">filters</a> object.</p>
+
+            <p><code>category</code> will indiciate that the given filter will filter the list by the category attribute.</p>
+          </section>
+          <section id="data-types">
+            <header>
+              <h1>Data Types</h1>
+              <p>Here's a list of all valid data types.</p>
+            </header>
+
+            <p>Being JSON, any of the JSON data types are supported in <code>application/vnd.tekpub.productions+json</code>.</p>
+
+          </section>
+          <section id="example-responses">
+            <header>
+              <h1>Example Responses</h1>
+              <p>Here's are some examples of this media type.</p>
+            </header>
+
+            <p>A general sample response. This contains most of the elements.</p>
+<pre>{"productions":
+    {"items":[[
+        {"slug":"..."},
+        {"title":"..."},
+        {"category":"..."},
+        {"price":"..."},
+        {"description":"..."},
+        {"released_at":"..."}],[
+        {"slug":"..."},
+        {"title":"..."},
+        {"category":"..."},
+        {"price":"..."},
+        {"description":"..."},
+        {"released_at":"..."}]]},
+ "filters":[
+    {"rel":"category",
+     "href":"...",
+     "prompt":"",
+     "data":[
+        {"name":"category",
+         "value":"Microsoft"}]},
+    {"rel":"category",
+     "href":"...",
+     "prompt":"",
+     "data":[
+        {"name":"category",
+         "value":"Ruby"}]}]}</pre>
+          </section>
+          <section id="history">
+            <header>
+              <h1>History</h1>
+              <p>The history of this document.</p>
+            </header>
+
+            <ul>
+              <li>2012-03-07: First published.</li>
+            </ul>
+          </section>
+          <footer>
+            <ul>
+              <li><a href="#description">Description</a></li>
+              <li><a href="#elements">Elements</a></li>
+              <li><a href="#attributes">Attributes</a></li>
+              <li><a href="#link-relations">Link Relations</a></li>
+              <li><a href="#data-types">Data Types</a></li>
+              <li><a href="#example-responses">Example Responses</a></li>
+              <li><a href="#history">History</a></li>
+            </ul>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </body>  
+</html>  
