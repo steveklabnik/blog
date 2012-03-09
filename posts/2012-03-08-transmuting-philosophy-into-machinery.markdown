@@ -35,11 +35,11 @@ Without further ado, the article.
 > - Peter Kropotkin, "Mutual Aid: A Factor of Evolution", p21
 
 
-Rob Conery is a pretty cool guy. While I always enjoy reading his blog, he's
+Rob Conery is a pretty cool guy. While I always enjoy reading <a href="http://blog.wekeroad.com/">his blog</a>, he's
 been at battle with the Hypermedia crowd recently. It's always good natured,
 though, and he means well.
 
-He recently posed an interesting question to his blog:
+He recently posed <a href="http://wekeroad.com/2012/03/03/moving-the-philosophy-into-machinery/">an interesting question to his blog</a>:
 
 > I would like to invite the good people who have engaged with me over the last
 > few days to jump in and write me up an API – and by way of explanation – show
