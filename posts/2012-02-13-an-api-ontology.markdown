@@ -4,7 +4,9 @@ title: "An API Ontology"
 date: 2011-02-12 15:00
 ---
 
-As I've done research on APIs for [Get Some REST](http://getsomere.st), I've
+**NOTE**: The alpha of my book on APIs is out! Check it out at [http://designinghypermediaapis.com](http://designinghypermediaapis.com).
+
+As I've done research on APIs for [Designing Hypermedia APIs](http://designinghypermediaapis.com), I've
 become increasingly interested in different styles of API. I currently see most
 real-world deployed APIs fit into a few different categories. All have their
 pros and cons, and it's important to see how they relate to one other.
