@@ -68,7 +68,7 @@ returned in.
 
 Note that while Flickr's API says REST, it is very clearly RPC. Yay terminology!
 
-## SOAP
+## WS-\* (or SOAP)
 ### Synopsis:
 
 Serialize and send objects over the wire.
