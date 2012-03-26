@@ -40,6 +40,11 @@ Pittsburgh, PA 15232
 Oh yeah: My dad is also Steve. I'm not a junior because he has no middle name:
 his mother said they were too poor to give him one.
 
+Additionally, I mean April 1. That's his birthday. However, if you live far
+away and it'll be a bit late, that's perfectly fine, still send one. I think
+that 'oh, this card came from so far away that it took some time' is pretty
+awesome in its own way.
+
 I really think this would be an awesome last gift to my dad. One of the worst
 things about being in the hospital is that you feel cut off from everything
 outside of that room, and while I've spent almost every minute of the last 8
