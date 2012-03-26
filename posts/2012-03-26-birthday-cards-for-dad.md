@@ -37,6 +37,9 @@ Steve Klabnik
 Pittsburgh, PA 15232
 ```
 
+Oh yeah: My dad is also Steve. I'm not a junior because he has no middle name:
+his mother said they were too poor to give him one.
+
 I really think this would be an awesome last gift to my dad. One of the worst
 things about being in the hospital is that you feel cut off from everything
 outside of that room, and while I've spent almost every minute of the last 8
