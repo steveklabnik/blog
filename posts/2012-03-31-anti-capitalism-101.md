@@ -16,6 +16,9 @@ essay](http://libcom.org/library/class-class-struggle-introduction) from
 LibCom.org, so if you'd like to see the history, you can read those versions as
 well.
 
+I plan on refining this as things go along, as it's still a bit jargony in
+places. Any suggestions are very welcome!
+
 <hr />
 
 ## Capitalism: an introduction
