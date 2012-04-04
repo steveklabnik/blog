@@ -35,11 +35,11 @@ Without further ado, the article.
 > - Peter Kropotkin, "Mutual Aid: A Factor of Evolution", p21
 
 
-Rob Conery is a pretty cool guy. While I always enjoy reading his blog, he's
+Rob Conery is a pretty cool guy. While I always enjoy reading <a href="http://blog.wekeroad.com/">his blog</a>, he's
 been at battle with the Hypermedia crowd recently. It's always good natured,
 though, and he means well.
 
-He recently posed an interesting question to his blog:
+He recently posed <a href="http://wekeroad.com/2012/03/03/moving-the-philosophy-into-machinery/">an interesting question to his blog</a>:
 
 > I would like to invite the good people who have engaged with me over the last
 > few days to jump in and write me up an API – and by way of explanation – show
@@ -54,7 +54,7 @@ Great! After all, social exchange is one of the building blocks of society:
 > Karl Marx, "Capital, Volume 1", p198
 
 Let's apply what we've learned about the basics of designing
-hypermedia APIs. Here's his requirements:
+hypermedia APIs. Here are his requirements:
 
 ## Use Cases
 
@@ -66,11 +66,11 @@ Customer comes to the app and logs in with email and password. A token is return
 
 ### Productions
 
-Joe User is logged in and wants to see what he can watch. He chooses to browse all productions and can see on the app which ones he is aloud to watch and which ones he isn’t. He then chooses to narrow his selection by category: Microsoft, Ruby, Javascript, Mobile. Once a production is selected, a list of Episodes is displayed with summary information. Joe wants to view Episode 2 of Real World ASP.NET MVC3 – so he selects it. The video starts.
+Joe User is logged in and wants to see what he can watch. He chooses to browse all productions and can see in the app which ones he is allowed to watch and which ones he isn’t. He then chooses to narrow his selection by category: Microsoft, Ruby, Javascript, Mobile. Once a production is selected, a list of Episodes is displayed with summary information. Joe wants to view Episode 2 of Real World ASP.NET MVC3 – so he selects it. The video starts.
 
 ### Episodes.
 
-Kelly User watches our stuff on her way to work every day, and when she gets on the train will check and see if we’ve pushed any new episodes recently. A list of 5 episodes comes up – she chooses one, and watches it on her commute.
+Kelly User watches our stuff on her way to work every day, and when she gets on the train she will check and see if we’ve pushed any new episodes recently. A list of 5 episodes comes up – she chooses one, and watches it on her commute.
 
 
 ## The design process
