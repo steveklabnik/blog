@@ -121,8 +121,7 @@ the API.
 Instead, the root should give you a link to the particular resources
 that you can actually view. Maybe something like this:
 
-    $ curl -I https://api.github.com/ -H "Accept: application/json" -u
-"username:password"
+    $ curl -I https://api.github.com/ -H "Accept: application/json" -u "username:password"
     HTTP/1.1 204 No Content
     Server: nginx/1.0.4
     Date: Sun, 07 Aug 2011 16:45:32 GMT
@@ -247,8 +246,9 @@ the same content at [@getsomerestbook](http://rstat.us/users/getsomerestbook) to
    [1]: /2011/07/03/nobody-understands-rest-or-http.html
    [2]: http://www.twilio.com/docs/api/rest/
    [3]: http://developer.github.com/
-   [4]: http://developer.github.com/v3/mimes/
+   [4]: http://developer.github.com/v3/mime/
    [5]: http://developer.github.com/v3/#authentication
    [6]: http://developer.github.com/v3/#pagination
    [7]: http://getsomere.st
 
+m
