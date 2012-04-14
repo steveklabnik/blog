@@ -246,8 +246,9 @@ the same content at [@getsomerestbook](http://rstat.us/users/getsomerestbook) to
    [1]: /2011/07/03/nobody-understands-rest-or-http.html
    [2]: http://www.twilio.com/docs/api/rest/
    [3]: http://developer.github.com/
-   [4]: http://developer.github.com/v3/mimes/
+   [4]: http://developer.github.com/v3/mime/
    [5]: http://developer.github.com/v3/#authentication
    [6]: http://developer.github.com/v3/#pagination
    [7]: http://getsomere.st
 
+m
