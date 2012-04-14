@@ -121,8 +121,7 @@ the API.
 Instead, the root should give you a link to the particular resources
 that you can actually view. Maybe something like this:
 
-    $ curl -I https://api.github.com/ -H "Accept: application/json" -u
-"username:password"
+    $ curl -I https://api.github.com/ -H "Accept: application/json" -u "username:password"
     HTTP/1.1 204 No Content
     Server: nginx/1.0.4
     Date: Sun, 07 Aug 2011 16:45:32 GMT
