@@ -228,6 +228,15 @@ module Summarizer
 end
 ```
 
-This example isn't fantastic, but whatever. We've eliminated some duplication, even if we didn't reduce our method
-surface. This is a win along a different axis, we just shouldn't fool ourselves
-that we've made our classes 'simpler.'
+This example isn't fantastic, but whatever. We've eliminated some duplication,
+even if we didn't reduce our method surface. This is a win along a different
+axis, we just shouldn't fool ourselves that we've made our classes 'simpler.'
+
+## This isn't the only metric
+
+Now, I don't mean to imply that method count is the be-all, end-all metric of
+complexity. Real software development is too complicated to wrap up in
+one tiny number. However, I do think there's a strong correlation between
+small, focused classes and easy to understand software systems. Aggregates can
+be used to make it easier to understand the use of a cluster of smaller
+objects. But that's another post.
