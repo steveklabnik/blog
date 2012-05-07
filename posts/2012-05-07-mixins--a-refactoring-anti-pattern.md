@@ -228,6 +228,6 @@ module Summarizer
 end
 ```
 
-We've eliminated some duplication, even if we didn't reduce our method
+This example isn't fantastic, but whatever. We've eliminated some duplication, even if we didn't reduce our method
 surface. This is a win along a different axis, we just shouldn't fool ourselves
 that we've made our classes 'simpler.'
