@@ -9,8 +9,8 @@ the two via a comment, or manually go back and close the issue as well?
 
 Turns out that GitHub has the power to turn Issues into Pull Requests in the
 API, but not in the web UI. So I wrote a tiny web app that lets you use the
-API call yourself: http://issue2pr.herokuapp.com/
+API call yourself: [http://issue2pr.herokuapp.com/](http://issue2pr.herokuapp.com/)
 
-Of course, the code is up on GitHub, here: https://github.com/steveklabnik/issue2pr
+Of course, the code is up on GitHub, here: [https://github.com/steveklabnik/issue2pr](https://github.com/steveklabnik/issue2pr)
 
 Issues (and pull requests) welcome!
