@@ -27,7 +27,7 @@ awesome.
 Everyone else!: Rails is open source after all, and 1224 people have
 contributed at least one patch.
 
-You can find everyone's commits and count here: http://contributors.rubyonrails.org/
+You can find everyone's commits and count here: [http://contributors.rubyonrails.org/](http://contributors.rubyonrails.org/)
 
 ### About payment
 
