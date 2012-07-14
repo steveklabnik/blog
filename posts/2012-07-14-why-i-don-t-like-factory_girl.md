@@ -60,7 +60,7 @@ complicated, let's make sure to use them from the start, so we don't have to
 worry about them later. Everyone started doing this. Here's how new Rails apps
 get started:
 
-```
+``` plain
 steve at thoth in ~/tmp
 $ rails new my_app
       create  
@@ -88,7 +88,7 @@ Fetching gem metadata from https://rubygems.org/........
 <snip>
 steve at thoth in ~/tmp/my_app
 steve at thoth in ~/tmp/my_app
-$ rails g rspec:install                                                   ✘
+$ rails g rspec:install                                                   
       create  .rspec
        exist  spec
       create  spec/spec_helper.rb
@@ -120,7 +120,7 @@ $ rails g resource foo
        route    resources :foos
 
 steve at thoth in ~/tmp/my_app
-$ rake db:migrate                                                         ✘
+$ rake db:migrate                                                         
 ==  CreateFoos: migrating =====================================================
 -- create_table(:foos)
    -> 0.0065s
@@ -180,7 +180,7 @@ Finished in 0.01879 seconds
 Now, test time isn't everything, but a hundredth of a second. Once we hit a
 hundred tests, we'll be taking almost two full seconds to run our tests.
 
-What if we just Foo.new.something!?
+What if we just `Foo.new.something!`?
 
 ```
 Finished in 0.00862 seconds
