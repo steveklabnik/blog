@@ -1,6 +1,8 @@
 require 'bundler'
 Bundler.require
 
+require 'sinatra/content-for'
+
 require_relative "user"
 require_relative "warden"
 require_relative "source_file"
