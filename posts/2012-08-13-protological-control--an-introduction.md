@@ -148,10 +148,11 @@ in this new society. That mechanism is called "discipline." Discipline
 the great advances of Taylorism, for example, was studying how the bodies of
 assembly line workers operated and streamlining their motions.
 
-Foucault also introduces the idea of the 'Panopticon,' which is a prison in
-a circular shape by which the rooms can all observe each other. The observation
-would help to keep them all in line, since the all-seeing tower in the middle
-would be able to observe everyone at all times.
+Foucault also illustrates that control and power in modern society mirror
+Jeremy Bentham's concept of the 'Panopticon,' which is a prison in a circular
+shape by which the rooms can all observe each other. The observation would help
+to keep them all in line, since the all-seeing tower in the middle would be able
+to observe everyone at all times.
 
 ![panopticon](http://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Panopticon.jpg/250px-Panopticon.jpg)
 
