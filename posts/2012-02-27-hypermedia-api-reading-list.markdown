@@ -79,7 +79,7 @@ this book highly enough.
 
 However, that may leave you wondering: Where's the definitive work on how to
 actually build and design a Hypermedia API? Did I mention, totally unrelated
-of course, that [I'm writing a book](http://getsomere.st)? ;)
+of course, that [I'm writing a book](http://designinghypermediaapis.com/)? ;)
 
 Yes, it still has REST in the title. Think about that for a while, I'm sure
 you can see towards my plans. I'm planning on a beta release as soon as I'm

@@ -8,7 +8,7 @@ I'm a big fan of using the presenter pattern to help separate logic from
 presentation. There's a great gem named
 [Draper](https://github.com/jcasimir/draper) that can help facilitate this
 pattern in your Rails apps. When doing research for
-[my book about REST](http://getsomere.st), I realized that the presenter
+[my book about REST](http://designinghypermediaapis.com/), I realized that the presenter
 pattern is a great way to create responses that comply with the hypermedia
 constraint, a.k.a. HATEOAS. I wanted to share with you a little bit about
 how to do this.

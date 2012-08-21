@@ -6,7 +6,7 @@ layout: post
 
 ## **HI [HN](http://news.ycombinator.com/item?id=3635085), PLEASE READ THIS!!!**
 
-Since I've posted this, I've refined a few of my positions on things. Everyone learns and grows, and while I still stand by most of what I said, I specifically don't agree that versioning the media type is how to properly version APIs. Hypermedia APIs should not actually use explicit versioning, but I'd rather see a version in the URI with HATEOAS than no HATEOAS and versioned media types. I've been meaning to update this post and write more, but alas, my work on [Get some REST](http://getsomere.st) has taken priority. I don't have a HN account, so feel free to [email me](mailto:steve@steveklabnik.com) with any thoughts or questions!
+Since I've posted this, I've refined a few of my positions on things. Everyone learns and grows, and while I still stand by most of what I said, I specifically don't agree that versioning the media type is how to properly version APIs. Hypermedia APIs should not actually use explicit versioning, but I'd rather see a version in the URI with HATEOAS than no HATEOAS and versioned media types. I've been meaning to update this post and write more, but alas, my work on [Get some REST](http://designinghypermediaapis.com/) has taken priority. I don't have a HN account, so feel free to [email me](mailto:steve@steveklabnik.com) with any thoughts or questions!
 
 Furthermore, everything in engineering is ALWAYS a trade-off. I primarily wish that more people understood the tools that HTTP provides them with, and made an informed choice, rather than cargo-culting what they've seen others do.
 

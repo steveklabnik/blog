@@ -29,7 +29,7 @@ and log out. Bummer. But why?
 
 ## HTTP verbs: transfer semantics, not state
 
-As I've been doing my research for [my book on REST](http://getsomere.st/), I've
+As I've been doing my research for [my book on REST](http://designinghypermediaapis.com/), I've
 been doing a lot of reading about HTTP. And I kept coming across these kinds of
 curious comments in the spec. For example, [sec 9.6: PUT](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6):
 

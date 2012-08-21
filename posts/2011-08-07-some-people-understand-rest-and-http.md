@@ -238,10 +238,8 @@ half-price in beta. Early adopters will be able to get their two cents
 in, and I'll cover things they still have questions on. It'll be
 available under a liberal license, in PDF, ePub, all that good stuff.
 
-I've also set up a Twitter account at [@getsomerestbook](http://twitter.com/#!/getsomerestbook). I'll be tweeting updates about the book, and also other good content
-related to RESTful design. Oh, and if you're on
-[rstat.us](http://rstat.us), I also have an account that'll syndicate
-the same content at [@getsomerestbook](http://rstat.us/users/getsomerestbook) too.
+I've also set up a Twitter account at [@hypermediaapis](http://twitter.com/hypermediaapis). I'll be tweeting updates about the book, and also other good content
+related to RESTful design.
 
    [1]: /2011/07/03/nobody-understands-rest-or-http.html
    [2]: http://www.twilio.com/docs/api/rest/
@@ -249,6 +247,5 @@ the same content at [@getsomerestbook](http://rstat.us/users/getsomerestbook) to
    [4]: http://developer.github.com/v3/mime/
    [5]: http://developer.github.com/v3/#authentication
    [6]: http://developer.github.com/v3/#pagination
-   [7]: http://getsomere.st
+   [7]: http://designinghypermediaapis.com/
 
-m

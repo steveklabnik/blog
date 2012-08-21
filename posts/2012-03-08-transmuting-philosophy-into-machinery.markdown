@@ -3,7 +3,7 @@ title: "Transmuting Philosophy into Machinery"
 date: 2012-03-06 13:28
 ---
 
-I'm so very close to releasing the beta of [Get Some REST](http://getsomere.st). 
+I'm so very close to releasing the beta of [Get Some REST](http://designinghypermediaapis.com/). 
 However, I'm about to get on a plane to Poland, and that's a bad time to launch
 things. ;) [wroc\_love.rb](http://wrocloverb.com/), here I come!
 

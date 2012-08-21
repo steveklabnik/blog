@@ -128,7 +128,7 @@ There's got to be a better way. Otherwise, I wouldn't be writing this blog post.
 
 ### The best way: the rel attribute
 
-When doing research for [my book on REST](http://getsomere.st), I've been doing
+When doing research for [my book on REST](http://designinghypermediaapis.com/), I've been doing
 a lot of digging into various standards documents. And one of the most important
 attributes from a REST perspective is one that nobody ever talks about or uses:
 the `rel` attribute. From [the HTML5 spec](http://www.w3.org/TR/html5/links.html#attr-hyperlink-rel):
@@ -167,7 +167,7 @@ Bam! Awesome! This is exactly what we want!
 
 ## So how do we use rel attributes?
 
-I'll be going into more depth about these kinds of topics in [my book](http://getsomere.st),
+I'll be going into more depth about these kinds of topics in [my book](http://designinghypermediaapis.com/),
 but here's the TL;DR:
 
 1. There are a set of official types. Try to use those if they're
@@ -207,7 +207,7 @@ We can change the text of the link, and our test doesn't break. So cool.
 
 ## What about stuff that's not links? What about data attributes?
 
-That's what [my book](http://getsomere.st) is going to talk about, sorry.
+That's what [my book](http://designinghypermediaapis.com/) is going to talk about, sorry.
 These kinds of practical examples are one of the reasons I decided to write
 it in the first place, and I don't want to publish all the content on my
 blog...
@@ -220,8 +220,8 @@ clients: Cucumber, through Selenium, is an automated agent that interacts with
 your web service. API clients are automated agents that interact with your web
 service. Hmmmm...
 
-If you want to know more about this, that's what [my book](http://getsomere.st)
+If you want to know more about this, that's what [my book](http://designinghypermediaapis.com/)
 is for. I'll be covering topics like this in depth, and explaining standards in
 simple language.
 
-Seriously. Did you sign up for [my book](http://getsomere.st) yet? ;)
+Seriously. Did you sign up for [my book](http://designinghypermediaapis.com/) yet? ;)
