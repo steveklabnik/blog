@@ -92,7 +92,7 @@ class Blog < Sinatra::Base
     @outline = source.outline
     haml :post
     rescue Errno::ENOENT #lol i suck
-      throw :halt, [404, "Not found"] 
+      pass 
     end
   end
   
