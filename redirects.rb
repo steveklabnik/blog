@@ -29,5 +29,6 @@ REDIRECTS = [
   { :from => "/about-crows", :to => "/2009/12/02/about-crows.html" },
   { :from => "/2011/09/23/more-rstat-dot-us-refatoring.html", :to => "/2011/09/23/more-rstat-dot-us-refactoring.html" },
   { :from => "/posts/2012-1-23-introducing-metadown.markdown", :to => "/posts/2012-01-23-introducing-metadown.markdown" },
+  { :from => "/posts/2012-08-13-protological-control--an-introduction", :to => "http://words.steveklabnik.com/protological-control-an-introduction" },
 ]
 
