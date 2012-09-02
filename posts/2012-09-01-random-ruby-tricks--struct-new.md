@@ -26,7 +26,7 @@ Nobody uses it this way, though. Here's the way I first saw it used:
 class Point < Struct.new(:x, :y)
 end
 
-origin = Point(0,0)
+origin = Point.new(0,0)
 ```
 
 Wait, what? Inherit...from an instance of something? Yep!
