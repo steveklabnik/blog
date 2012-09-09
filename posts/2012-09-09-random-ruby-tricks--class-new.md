@@ -77,6 +77,11 @@ bar
 The block gets `class_eval`'d. I haven't found a good use for this one,
 exactly, but it's good to know about!
 
+EDIT: @pete_higgins has chimed in on Twitter. I knew I'd done this before:
+
+<blockquote class="twitter-tweet" data-in-reply-to="244902236185047041"><p>@<a href="https://twitter.com/steveklabnik">steveklabnik</a> Class.new with a block is useful for creating anonymous classes in tests, or as a simple mock mechanism.</p>&mdash; pete higgins (@pete_higgins) <a href="https://twitter.com/pete_higgins/status/244903490588119040" data-datetime="2012-09-09T21:01:56+00:00">September 9, 2012</a></blockquote>
+<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ## `new` vs `initialize`
 
 Ever wonder why you call `Foo.new` but define `Foo.initialize`? It's pretty
