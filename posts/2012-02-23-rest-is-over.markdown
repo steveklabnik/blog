@@ -96,7 +96,7 @@ from an outside perspective, a 'real RESTful API' does two things:
 2. Serves hypermedia responses.
 
 HTTP does most of the heavy lifting in terms of bringing us into REST
-complaiance. So why are we talking about how to transfer represntations of state?
+compliance. So why are we talking about how to transfer representations of state?
 
 The phrase "Hypermedia API" is much more direct: it's an API where hypermedia
 is at the center. Those RESTish APIs could never be called 'Hypermedia APIs,' as
