@@ -83,6 +83,11 @@ Originally, these two repositories were located at [https://github.com/spastorin
 
 We have a Google Group for discussion here: [https://groups.google.com/forum/?fromgroups#!forum/rails-api-core](https://groups.google.com/forum/?fromgroups#!forum/rails-api-core)
 
+Getting Started
+---------------
+
+To get started, check out the README here: [https://github.com/rails-api/rails-api#railsapi](https://github.com/rails-api/rails-api#railsapi).
+
 Who
 ---
 
