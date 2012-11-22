@@ -3,9 +3,6 @@ title: "Introducing the Rails API Project"
 date: 2012-11-22 09:29
 ---
 
-Introducing the Rails API project
-=================================
-
 Ruby on Rails is a great tool to build websites incredibly quickly and easily.
 But what about applications that aren't websites? Rails is still a first-class
 choice for this use-case, but why settle for good when you could be the best?
@@ -79,11 +76,11 @@ building them should be easy.
 Where
 -----
 
-You can find the organization on GitHub at https://github.com/rails-api
+You can find the organization on GitHub at [https://github.com/rails-api](https://github.com/rails-api)
 
-Originally, these two repositories were located at https://github.com/spastorino/rails-api and https://github.com/josevalim/active_model_serializers .
+Originally, these two repositories were located at [https://github.com/spastorino/rails-api](https://github.com/spastorino/rails-api) and [https://github.com/josevalim/active_model_serializers](https://github.com/josevalim/active_model_serializers).
 
-We have a Google Group for discussion here: https://groups.google.com/forum/?fromgroups#!forum/rails-api-core
+We have a Google Group for discussion here: [https://groups.google.com/forum/?fromgroups#!forum/rails-api-core](https://groups.google.com/forum/?fromgroups#!forum/rails-api-core)
 
 Who
 ---
