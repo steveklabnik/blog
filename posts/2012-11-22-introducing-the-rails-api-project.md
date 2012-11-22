@@ -47,9 +47,10 @@ practices around what JSON is sent around, we can simplify things for
 server-side and client-side developers.
 
 The generation of this JSON should be as transparent and simple as possible
-on both sides. ActiveModel::Serializers is key here. Many new APIs are settling
-on HAL as a JSON variant that is important to them, and so we'll be considering
-it heavily.
+on both sides.
+[ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers)
+is key here. Many new APIs are settling on HAL as a JSON variant that is
+important to them, and so we'll be considering it heavily.
 
 ### Authentication
 
