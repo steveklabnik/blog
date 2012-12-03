@@ -5,7 +5,8 @@ date: 2012-12-03 08:30
 
 I've relased the second beta for Draper 1.0.0! Many thanks to all of you who
 gave the first beta a shot. We've fixed some issues, and I'd apprecaite you
-giving this one a try.
+giving this one a try. This solves all known issues with Draper, including
+every one we've found in 1.0.0.beta1.
 
 You can get it by installing it from Rubygems:
 
