@@ -44,4 +44,6 @@ You may also need to add the 'magic comment' at the top of the file:
 Please remember that if you don't use something that's UTF-8, this won't
 actually work to fix the bug.
 
+You can find the [source of bring_back_snowman on GitHub](https://github.com/steveklabnik/bring_back_snowman), of course.
+
 Merry Christmas!
