@@ -6,9 +6,9 @@ date: 2013-01-14 10:43
 Today, I released Draper 1.0.0! Draper is a gem that gives you decorators/view
 models for Rails.
 
-* Rubygems: https://rubygems.org/gems/draper
-* GitHub: https://github.com/drapergem/draper
-* README: https://github.com/drapergem/draper/blob/master/README.md
+* Rubygems: [https://rubygems.org/gems/draper](https://rubygems.org/gems/draper)
+* GitHub: [https://github.com/drapergem/draper](https://github.com/drapergem/draper)
+* README: [https://github.com/drapergem/draper/blob/master/README.md](https://github.com/drapergem/draper/blob/master/README.md)
 
 You can get it with Rubygems:
 
