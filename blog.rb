@@ -126,11 +126,8 @@ class Blog < Sinatra::Base
 
   #lol octopress
   get '/*' do
-    puts "YEAH"
     post = params[:splat].first.gsub("/", "-").gsub(".html", "")
-    puts "YEAH"
     pass if post.nil?
-    puts "YEAH"
     redirect "posts/" + post, 301
   end
 end
