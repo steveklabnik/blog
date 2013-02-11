@@ -11,7 +11,7 @@ The policy was originally posted on Google Groups, here: [https://groups.google.
 
 Here's a copy if you don't want to read Google Groups:
 
-----------------------
+<hr >
 
 Since the most recent patch releases there has been some confusion about what versions of Ruby on Rails are currently supported, and when people can expect new versions.  Our maintenance policy is as follows. 
 

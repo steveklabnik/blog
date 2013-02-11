@@ -41,7 +41,7 @@ class RelRenderer < Redcarpet::Render::HTML
   end
 
   def header(text, header_level)
-    text_slug = text.gsub(/\W/, "_").downcase
+    text_slug = text.to_s.gsub(/\W/, "_").downcase
     
     self.outline << [header_level, "<a href='##{text_slug}'>#{text}</a>"]
 
