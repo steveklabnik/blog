@@ -16,3 +16,10 @@ weeks, and then keeping it current until the actual release of Rails 4.
 
 Of course, updating the content is much easier than writing it in the first
 place. Thanks for all of your hard work on previous editions, Yehuda and Ryan!
+
+<hr />
+
+Of course, this doesn't mean I'll stop working my my two self-published books,
+[Designing Hypermedia APIs](http://www.designinghypermediaapis.com) and
+[Rust for Rubyists](http://www.rustforrubyists.com). It just means I'll be
+doing even more writing!
