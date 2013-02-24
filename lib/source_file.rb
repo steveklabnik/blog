@@ -51,7 +51,7 @@ class SourceFile
   attr_accessor :outline
 
   def self.archive_list
-    @archive_list ||= Dir.glob("posts/*.{markdown,md}").sort.reverse.collect do |filename|
+    @archive_list ||= Dir.glob("posts/*md").sort.reverse.collect do |filename|
       content = File.read(filename)
       content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
       title = YAML.load($1)["title"]
@@ -60,7 +60,7 @@ class SourceFile
   end
 
   def self.archive_data
-    @archive_data ||= Dir.glob("posts/*.{markdown,md}").sort.reverse.collect do |filename|
+    @archive_data ||= Dir.glob("posts/*.md").sort.reverse.collect do |filename|
       content = File.read(filename)
       content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
       title = YAML.load($1)["title"]
@@ -73,7 +73,7 @@ class SourceFile
   end
 
   def self.last_updated
-    filename = Dir.glob("posts/*.{markdown,md}").sort.reverse.first
+    filename = Dir.glob("posts/*md").sort.reverse.first
     filename =~ /\/(\d\d\d\d-\d\d-\d\d)/
     Date.strptime($1).to_datetime.rfc2822
   end
