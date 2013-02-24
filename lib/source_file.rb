@@ -82,12 +82,7 @@ class SourceFile
     base = "posts"
     content = ""
     
-    # oh god this is bad.
-    begin 
-      content = File.read(File.join(base, "#{name}.markdown"))
-    rescue
-      content = File.read(File.join(base, "#{name}.md"))
-    end
+    content = File.read(File.join(base, "#{name}.md"))
 
     if content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
       renderer = OutlineRenderer.new
