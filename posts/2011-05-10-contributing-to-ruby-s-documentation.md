@@ -62,7 +62,7 @@ chose to document the rss library.
 Now you have a website in rdocout. Open up its index.html, and poke around for
 what you've changed. If it all looks good, you're ready to make a patch!
 
-    $ rm -r rdocout
+    $ rm -r tmpdoc
 
     $ git add .
 
@@ -102,5 +102,5 @@ improve. ;)
    [7]: http://rdoc.rubyforge.org/RDoc/Markup.html
    [8]: http://rdoc.rubyforge.org/RDoc/Parser/Ruby.html
    [9]: http://rdoc.rubyforge.org/RDoc/Parser/C.html
-   [10]: http://redmine.ruby-lang.org/account/register
-   [11]: http://redmine.ruby-lang.org/projects/ruby-19/issues/new
+   [10]: http://bugs.ruby-lang.org/account/register
+   [11]: http://bugs.ruby-lang.org/projects/ruby-trunk/issues/new
