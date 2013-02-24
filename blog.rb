@@ -77,27 +77,6 @@ class Blog < Sinatra::Base
       pass 
     end
   end
-  
-  get '/login/?' do
-    haml :login, :layout => :full_page_layout
-  end
-  
-  post '/login/?' do
-    authenticate!
-    redirect "/"
-  end
-  
-  get '/logout/?' do
-    log_out!
-    redirect '/'
-  end
-
-  post '/unauthenticated/?' do
-    # If we're in our own failure app, bad things happen
-    warden.custom_failure!
-    status 401
-    haml :login, :layout => :full_page_layout
-  end
 
   #lol posterous
   REDIRECTS.each do |hsh|
