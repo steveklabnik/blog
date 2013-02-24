@@ -3,8 +3,10 @@ Bundler.require
 
 require 'sinatra/content_for'
 
-require_relative "source_file"
-require_relative "redirects"
+$:.unshift("lib")
+
+require "source_file"
+require "redirects"
 
 class Blog < Sinatra::Base
   helpers Sinatra::ContentFor
