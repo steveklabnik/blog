@@ -3,21 +3,11 @@ Bundler.require
 
 require 'sinatra/content_for'
 
-require_relative "user"
-require_relative "warden"
 require_relative "source_file"
 require_relative "redirects"
 
 class Blog < Sinatra::Base
-  use Rack::Session::Cookie, :secret => ENV['SESSION_SECRET']
-  use Warden::Manager do |manager|
-    manager.default_strategies :password
-    manager.failure_app = Blog
-  end
-
-  helpers WardenHelpers
   helpers Sinatra::ContentFor
-  use Rack::Flash
 
   helpers do
     def title
@@ -71,16 +61,6 @@ class Blog < Sinatra::Base
       end
     end
     rss.to_s
-  end
-
-  get '/signup' do
-    haml :signup, :layout => :full_page_layout
-  end
-
-  post '/signup' do
-    User.create(params[:user])
-    flash[:notice] = "All signed up! Thanks!"
-    redirect '/'
   end
 
   get '/posts/:id' do
