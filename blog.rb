@@ -65,6 +65,10 @@ class Blog < Sinatra::Base
     rss.to_s
   end
 
+  get "/posts/?" do
+    redirect "/archive"
+  end
+
   get '/posts/:id' do
     begin
     source = SourceFile.new(params[:id])
@@ -88,7 +92,7 @@ class Blog < Sinatra::Base
   #lol octopress
   get '/*' do
     post = params[:splat].first.gsub("/", "-").gsub(".html", "")
-    pass if post.nil?
+
     redirect "posts/" + post, 301
   end
 end
