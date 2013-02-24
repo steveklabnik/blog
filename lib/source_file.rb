@@ -28,16 +28,12 @@ class StripDown < Redcarpet::Render::Base
   end
 end
 
-class RelRenderer < Redcarpet::Render::HTML
+class OutlineRenderer < Redcarpet::Render::HTML
   attr_accessor :outline
 
   def initialize
     @outline = []
     super
-  end
-
-  def link(link, title, content)
-    "<a href='#{link}' rel='#{title}'>#{content}</a>"
   end
 
   def header(text, header_level)
@@ -94,7 +90,7 @@ class SourceFile
     end
 
     if content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
-      renderer = RelRenderer.new
+      renderer = OutlineRenderer.new
       r = Redcarpet::Markdown.new(renderer, :fenced_code_blocks => true)
       self.content = r.render($')
       self.outline = renderer.outline
