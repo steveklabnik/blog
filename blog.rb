@@ -71,13 +71,15 @@ class Blog < Sinatra::Base
 
   get '/posts/:id' do
     begin
-    source = SourceFile.new(params[:id])
-    @title = source.metadata['title']
-    @title_hidden = source.metadata['title-hidden']
-    @content = source.content
-    @outline = source.outline
-    haml :post
-    rescue Errno::ENOENT #lol i suck
+      source = SourceFile.new(params[:id])
+
+      @title = source.metadata['title']
+      @title_hidden = source.metadata['title-hidden']
+      @content = source.content
+      @outline = source.outline
+
+      haml :post
+    rescue Errno::ENOENT # we couldn't find the file on disk.
       pass 
     end
   end
