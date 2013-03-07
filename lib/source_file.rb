@@ -80,7 +80,6 @@ class SourceFile
 
   def initialize(name)
     base = "posts"
-    content = ""
     
     content = File.read(File.join(base, "#{name}.md"))
 
