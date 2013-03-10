@@ -10,7 +10,7 @@ here's one of the pieces: Travis build matrix.
 Here's what you want:
 
 ```
-anguage: ruby
+language: ruby
 rvm:
   - 1.8.7
   - 1.9.2
