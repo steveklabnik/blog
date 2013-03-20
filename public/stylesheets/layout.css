@@ -22,6 +22,9 @@ div.container {
 pre.prettyprint {
   margin-bottom: 2em;
 }
+div.date {
+	text-align: right;
+}
 
 
 /* #Page Styles
