@@ -1,5 +1,6 @@
 - unless @title_hidden
   %h1= @title
+  .date= formatted_date
 :preserve
   #{@content}
 - content_for :sidebar do

@@ -17,6 +17,10 @@ class Blog < Sinatra::Base
      "#{title}Literate Programming"
     end
 
+    def formatted_date
+      @date && Date.parse(@date).strftime("%-d %B %Y")
+    end
+
     def format_outline(outline)
       prev_level = 2
 
@@ -77,10 +81,11 @@ class Blog < Sinatra::Base
       @title_hidden = source.metadata['title-hidden']
       @content = source.content
       @outline = source.outline
+      @date = source.metadata['date']
 
       haml :post
     rescue Errno::ENOENT # we couldn't find the file on disk.
-      pass 
+      pass
     end
   end
 
