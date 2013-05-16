@@ -1,5 +1,5 @@
 ---
-title: "Ditching Google: Chat with XMPP"
+title: "Ditching Google: Chat with Your Own XMPP Server"
 date: 2013-05-16 13:30
 ---
 
