@@ -24,6 +24,13 @@ non-privledged user account, yadda, yadda. I'm assuming you can do that.
 I picked [ejabberd](http://www.ejabberd.im/) for my server software because
 it's used by a lot of people.
 
+EDIT: I just got a tweet from [@jamesgolick](http://twitter.com/jamesgolick), who I trust to know stuff about stuff. He says:
+
+> ejabberd is buggy. Use the erlangsolutions fork instead.
+> - [@jamesgolick](https://twitter.com/jamesgolick/status/335136677364396032)
+
+So, take that for what it's worth.
+
 Anyway, since I use Arch Linux, installing was as easy as
 
 ```bash
