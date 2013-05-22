@@ -332,3 +332,4 @@
 	.add-bottom { margin-bottom: 20px !important; }
 
 code { font-family:monospace; }
+pre.prettyprint { overflow: scroll; }
