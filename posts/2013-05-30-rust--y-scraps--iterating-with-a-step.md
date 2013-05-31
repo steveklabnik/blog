@@ -40,6 +40,9 @@ But I think this is just out of my abilities. The issue is that the closure
 needs to take the same number of arguments as the step, and I'm not sure that
 I have the Rust-fu to make it work yet.
 
+After a discussion in the IRC room, Rust doesn't have the Rust-fu yet either;
+varargs aren't there, so this style is a no-go for now.
+
 -------- 
 
 Oh, and since there were no examples of this yet, [I added some to the
