@@ -12,9 +12,18 @@ simple way to do this in Rust is with `unit::range_step`:
 ```rust
 let nums = [1,2,3,4,5,6,7];
 
-for uint::range_step(0, bytes.len(), 2) |i| {
+for uint::range_step(0, bytes.len() - 1, 2) |i| {
     println(fmt!("%d & %d", nums[i], nums[i+1]));
 }
+```
+
+This yields
+
+```text
+1 & 2
+3 & 4
+5 & 6
+
 ```
 
 Of course, this is awkward: I wish I had some code to do something like:
