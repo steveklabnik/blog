@@ -3,7 +3,7 @@ title: "redis-namespace 1.3.1: security release"
 date: 2013-08-03 16:35
 ---
 
-TL;DR: if you use [redis-namespace](https://rubygems.org/gems/redis-namespace) and you use `send`, `Kernel#exec` may get called. Please upgrade to 1.3.1 immediately.
+TL;DR: if you use [redis-namespace](https://rubygems.org/gems/redis-namespace) and you use `send`, `Kernel#exec` may get called. Please upgrade to 1.0.4, 1.1.1, 1.2.2, or 1.3.1 immediately.
 
 Link to the fix: [https://github.com/resque/redis-namespace/commit/6d839515e8a3fdc17b5fb391500fda3f919689d6](https://github.com/resque/redis-namespace/commit/6d839515e8a3fdc17b5fb391500fda3f919689d6)
 
