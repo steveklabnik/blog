@@ -14,8 +14,7 @@ in your 'omgpull' branch:
 ```
 $ git fetch upstream
 $ git checkout omgpull 
-$ git rebase upstream/master
-$ git rebase -i
+$ git rebase -i upstream/master
 
 < choose squash for all of your commits, except the first one >
 < Edit the commit message to make sense, and describe all your changes >
