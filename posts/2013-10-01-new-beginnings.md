@@ -36,5 +36,8 @@ different than I do all day.
 ... I'm not saying that Ruby is a minus, but I'm not saying it's a plus,
 either.
 
+I'm also open to re-locating out of the country. That certainly counts as
+interesting.
+
 So, if you think we might work well together, please, [send me an
 email](mailto:steve@steveklabnik.com).
