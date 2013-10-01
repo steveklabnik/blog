@@ -5,13 +5,12 @@ date: 2013-10-01 09:19
 
 TL;DR:
 
-```
-WANTED: Proletarian/petite bourgeoisie looking for
-capitalist/industrialist/haute bourgeoisie. I've got the labor power, you've
-got the money commodity. Let's exchange commodities at full market value in
-accordance with the Law of Value; I know you'll extract some surplus and
-alienate my species-being, but I really need to regenerate and reproduce myself
-so that I can be around to labor tomorrow.
+> WANTED: Proletarian/petite bourgeoisie looking for
+> capitalist/industrialist/haute bourgeoisie. I've got the labor power, you've
+> got the money commodity. Let's exchange commodities at full market value in
+> accordance with the Law of Value; I know you'll extract some surplus and
+> alienate my species-being, but I really need to regenerate and reproduce myself
+> so that I can be around to labor tomorrow.
 ```
 
 Yes, that's right, I am officially looking for work. I loved my job at
@@ -25,7 +24,7 @@ I give bonus points for interesting.
 
 Things I want out of life:
 
-1. Travel. I still like doing this.
+1. Travel. I still like doing this. I just don't want to do it *constantly*.
 2. Related: some degree of location independence. I'll only accept positions
 that require me to be in a seat that's in San Fransisco and New York City.
 Remote would be even better. Probably.
