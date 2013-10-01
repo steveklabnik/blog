@@ -25,7 +25,7 @@ Things I want out of life:
 
 1. Travel. I still like doing this. I just don't want to do it *constantly*.
 2. Related: some degree of location independence. I'll only accept positions
-that require me to be in a seat that's in San Fransisco or New York City.
+that require me to be in a seat that's in San Francisco or New York City.
 Remote would be even better. Probably.
 3. Piles of money. I have student loan debt I'd prefer not to have.
 4. Side project ability. I am highly motivated by doing side projects that are
