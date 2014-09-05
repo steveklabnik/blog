@@ -48,7 +48,7 @@ sweatshop wages, they will. So catastrophic climate change and widespread
 poverty are signs of the normal functioning of the system. Furthermore, for
 money to make more money, more and more things have to be exchangeable for
 money. Thus the tendency is for everything from everyday items to DNA sequences
-to carbon dioxide emissions —and, crucially, our ability to work—to become
+to carbon dioxide emissions—and, crucially, our ability to work—to become
 commodified.
 
 And it is this last point—the commodification of our creative and productive
@@ -87,7 +87,7 @@ predominantely carried out by women.
 Servicing men and children at home serves capital: by making housework and
 reproduction a women’s ‘natural and feminine’ process rather than work,
 capitalism benefits in the form of free labour. When capital pays husbands they
-get two workers, not one.  Denying domestic labour a wage makes this work
+get two workers, not one. Denying domestic labour a wage makes this work
 invisible, and divides the working class into waged and unwaged at the expense
 of both.
 
@@ -102,7 +102,7 @@ about capital as if it has agency or interests of its own, and so often talking
 about 'capital' is more precise than talking about bosses.
 
 Both bosses and workers, therefore, are alienated by this process, but in
-different ways.  While from the workers' perspective, our alienation is
+different ways. While from the workers' perspective, our alienation is
 experienced through being controlled by our boss, the boss experiences it
 through impersonal market forces and competition with other bosses.
 
@@ -167,7 +167,7 @@ reign of Henry VIII alone 72,000 people were executed for vagabondage.
 Later capitalism was spread by invasion and conquest by Western imperialist
 powers around the globe. Whole civilisations were brutally destroyed with
 communities driven from their land into waged work. The only countries that
-avoided conquest were those—like Japan— which adopted capitalism on their own
+avoided conquest were those—like Japan—which adopted capitalism on their own
 in order to compete with the other imperial powers.  Everywhere capitalism
 developed, peasants and early workers resisted, but were eventually overcome by
 mass terror and violence.
@@ -177,9 +177,9 @@ it was spread by the organised violence of the elite. The concept of private
 property of land and means of production might seem now like the natural state
 of things, however we should remember it is a man-made concept enforced by
 conquest. Similarly, the existence of a class of people with nothing to sell
-but their labour power is not something which has always been the case - common
+but their labour power is not something which has always been the case—common
 land shared by all was seized by force, and the dispossessed forced to work for
-a wage under the threat of starvation or even execution.  As capital expanded,
+a wage under the threat of starvation or even execution. As capital expanded,
 it created a global working class consisting of the majority of the world's
 population whom it exploits but also depends on.
 
@@ -188,7 +188,7 @@ population whom it exploits but also depends on.
 Capitalism has only existed as the dominant economic system on the planet for a
 little over 200 years. Compared to the half a million years of human existence
 it is a momentary blip, and therefore it would be naive to assume that it will
-last for ever.  It is entirely reliant on us, the working class, and our labour
+last for ever. It is entirely reliant on us, the working class, and our labour
 which it must exploit, and so it will only survive as long as we let it.
 
 ## Class & Class Struggle: an introduction
@@ -242,7 +242,7 @@ are too sick or elderly to work, to survive. We sell our time and energy to a
 boss for their benefit.
 
 Our work is the basis of this society. And it is the fact that this society
-relies on the workwe do, while at the same time always squeezing us to maximise
+relies on the work we do, while at the same time always squeezing us to maximise
 profit, that makes it vulnerable.
 
 ### Class Struggle
@@ -275,7 +275,7 @@ wage and our employers and governments, who are the capitalist class, or
 'bourgeoisie'.  By resisting the imposition of work, we say that our lives are
 more important than our boss's profits. This attacks the very nature of
 capitalism, where profit is the most important reason for doing anything, and
-points to the possibility of a world without classes and privatelyowned means
+points to the possibility of a world without classes and privately owned means
 of production. We are the working class resisting our own existence. We are the
 working class struggling against work and class.
 
