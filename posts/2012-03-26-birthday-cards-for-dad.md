@@ -31,11 +31,8 @@ the water and give my dad a zillion cards for his last birthday.
 So yeah, if you have a few minutes this week, and you're thinking of my father,
 send a birthday card to my house. Here's the address:
 
-```
-Steve Klabnik
-411 Noble Street
-Pittsburgh, PA 15232
-```
+*note*: Five years later, I've removed the address. I haven't lived there in
+years, please don't see this now and send mail to some random person kthx.
 
 Oh yeah: My dad is also Steve. I'm not a junior because he has no middle name:
 his mother said they were too poor to give him one.
